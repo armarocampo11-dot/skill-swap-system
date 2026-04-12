@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Missions - STI Skill Swap</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <h2>STI Skill Swap</h2>
+    <div class="nav-links">
+      <button onclick="goToDashboard()">Dashboard</button>
+      <button onclick="goToProgress()">Progress</button>
+      <button onclick="goToProfile()">Profile</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="container dashboard-shell">
+
+      <section class="dashboard-hero card">
+        <div class="dashboard-hero-copy">
+          <p class="dashboard-kicker">Mission center</p>
+          <h1 class="hero-title">Your <span class="glow-text">Missions</span></h1>
+          <p class="subtitle">A dedicated page for action-based growth goals.</p>
+          <p id="missionsWelcome" class="dashboard-welcome">Loading missions...</p>
+        </div>
+      </section>
+
+      <section class="dashboard-gamify-grid missions-page-grid">
+        <div class="card dashboard-missions-card">
+          <div class="dashboard-section-head">
+            <div>
+              <h2 class="section-title">📅 Daily Missions</h2>
+              <p class="small-text">Quick actions to push your account forward.</p>
+            </div>
+          </div>
+          <div id="dailyMissionsList" class="missions-list"></div>
+        </div>
+
+        <div class="card dashboard-missions-card">
+          <div class="dashboard-section-head">
+            <div>
+              <h2 class="section-title">🚀 Milestone Missions</h2>
+              <p class="small-text">Longer-term tasks that build your reputation.</p>
+            </div>
+          </div>
+          <div id="milestoneMissionsList" class="missions-list"></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script type="module" src="missions.js"></script>
+</body>
+</html>

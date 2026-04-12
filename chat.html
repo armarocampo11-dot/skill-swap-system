@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chat - STI Skill Swap</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <h2>STI Skill Swap Chat</h2>
+    <div class="nav-links">
+      <button class="secondary-btn" onclick="goBack()">Connections</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="container">
+
+      <div class="card" style="margin-bottom: 16px;">
+        <h1 class="hero-title" style="margin-bottom: 10px;">
+          <span id="chatPartner">Loading...</span>
+        </h1>
+        <p id="chatMeta" class="subtitle" style="margin-bottom: 10px;">Loading chat info...</p>
+        <div id="chatStatus"></div>
+      </div>
+
+      <div id="messagesBox" class="card" style="min-height: 260px; max-height: 360px; overflow-y: auto;"></div>
+
+      <div class="grid-2" style="grid-template-columns: 1fr auto; margin-top: 14px;">
+        <input type="text" id="messageInput" placeholder="Type your message here..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module" src="chat.js"></script>
+</body>
+</html>

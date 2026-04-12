@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Swipe Mode - STI Skill Swap</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <h2>STI Skill Swap</h2>
+    <div class="nav-links">
+      <button onclick="goToBrowse()">Browse</button>
+      <button onclick="goToDashboard()">Dashboard</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="container">
+      <div class="card swipe-page-hero">
+        <h1 class="hero-title">Swipe <span class="glow-text">Mode</span></h1>
+        <p class="subtitle">Skip left, show interest right, or open the full profile.</p>
+      </div>
+
+      <div class="swipe-stage">
+        <div id="swipeEmptyState" class="card swipe-empty" style="display:none;">
+          <h2>No more students</h2>
+          <p class="small-text">You’ve reached the end of the current stack.</p>
+          <div class="swipe-empty-actions">
+            <button onclick="resetSwipeStack()">Restart Stack</button>
+            <button class="secondary-btn" onclick="goToBrowse()">Back to Browse</button>
+          </div>
+        </div>
+
+        <div id="swipeStack" class="swipe-stack"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="requestModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h2>Send Request</h2>
+
+      <label>Transaction Type:</label>
+      <div class="modal-options">
+        <button type="button" onclick="selectType('Swap')">Swap</button>
+        <button type="button" onclick="selectType('Payment')">Payment</button>
+        <button type="button" onclick="selectType('Either')">Either</button>
+      </div>
+
+      <div id="amountSection" style="display:none;">
+        <label>Amount (₱):</label>
+        <input type="number" id="amountInput" placeholder="Enter amount">
+      </div>
+
+      <label>Message:</label>
+      <textarea id="messageInput" placeholder="Introduce your request..."></textarea>
+
+      <div class="modal-actions">
+        <button onclick="submitRequest()">Send</button>
+        <button onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="swipe.js"></script>
+</body>
+</html>

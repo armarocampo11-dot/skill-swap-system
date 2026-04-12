@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Requests - STI Skill Swap</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="navbar">
+    <h2>STI Skill Swap</h2>
+    <div class="nav-links">
+      <button onclick="goToDashboard()">Dashboard</button>
+      <button onclick="goToBrowse()">Browse</button>
+      <button onclick="goToConnections()">Connections</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="container dashboard-shell">
+
+      <section class="requests-hero-card">
+        <div class="requests-hero-top">
+          <p class="requests-kicker">Request center</p>
+        </div>
+
+        <div class="requests-hero-main">
+          <div>
+            <h1>My <span class="glow-text">Requests</span></h1>
+            <p>Track pending requests, active swaps, and completed exchanges in one clean place.</p>
+            <p id="requestsWelcome" class="requests-hero-welcome">Loading requests...</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="requests-filter-grid">
+        <button class="request-filter-card active-filter" data-filter="needs_action">
+          <span class="request-filter-count" id="needsActionCount">0</span>
+          <span class="request-filter-label">Needs Action</span>
+        </button>
+
+        <button class="request-filter-card" data-filter="active">
+          <span class="request-filter-count" id="activeCount">0</span>
+          <span class="request-filter-label">Active</span>
+        </button>
+
+        <button class="request-filter-card" data-filter="completed">
+          <span class="request-filter-count" id="completedCount">0</span>
+          <span class="request-filter-label">Completed</span>
+        </button>
+
+        <button class="request-filter-card" data-filter="sent">
+          <span class="request-filter-count" id="sentCount">0</span>
+          <span class="request-filter-label">Sent</span>
+        </button>
+      </section>
+
+      <section class="requests-panel-card">
+        <div class="requests-panel-head">
+          <div>
+            <h2 id="requestBoardTitle">Needs Action</h2>
+            <p id="requestBoardSubtitle">Incoming requests waiting for your response.</p>
+          </div>
+        </div>
+
+        <div id="requestsList" class="requests-modern-list"></div>
+      </section>
+
+    </div>
+  </div>
+
+  <div id="ratingModal" class="app-modal hidden">
+    <div class="app-modal-card">
+      <div class="app-modal-head">
+        <h3>Rate completed request</h3>
+        <button class="secondary-btn" onclick="closeRatingModal()">Close</button>
+      </div>
+
+      <p id="ratingModalTarget" class="small-text">Loading...</p>
+
+      <label class="app-label" for="ratingStars">Stars</label>
+      <select id="ratingStars" class="app-input">
+        <option value="5">5 - Excellent</option>
+        <option value="4">4 - Strong</option>
+        <option value="3">3 - Good</option>
+        <option value="2">2 - Fair</option>
+        <option value="1">1 - Poor</option>
+      </select>
+
+      <label class="app-label" for="ratingComment">Comment</label>
+      <textarea id="ratingComment" class="app-input" rows="4" placeholder="Write a short review"></textarea>
+
+      <div class="app-modal-actions">
+        <button onclick="submitRating()">Submit Rating</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="requests.js"></script>
+</body>
+</html>

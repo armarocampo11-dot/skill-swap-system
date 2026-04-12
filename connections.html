@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connections - STI Skill Swap</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="navbar">
+    <h2>STI Skill Swap</h2>
+    <div class="nav-links">
+      <button onclick="goToDashboard()">Dashboard</button>
+      <button onclick="goToRequests()">Requests</button>
+      <button onclick="goToBrowse()">Browse</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="container dashboard-shell">
+      <section class="dashboard-hero card">
+        <div class="dashboard-hero-copy">
+          <p class="dashboard-kicker">Message center</p>
+          <h1 class="hero-title">My <span class="glow-text">Connections</span></h1>
+          <p class="subtitle">Clean messaging with one conversation per person.</p>
+          <p id="connectionsWelcome" class="dashboard-welcome">Loading conversations...</p>
+        </div>
+      </section>
+
+      <section class="chat-app-shell">
+        <aside class="chat-sidebar">
+          <div class="chat-sidebar-top">
+            <h3>Chats</h3>
+            <p class="small-text">Unread and newest appear first.</p>
+          </div>
+          <div id="conversationList" class="chat-conversation-list"></div>
+        </aside>
+
+        <section class="chat-main-panel">
+          <div id="threadHeader" class="chat-main-header">
+            <div class="chat-main-header-left">
+              <img id="threadAvatar" class="chat-main-avatar" src="avatars/avatar1.png" alt="Avatar">
+              <div>
+                <h3 id="threadName">Select a conversation</h3>
+                <p id="threadSubtext" class="small-text">Your messages will appear here.</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="threadMessages" class="chat-message-area">
+            <div class="chat-empty-state">
+              <div class="chat-empty-icon">💬</div>
+              <h4>No conversation selected</h4>
+              <p>Choose a chat from the left side to start messaging.</p>
+            </div>
+          </div>
+
+          <div class="chat-status-row">
+            <span id="typingStatus" class="chat-typing-status"></span>
+          </div>
+
+          <div class="chat-composer-bar">
+            <textarea id="threadInput" class="chat-composer-input" rows="2" placeholder="Type your message..."></textarea>
+            <button class="chat-send-btn" onclick="sendThreadMessage()">Send</button>
+          </div>
+        </section>
+      </section>
+    </div>
+  </div>
+
+  <script type="module" src="connections.js"></script>
+</body>
+</html>

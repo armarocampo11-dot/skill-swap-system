@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - STI Skill Swap</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <h2>STI Skill Swap</h2>
+    <div class="nav-links">
+      <button onclick="goToProfile()">Profile</button>
+      <button onclick="goToBrowse()">Browse Users</button>
+
+      <button onclick="goToRequests()">
+        Requests
+        <span id="requestBadge" class="notification-badge" style="display:none;">0</span>
+      </button>
+
+      <button onclick="goToConnections()">
+        Connections
+        <span id="messageBadge" class="notification-badge" style="display:none;">0</span>
+      </button>
+
+      <button class="danger-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="container dashboard-shell">
+
+      <section class="dashboard-hero card">
+        <div class="dashboard-hero-copy">
+          <p class="dashboard-kicker">Campus skill exchange platform</p>
+          <h1 class="hero-title">Welcome to <span class="glow-text">STI Skill Swap</span></h1>
+          <p class="subtitle">Connect, exchange skills, and grow with fellow students.</p>
+          <p id="welcome" class="dashboard-welcome">Loading user...</p>
+        </div>
+      </section>
+
+      <section class="dashboard-top-grid dashboard-top-grid-v2">
+        <div class="card xp-card dashboard-progress-card clickable-stat" onclick="goToProgress()">
+          <div class="dashboard-progress-head">
+            <div class="dashboard-progress-copy">
+              <p class="dashboard-panel-label">Progress Overview</p>
+              <h3>🔥 Your Progress</h3>
+              <p class="small-text">A quick summary of your growth, missions, and next step.</p>
+            </div>
+
+            <div class="dashboard-rank-wrap">
+              <span class="dashboard-level">Level <span id="levelNumber">1</span></span>
+              <span class="xp-rank" id="rankTitle">Beginner</span>
+            </div>
+          </div>
+
+          <div class="dashboard-progress-metrics">
+            <div class="progress-metric-chip">
+              <span class="metric-chip-label">Current XP</span>
+              <strong id="xpPointsMain">0</strong>
+            </div>
+
+            <div class="progress-metric-chip">
+              <span class="metric-chip-label">Next Level</span>
+              <strong><span id="xpRemaining">0</span> XP</strong>
+            </div>
+          </div>
+
+          <div class="progress-bar-container dashboard-progress-bar-wrap">
+            <div class="progress-bar" id="xpBar"></div>
+          </div>
+
+          <div class="dashboard-progress-footer">
+            <span id="profileCompletionText">Profile completion: 0%</span>
+            <span class="dashboard-progress-tip" id="priorityActionText">Loading...</span>
+          </div>
+
+          <div class="xp-insight-row">
+            <div class="xp-insight-box">
+              <span class="xp-insight-label">Next Goal</span>
+              <strong id="nextGoalText">Loading...</strong>
+            </div>
+
+            <div class="xp-insight-box">
+              <span class="xp-insight-label">Priority Action</span>
+              <strong id="priorityActionTextCard">Loading...</strong>
+            </div>
+          </div>
+
+          <div class="dashboard-mini-actions">
+            <button onclick="event.stopPropagation(); goToProgress()">Open Progress</button>
+            <button onclick="event.stopPropagation(); goToMissions()">Open Missions</button>
+            <button onclick="event.stopPropagation(); goToStats()">Open Stats</button>
+          </div>
+        </div>
+
+        <div class="dashboard-stat-grid dashboard-stat-grid-v2">
+          <div class="stat-box clickable-stat" onclick="goToStats()">
+            <div class="stat-icon">🤝</div>
+            <h3 id="swapCount">0</h3>
+            <p>Skill Swaps</p>
+          </div>
+
+          <div class="stat-box clickable-stat" onclick="goToProgress()">
+            <div class="stat-icon">⚡</div>
+            <h3 id="xpPoints">0</h3>
+            <p>XP Points</p>
+          </div>
+
+          <div class="stat-box clickable-stat" onclick="goToRatings()">
+            <div class="stat-icon">⭐</div>
+            <h3 id="avgRating">0.0★</h3>
+            <p>Rating</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-gamify-grid">
+        <div class="card dashboard-missions-card">
+          <div class="dashboard-section-head">
+            <div>
+              <h2 class="section-title">🎯 Missions Preview</h2>
+              <p class="small-text">Your most important tasks right now.</p>
+            </div>
+            <button class="secondary-btn" onclick="goToMissions()">See All</button>
+          </div>
+
+          <div id="missionsPreviewList" class="missions-list"></div>
+        </div>
+
+        <div class="card dashboard-badges-card">
+          <div class="dashboard-section-head">
+            <div>
+              <h2 class="section-title">🏅 Achievements Preview</h2>
+              <p class="small-text">Your latest unlocked or nearest badges.</p>
+            </div>
+            <button class="secondary-btn" onclick="goToProgress()">Open Progress</button>
+          </div>
+
+          <div id="badgesPreviewList" class="badges-list"></div>
+        </div>
+      </section>
+
+      <section class="card dashboard-recommend-card">
+        <div class="recommend-header">
+          <div>
+            <h2 class="section-title">Recommended Skill Matches</h2>
+            <p class="small-text">Students matched based on your offered and wanted skills.</p>
+          </div>
+          <button class="secondary-btn" onclick="goToBrowse()">See More</button>
+        </div>
+
+        <div class="dashboard-recommend-layout">
+          <div id="recommendedList" class="horizontal-scroll dashboard-recommend-scroll"></div>
+
+          <div class="dashboard-recommend-side">
+            <div class="dashboard-side-badge">Smart Match</div>
+            <h3>Why these students?</h3>
+            <p>
+              These recommendations are based on the skills you offer, the skills you want to learn,
+              and the quality of each student’s profile and ratings.
+            </p>
+
+            <div class="dashboard-side-points">
+              <div class="dashboard-side-point">
+                <span>🎯</span>
+                <p>Skill-based matching</p>
+              </div>
+              <div class="dashboard-side-point">
+                <span>⭐</span>
+                <p>Rating-aware suggestions</p>
+              </div>
+              <div class="dashboard-side-point">
+                <span>⚡</span>
+                <p>Faster discovery flow</p>
+              </div>
+            </div>
+
+            <button onclick="goToBrowse()">Explore More Students</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-actions-grid">
+        <div class="card dashboard-action-card clickable-stat" onclick="goToProfile()">
+          <div class="dashboard-action-icon">🪪</div>
+          <h3>My Profile</h3>
+          <p>Update your identity, skills, avatar, and transaction preferences.</p>
+          <button onclick="event.stopPropagation(); goToProfile()">Open Profile</button>
+        </div>
+
+        <div class="card dashboard-action-card clickable-stat" onclick="goToBrowse()">
+          <div class="dashboard-action-icon">🔎</div>
+          <h3>Find Matches</h3>
+          <p>Browse students by category, skill, recommendation, or swipe mode.</p>
+
+          <div class="dashboard-card-dual-actions">
+            <button onclick="event.stopPropagation(); goToBrowse()">Browse Users</button>
+            <button class="secondary-btn" onclick="event.stopPropagation(); window.location.href='swipe.html'">Swipe Mode</button>
+          </div>
+        </div>
+
+        <div class="card dashboard-action-card clickable-stat" onclick="goToMissions()">
+          <div class="dashboard-action-icon">🎯</div>
+          <h3>Mission Center</h3>
+          <p>Open your task page and see what actions will grow your account faster.</p>
+          <button onclick="event.stopPropagation(); goToMissions()">Open Missions</button>
+        </div>
+
+        <div class="card dashboard-action-card clickable-stat" onclick="goToRatings()">
+          <div class="dashboard-action-icon">⭐</div>
+          <h3>Ratings & Reviews</h3>
+          <p>See your average rating, total reviews, and what other students said about you.</p>
+          <button onclick="event.stopPropagation(); goToRatings()">Open Ratings</button>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script type="module" src="dashboard.js"></script>
+</body>
+</html>

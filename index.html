@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>STI Skill Swap</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="page">
+    <div class="container auth-box">
+      <h1>STI Skill Swap</h1>
+      <p class="subtitle">Exchange skills, not just money.</p>
+
+      <h2>Register</h2>
+      <input type="text" id="name" placeholder="Full Name">
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="Password">
+      <input type="text" id="registerOfferedSkills" placeholder="Skills you can offer (e.g. Canva, Math Tutoring, Editing)">
+      <input type="text" id="registerWantedSkills" placeholder="Skills you want to learn (e.g. Java, Public Speaking, Layout Design)">
+      <button onclick="register()">Register</button>
+
+      <hr>
+
+      <h2>Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email">
+      <input type="password" id="loginPassword" placeholder="Password">
+      <button onclick="login()">Login</button>
+    </div>
+  </div>
+
+  <script type="module" src="auth.js"></script>
+</body>
+</html>

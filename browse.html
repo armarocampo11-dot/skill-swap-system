@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browse Users - STI Skill Swap</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="navbar">
+    <h2>STI Skill Swap</h2>
+    <div class="nav-links">
+      <button onclick="goToDashboard()">Dashboard</button>
+      <button onclick="goToRequests()">Requests</button>
+      <button onclick="goToConnections()">Connections</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="container dashboard-shell">
+
+      <section class="browse-hero-card">
+        <div class="browse-hero-copy">
+          <p class="browse-kicker">Discovery center</p>
+          <h1>Browse <span class="glow-text">Students</span></h1>
+          <p>Find skill partners faster with cleaner filters, compact cards, and smarter recommendations.</p>
+          <p id="browseWelcome" class="browse-hero-welcome">Loading student recommendations...</p>
+        </div>
+      </section>
+
+      <section class="browse-controls-card">
+        <div class="browse-controls-top">
+          <div class="browse-search-wrap">
+            <input id="browseSearchInput" class="browse-search-input" type="text" placeholder="Search by name, skill, or course">
+          </div>
+
+          <div class="browse-results-meta">
+            <span id="browseResultCount">0 students</span>
+          </div>
+        </div>
+
+        <div id="categoryCards" class="browse-category-grid"></div>
+      </section>
+
+      <section class="browse-list-card">
+        <div class="browse-list-head">
+          <div>
+            <h2 id="browseSectionTitle">Recommended Students</h2>
+            <p id="browseSectionSubtitle">Students who may match your interests and offered skills.</p>
+          </div>
+        </div>
+
+        <div id="browseUsersGrid" class="browse-users-grid"></div>
+      </section>
+
+    </div>
+  </div>
+
+  <div id="quickRequestModal" class="app-modal hidden">
+    <div class="app-modal-card">
+      <div class="app-modal-head">
+        <h3>Send Request</h3>
+        <button class="secondary-btn" onclick="closeQuickRequestModal()">Close</button>
+      </div>
+
+      <p id="quickRequestTarget" class="small-text">Loading...</p>
+
+      <label class="app-label" for="requestMode">Request Mode</label>
+      <select id="requestMode" class="app-input">
+        <option value="swap">Swap</option>
+        <option value="paid">Paid</option>
+        <option value="either">Either</option>
+      </select>
+
+      <label class="app-label" for="requestSkill">Skill / Request Title</label>
+      <input id="requestSkill" class="app-input" type="text" placeholder="Example: Canva editing, Math tutoring">
+
+      <label class="app-label" for="requestAmount">Paid Amount (optional)</label>
+      <input id="requestAmount" class="app-input" type="number" min="0" placeholder="Enter amount only if needed">
+
+      <label class="app-label" for="requestMessage">Message</label>
+      <textarea id="requestMessage" class="app-input" rows="4" placeholder="Write a short request message"></textarea>
+
+      <div class="app-modal-actions">
+        <button onclick="submitQuickRequest()">Send Request</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="browse.js"></script>
+</body>
+</html>

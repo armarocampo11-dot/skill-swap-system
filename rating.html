@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rate Partner - Skill Swap</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <h2>Skill Swap Rating</h2>
+    <div class="nav-links">
+      <button class="secondary-btn" onclick="goBack()">Back</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="container">
+      <h1 class="hero-title">Rate Your <span class="glow-text">Partner</span></h1>
+      <p class="subtitle">Leave a rating and short feedback after your completed transaction.</p>
+
+      <div class="card">
+        <p><strong>Partner:</strong> <span id="partnerName">Loading...</span></p>
+        <p><strong>Status:</strong> <span id="requestStatus">Loading...</span></p>
+      </div>
+
+      <label>Star Rating</label>
+      <select id="stars">
+        <option value="5">5 - Excellent</option>
+        <option value="4">4 - Very Good</option>
+        <option value="3">3 - Good</option>
+        <option value="2">2 - Fair</option>
+        <option value="1">1 - Poor</option>
+      </select>
+
+      <label>Feedback</label>
+      <textarea id="feedback" rows="4" placeholder="Write a short review..."></textarea>
+
+      <button id="submitRatingBtn" class="success-btn" onclick="submitRating()">Submit Rating</button>
+      <p id="ratingStatus" class="small-text"></p>
+    </div>
+  </div>
+
+  <script type="module" src="rating.js"></script>
+</body>
+</html>
