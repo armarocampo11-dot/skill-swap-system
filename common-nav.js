@@ -11,60 +11,27 @@ function go(page) {
   window.location.href = page;
 }
 
-window.goToDashboard = function () {
-  go("dashboard.html");
-};
-
-window.goToBrowse = function () {
-  go("browse.html");
-};
-
-window.goToRequests = function () {
-  go("requests.html");
-};
-
-window.goToConnections = function () {
-  go("connections.html");
-};
-
-window.goToProfile = function () {
-  go("profile.html");
-};
-
-window.goToProgress = function () {
-  go("progress.html");
-};
-
-window.goToMissions = function () {
-  go("missions.html");
-};
-
-window.goToStats = function () {
-  go("stats.html");
-};
-
-window.goToRatings = function () {
-  go("ratings.html");
-};
-
-window.goToSwipe = function () {
-  go("swipe.html");
-};
+window.goToDashboard = function () { go("dashboard.html"); };
+window.goToBrowse = function () { go("browse.html"); };
+window.goToRequests = function () { go("requests.html"); };
+window.goToConnections = function () { go("connections.html"); };
+window.goToProfile = function () { go("profile.html"); };
+window.goToProgress = function () { go("progress.html"); };
+window.goToMissions = function () { go("missions.html"); };
+window.goToStats = function () { go("stats.html"); };
+window.goToRatings = function () { go("ratings.html"); };
+window.goToSwipe = function () { go("swipe.html"); };
 
 window.goBack = function () {
-  if (window.history.length > 1) {
-    window.history.back();
-  } else {
-    go("dashboard.html");
-  }
+  if (window.history.length > 1) window.history.back();
+  else go("dashboard.html");
 };
 
 window.focusDashboardSearch = function () {
   const input = document.getElementById("dashboardSearchInput");
-  if (input) {
-    input.focus();
-    input.scrollIntoView({ behavior: "smooth", block: "center" });
-  }
+  if (!input) return;
+  input.focus();
+  input.scrollIntoView({ behavior: "smooth", block: "center" });
 };
 
 window.confirmLogout = async function () {
@@ -78,6 +45,23 @@ window.confirmLogout = async function () {
   }
 
   window.location.href = "index.html";
+};
+
+window.toggleNotifications = function () {
+  const panel = document.getElementById("notificationPanel");
+  if (!panel) return;
+  panel.classList.toggle("show");
+};
+
+window.closeNotifications = function () {
+  const panel = document.getElementById("notificationPanel");
+  if (!panel) return;
+  panel.classList.remove("show");
+};
+
+window.openNotificationTarget = function (target) {
+  if (!target) return;
+  window.location.href = target;
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -98,4 +82,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  document.addEventListener("click", event => {
+    const panel = document.getElementById("notificationPanel");
+    const bell = event.target.closest("[data-notification-button]");
+    if (!panel || bell) return;
+    if (!event.target.closest("#notificationPanel")) {
+      panel.classList.remove("show");
+    }
+  });
 });

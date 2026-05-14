@@ -24,21 +24,28 @@ let searchTerm = "";
 let selectedReceiver = null;
 
 const DEFAULT_CATEGORIES = [
-  { key: "all", icon: "🎯", title: "All Students", subtitle: "Show everyone available right now" },
-  { key: "editing", icon: "🎬", title: "Editing", subtitle: "Canva, video edits, posters, layouts" },
-  { key: "design", icon: "🎨", title: "Design", subtitle: "Graphics, UI, visual content" },
-  { key: "coding", icon: "💻", title: "Coding", subtitle: "Programming, web, app building" },
-  { key: "math", icon: "📐", title: "Math Tutoring", subtitle: "Calculus, algebra, problem solving" },
-  { key: "writing", icon: "✍️", title: "Writing", subtitle: "Scripts, captions, communication help" },
-  { key: "tourism", icon: "🌍", title: "Tourism", subtitle: "Travel planning and guiding" },
-  { key: "hospitality", icon: "🏨", title: "Hotel Management", subtitle: "Hospitality and service skills" },
-  { key: "presentation", icon: "🎤", title: "Presentation", subtitle: "Slides, public speaking, reports" }
+  { key: "all", icon: "🎯", title: "All", subtitle: "Everyone" },
+  { key: "editing", icon: "🎬", title: "Editing", subtitle: "Video & Canva" },
+  { key: "design", icon: "🎨", title: "Design", subtitle: "Graphics & UI" },
+  { key: "coding", icon: "💻", title: "Coding", subtitle: "Web & apps" },
+  { key: "math", icon: "📐", title: "Math", subtitle: "Tutoring" },
+  { key: "writing", icon: "✍️", title: "Writing", subtitle: "Scripts" },
+  { key: "presentation", icon: "🎤", title: "Speaking", subtitle: "Reports" }
 ];
 
 function safeText(value, fallback = "") {
   if (value === null || value === undefined) return fallback;
   const text = String(value).trim();
   return text === "" ? fallback : text;
+}
+
+function escapeHTML(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 function normalizeDate(value) {
@@ -66,26 +73,7 @@ function lowerSkills(text) {
 }
 
 function getAvatar(user) {
-  const pic = safeText(user.profilePic, "");
-  return pic || "avatars/avatar1.png";
-}
-
-function getUserRating(userId) {
-  const info = ratingMap[userId];
-  if (!info || info.count === 0) {
-    return {
-      label: "No ratings",
-      avg: 0,
-      count: 0
-    };
-  }
-
-  const avg = info.total / info.count;
-  return {
-    label: `${avg.toFixed(1)}★`,
-    avg,
-    count: info.count
-  };
+  return safeText(user.profilePic, "avatars/avatar1.png");
 }
 
 function buildRatingMap(ratingDocs) {
@@ -94,18 +82,19 @@ function buildRatingMap(ratingDocs) {
     const rating = docSnap.data();
     const rateeId = rating.rateeId;
     const stars = Number(rating.stars || 0);
-
     if (!rateeId || !Number.isFinite(stars) || stars <= 0) return;
-
-    if (!map[rateeId]) {
-      map[rateeId] = { total: 0, count: 0 };
-    }
-
+    if (!map[rateeId]) map[rateeId] = { total: 0, count: 0 };
     map[rateeId].total += stars;
     map[rateeId].count += 1;
   });
-
   return map;
+}
+
+function getUserRating(userId) {
+  const info = ratingMap[userId];
+  if (!info || info.count === 0) return { label: "New", avg: 0, count: 0 };
+  const avg = info.total / info.count;
+  return { label: `${avg.toFixed(1)}★`, avg, count: info.count };
 }
 
 function getUserCategories(user) {
@@ -121,11 +110,9 @@ function getUserCategories(user) {
 
   if (source.includes("canva") || source.includes("edit") || source.includes("video")) tags.add("editing");
   if (source.includes("design") || source.includes("graphic") || source.includes("ui")) tags.add("design");
-  if (source.includes("code") || source.includes("program") || source.includes("web")) tags.add("coding");
+  if (source.includes("code") || source.includes("program") || source.includes("web") || source.includes("java") || source.includes("python")) tags.add("coding");
   if (source.includes("math") || source.includes("calculus") || source.includes("algebra")) tags.add("math");
   if (source.includes("write") || source.includes("script") || source.includes("caption")) tags.add("writing");
-  if (source.includes("tourism") || source.includes("travel")) tags.add("tourism");
-  if (source.includes("hotel") || source.includes("hospitality")) tags.add("hospitality");
   if (source.includes("presentation") || source.includes("report") || source.includes("public speaking")) tags.add("presentation");
 
   return [...tags];
@@ -138,47 +125,32 @@ function computeMatch(user) {
   const theirOffered = lowerSkills(user.offeredSkills);
 
   let score = 0;
-
   theirOffered.forEach(skill => {
     if (myWanted.includes(skill)) score += 2;
   });
-
   theirWanted.forEach(skill => {
     if (myOffered.includes(skill)) score += 1;
   });
 
-  if (safeText(currentUserData.course, "") && currentUserData.course === user.course) {
-    score += 1;
-  }
-
-  if (safeText(currentUserData.yearLevel, "") && currentUserData.yearLevel === user.yearLevel) {
-    score += 1;
-  }
+  if (safeText(currentUserData.course, "") && currentUserData.course === user.course) score += 1;
+  if (safeText(currentUserData.yearLevel, "") && currentUserData.yearLevel === user.yearLevel) score += 1;
 
   const rating = getUserRating(user.id);
-  if (rating.count > 0) {
-    score += Math.min(2, rating.avg / 2.5);
-  }
+  if (rating.count > 0) score += Math.min(2, rating.avg / 2.5);
 
   const overlap = theirOffered.filter(skill => myWanted.includes(skill));
-  const percent = Math.min(100, Math.max(22, Math.floor(score * 18)));
+  const percent = Math.min(99, Math.max(35, Math.floor(score * 18)));
 
-  return {
-    score,
-    percent,
-    overlap
-  };
+  return { score, percent, overlap };
 }
 
 function matchesCategory(user) {
   if (activeCategory === "all") return true;
-  const categories = getUserCategories(user);
-  return categories.includes(activeCategory);
+  return getUserCategories(user).includes(activeCategory);
 }
 
 function matchesSearch(user) {
   if (!searchTerm) return true;
-
   const haystack = [
     safeText(user.name, ""),
     safeText(user.course, ""),
@@ -191,6 +163,8 @@ function matchesSearch(user) {
 }
 
 function getFilteredUsers() {
+  if (!currentUser) return [];
+
   return allUsers
     .filter(user => user.id !== currentUser.uid)
     .filter(matchesCategory)
@@ -211,11 +185,11 @@ function renderCategoryCards() {
   const container = document.getElementById("categoryCards");
   if (!container) return;
 
-  container.innerHTML = DEFAULT_CATEGORIES.map(cat => `
-    <button class="browse-category-card ${activeCategory === cat.key ? "active-category-card" : ""}" data-category="${cat.key}">
-      <div class="browse-category-icon">${cat.icon}</div>
-      <strong>${cat.title}</strong>
-      <span>${cat.subtitle}</span>
+  container.innerHTML = DEFAULT_CATEGORIES.map(category => `
+    <button class="browse-category-card ${activeCategory === category.key ? "active-category-card" : ""}" data-category="${category.key}">
+      <div class="browse-category-icon">${category.icon}</div>
+      <strong>${category.title}</strong>
+      <span>${category.subtitle}</span>
     </button>
   `).join("");
 }
@@ -225,74 +199,59 @@ function renderUsers() {
   const countEl = document.getElementById("browseResultCount");
   const titleEl = document.getElementById("browseSectionTitle");
   const subtitleEl = document.getElementById("browseSectionSubtitle");
-
   if (!grid) return;
 
   const users = getFilteredUsers();
 
-  countEl.innerText = `${users.length} student${users.length === 1 ? "" : "s"}`;
-
-  const activeCategoryMeta = DEFAULT_CATEGORIES.find(c => c.key === activeCategory);
-  if (activeCategory === "all") {
-    titleEl.innerText = "Recommended Students";
-    subtitleEl.innerText = "Students who may match your interests and offered skills.";
-  } else {
-    titleEl.innerText = activeCategoryMeta?.title || "Filtered Students";
-    subtitleEl.innerText = activeCategoryMeta?.subtitle || "Showing filtered results.";
-  }
+  if (countEl) countEl.innerText = `${users.length}`;
+  if (titleEl) titleEl.innerText = activeCategory === "all" ? "Recommended For You" : DEFAULT_CATEGORIES.find(c => c.key === activeCategory)?.title || "Students";
+  if (subtitleEl) subtitleEl.innerText = activeCategory === "all" ? "Students who may match your skills." : "Filtered students based on this skill.";
 
   if (!users.length) {
     grid.innerHTML = `
-      <div class="browse-empty-state">
-        <div class="reviews-empty-icon">🔎</div>
-        <h4>No students found</h4>
-        <p>Try another search or switch to a different category.</p>
-      </div>
+      <article class="v7-person-card browse-user-card">
+        <div class="v7-person-main">
+          <div class="v7-person-avatar" style="display:grid;place-items:center;background:#eef3ff;">🔎</div>
+          <div class="v7-person-info">
+            <h3>No students found</h3>
+            <p>Try another search or category.</p>
+          </div>
+          <div class="v7-match-ring">0%</div>
+        </div>
+      </article>
     `;
     return;
   }
 
-  grid.innerHTML = users.map((user, index) => {
-    const skills = parseSkills(user.offeredSkills).slice(0, 3);
+  grid.innerHTML = users.map(user => {
+    const skills = parseSkills(user.offeredSkills).slice(0, 2);
     const matchReason = user.match.overlap.length
-      ? `Matches your interest in ${user.match.overlap.slice(0, 2).join(", ")}`
-      : "Potential skill partner";
-
-    const topBadge = index === 0 ? `<span class="browse-top-badge">Top Match</span>` : "";
+      ? user.match.overlap.slice(0, 2).join(", ")
+      : "Skill partner";
 
     return `
-      <article class="browse-user-card">
-        <div class="browse-user-top-row">
-          <div>${topBadge}</div>
-          <span class="browse-match-pill">${user.match.percent}% Match</span>
-        </div>
+      <article class="v7-person-card browse-user-card" onclick="openStudentProfile('${user.id}')">
+        <div class="v7-person-main">
+          <img class="v7-person-avatar" src="${escapeHTML(getAvatar(user))}" alt="Avatar">
 
-        <div class="browse-user-main">
-          <img class="browse-user-avatar" src="${getAvatar(user)}" alt="Avatar">
-          <div class="browse-user-text">
-            <h3>${safeText(user.name, "Student")}</h3>
-            <p class="browse-user-meta">${safeText(user.course, "Course not set")} • ${safeText(user.yearLevel, "Year not set")}</p>
-
-            <div class="browse-user-badges">
-              <span class="browse-rating-pill">${user.rating.label}</span>
-              <span class="browse-soft-pill">${safeText(user.transactionPreference, "Either")}</span>
-            </div>
+          <div class="v7-person-info">
+            <h3>${escapeHTML(safeText(user.name, "Student"))}</h3>
+            <p>${escapeHTML(safeText(user.course, "Course"))} • ${escapeHTML(safeText(user.yearLevel, "Year"))}</p>
+            <p>${escapeHTML(matchReason)}</p>
           </div>
+
+          <div class="v7-match-ring">${user.match.percent}%</div>
         </div>
 
-        <p class="browse-user-reason">${matchReason}</p>
-
-        <div class="browse-skill-tags">
-          ${
-            skills.length
-              ? skills.map(skill => `<span class="browse-skill-tag">${skill}</span>`).join("")
-              : `<span class="browse-skill-tag muted-skill-tag">No listed skills yet</span>`
-          }
+        <div class="v7-person-tags">
+          <span>${escapeHTML(safeText(user.transactionPreference, "Either"))}</span>
+          <span>${escapeHTML(user.rating.label)}</span>
+          ${skills.map(skill => `<span>${escapeHTML(skill)}</span>`).join("")}
         </div>
 
-        <div class="browse-user-actions">
-          <button onclick="openQuickRequestModal('${user.id}')">Quick Request</button>
-          <button class="secondary-btn" onclick="openStudentProfile('${user.id}')">View Profile</button>
+        <div class="v7-person-actions">
+          <button onclick="event.stopPropagation(); openQuickRequestModal('${user.id}')">Request</button>
+          <button class="secondary-btn" onclick="event.stopPropagation(); openStudentProfile('${user.id}')">View</button>
         </div>
       </article>
     `;
@@ -303,8 +262,16 @@ function bindSearch() {
   const input = document.getElementById("browseSearchInput");
   if (!input) return;
 
-  input.addEventListener("input", (e) => {
-    searchTerm = e.target.value.trim();
+  const params = new URLSearchParams(window.location.search);
+  const initialSearch = params.get("search");
+
+  if (initialSearch) {
+    input.value = initialSearch;
+    searchTerm = initialSearch;
+  }
+
+  input.addEventListener("input", event => {
+    searchTerm = event.target.value.trim();
     renderUsers();
   });
 }
@@ -313,10 +280,9 @@ function bindCategoryClicks() {
   const container = document.getElementById("categoryCards");
   if (!container) return;
 
-  container.addEventListener("click", (e) => {
-    const card = e.target.closest(".browse-category-card");
+  container.addEventListener("click", event => {
+    const card = event.target.closest(".browse-category-card");
     if (!card) return;
-
     activeCategory = card.dataset.category || "all";
     renderCategoryCards();
     renderUsers();
@@ -334,13 +300,12 @@ async function reloadBrowseData() {
 
   const welcome = document.getElementById("browseWelcome");
   if (welcome) {
-    welcome.innerText =
-      `${safeText(currentUserData.name, "Student")}, browse skill partners based on shared interests and profile relevance.`;
+    welcome.innerText = `${safeText(currentUserData.name, "Student")}, discover skill partners matched to your profile.`;
   }
 
-  allUsers = usersSnap.docs.map(d => ({
-    id: d.id,
-    ...d.data()
+  allUsers = usersSnap.docs.map(docSnap => ({
+    id: docSnap.id,
+    ...docSnap.data()
   }));
 
   ratingMap = buildRatingMap(ratingsSnap.docs);
@@ -349,16 +314,23 @@ async function reloadBrowseData() {
   renderUsers();
 }
 
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(auth, async user => {
   if (!user) {
     window.location.href = "index.html";
     return;
   }
 
   currentUser = user;
-  await reloadBrowseData();
-  bindSearch();
-  bindCategoryClicks();
+
+  try {
+    bindSearch();
+    bindCategoryClicks();
+    await reloadBrowseData();
+  } catch (error) {
+    console.error("Browse error:", error);
+    const welcome = document.getElementById("browseWelcome");
+    if (welcome) welcome.innerText = "Error loading browse page.";
+  }
 });
 
 window.openQuickRequestModal = function (receiverId) {
@@ -366,7 +338,7 @@ window.openQuickRequestModal = function (receiverId) {
   if (!selectedReceiver) return;
 
   document.getElementById("quickRequestTarget").innerText =
-    `You are sending a request to ${safeText(selectedReceiver.name, "Student")}.`;
+    `Request to ${safeText(selectedReceiver.name, "Student")}`;
 
   document.getElementById("requestMode").value = "swap";
   document.getElementById("requestSkill").value = "";
@@ -416,16 +388,4 @@ window.submitQuickRequest = async function () {
 
 window.openStudentProfile = function (uid) {
   window.location.href = `view-profile.html?uid=${uid}`;
-};
-
-window.goToDashboard = function () {
-  window.location.href = "dashboard.html";
-};
-
-window.goToRequests = function () {
-  window.location.href = "requests.html";
-};
-
-window.goToConnections = function () {
-  window.location.href = "connections.html";
 };

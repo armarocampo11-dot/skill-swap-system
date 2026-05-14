@@ -1,9 +1,10 @@
 import { app } from "./firebase-config.js";
+
 import {
   getAuth,
-  onAuthStateChanged,
-  signOut
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
 import {
   getFirestore,
   doc,
@@ -15,28 +16,34 @@ import {
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-function getRank(level) {
-  if (level <= 1) return "Beginner";
-  if (level === 2) return "Explorer";
-  if (level === 3) return "Skilled";
-  if (level === 4) return "Pro";
-  if (level === 5) return "Expert";
-  if (level === 6) return "Elite";
-  return "Master";
-}
-
-function parseSkills(text) {
-  return (text || "").split(",").map(s => s.trim().toLowerCase()).filter(Boolean);
-}
-
-function topSkills(text, limit = 3) {
-  return (text || "").split(",").map(s => s.trim()).filter(Boolean).slice(0, limit);
-}
-
 function safeText(value, fallback = "Student") {
   if (value === null || value === undefined) return fallback;
   const text = String(value).trim();
   return text === "" ? fallback : text;
+}
+
+function escapeHTML(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function parseSkills(text) {
+  return safeText(text, "")
+    .split(",")
+    .map(skill => skill.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+function displaySkills(text, limit = 2) {
+  return safeText(text, "")
+    .split(",")
+    .map(skill => skill.trim())
+    .filter(Boolean)
+    .slice(0, limit);
 }
 
 function normalizeDate(value) {
@@ -53,274 +60,159 @@ function normalizeDate(value) {
 }
 
 function getProfileCompletion(me) {
-  let filled = 0;
   const checks = [
-    me.name, me.course, me.yearLevel, me.studentId, me.section,
-    me.bio, me.offeredSkills, me.wantedSkills, me.transactionPreference
+    me.name,
+    me.course,
+    me.yearLevel,
+    me.studentId,
+    me.section,
+    me.bio,
+    me.offeredSkills,
+    me.wantedSkills,
+    me.transactionPreference
   ];
-  checks.forEach(value => {
-    if (value && String(value).trim() !== "") filled++;
-  });
-  return { percent: Math.round((filled / checks.length) * 100) };
-}
 
-function getNextGoalText(stats) {
-  if (stats.profileCompletion < 100) return `Complete profile (${stats.profileCompletion}%)`;
-  if (stats.completedCount < 1) return "Complete your first swap";
-  if (stats.ratingCount < 3) return `Earn ${3 - stats.ratingCount} more rating${3 - stats.ratingCount === 1 ? "" : "s"}`;
-  if (stats.acceptedCount < 3) return `Get ${3 - stats.acceptedCount} more accepted connection${3 - stats.acceptedCount === 1 ? "" : "s"}`;
-  return "Keep climbing toward the next level";
-}
-
-function getPriorityActionText(stats) {
-  if (stats.profileCompletion < 100) return "Finish your profile to unlock better matches";
-  if (stats.sentCount < 1) return "Send your first request";
-  if (stats.acceptedCount < 1) return "Get one request accepted";
-  if (stats.completedCount < 1) return "Complete one swap";
-  if (stats.ratingCount < 1) return "Earn your first rating";
-  return "Keep building your campus reputation";
-}
-
-function buildMissions(stats) {
-  return [
-    {
-      icon: "🪪",
-      title: "Complete your profile",
-      reward: "+15 XP",
-      current: stats.profileCompletion,
-      target: 100,
-      done: stats.profileCompletion >= 100
-    },
-    {
-      icon: "📨",
-      title: "Send your first request",
-      reward: "+5 XP",
-      current: Math.min(stats.sentCount, 1),
-      target: 1,
-      done: stats.sentCount >= 1
-    },
-    {
-      icon: "🤝",
-      title: "Get one accepted request",
-      reward: "+10 XP",
-      current: Math.min(stats.acceptedCount, 1),
-      target: 1,
-      done: stats.acceptedCount >= 1
-    },
-    {
-      icon: "✅",
-      title: "Complete one swap",
-      reward: "+50 XP",
-      current: Math.min(stats.completedCount, 1),
-      target: 1,
-      done: stats.completedCount >= 1
-    }
-  ];
-}
-
-function renderMissionPreview(stats) {
-  const container = document.getElementById("missionsPreviewList");
-  if (!container) return;
-
-  const missions = buildMissions(stats).slice(0, 2);
-  container.innerHTML = missions.map(mission => {
-    const progress = Math.min(100, Math.round((mission.current / mission.target) * 100));
-    return `
-      <div class="mission-row ${mission.done ? "done" : ""}">
-        <div class="mission-left">
-          <span class="mission-icon">${mission.icon}</span>
-          <div>
-            <p class="mission-title">${mission.title}</p>
-            <p class="mission-reward">${mission.reward}</p>
-          </div>
-        </div>
-        <div class="mission-right">
-          <div class="mission-status ${mission.done ? "done" : ""}">
-            ${mission.done ? "Done" : `${mission.current}/${mission.target}`}
-          </div>
-          <div class="mission-progress-track">
-            <div class="mission-progress-fill" style="width:${progress}%"></div>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join("");
-}
-
-function buildBadgeProgress(stats) {
-  return [
-    {
-      name: "First Request",
-      description: "Sent your first skill request",
-      unlocked: stats.sentCount >= 1,
-      progressText: `${Math.min(stats.sentCount, 1)}/1 request`
-    },
-    {
-      name: "Swap Starter",
-      description: "Completed your first swap",
-      unlocked: stats.completedCount >= 1,
-      progressText: `${Math.min(stats.completedCount, 1)}/1 completed`
-    },
-    {
-      name: "Trusted Partner",
-      description: "Earned strong ratings from students",
-      unlocked: stats.ratingCount >= 3 && stats.avgRatingNumber >= 4.5,
-      progressText: `${Math.min(stats.ratingCount, 3)}/3 ratings`
-    },
-    {
-      name: "Campus Connector",
-      description: "Built multiple accepted connections",
-      unlocked: stats.acceptedCount >= 3,
-      progressText: `${Math.min(stats.acceptedCount, 3)}/3 accepted`
-    }
-  ];
-}
-
-function renderBadgePreview(stats) {
-  const container = document.getElementById("badgesPreviewList");
-  if (!container) return;
-
-  const badges = buildBadgeProgress(stats)
-    .sort((a, b) => Number(b.unlocked) - Number(a.unlocked))
-    .slice(0, 2);
-
-  container.innerHTML = badges.map(badge => `
-    <div class="achievement-badge ${badge.unlocked ? "unlocked" : "locked"}">
-      <div class="achievement-badge-top">
-        <span class="achievement-badge-icon">${badge.unlocked ? "🏅" : "🔒"}</span>
-        <span class="achievement-badge-state">${badge.unlocked ? "Unlocked" : badge.progressText}</span>
-      </div>
-      <h4>${badge.name}</h4>
-      <p>${badge.description}</p>
-    </div>
-  `).join("");
+  const filled = checks.filter(value => safeText(value, "") !== "").length;
+  return Math.round((filled / checks.length) * 100);
 }
 
 function getRatingMap(ratingDocs) {
   const map = {};
-  ratingDocs.forEach((docSnap) => {
+  ratingDocs.forEach(docSnap => {
     const rating = docSnap.data();
     const rateeId = rating.rateeId;
+    const stars = Number(rating.stars || 0);
+    if (!rateeId || !Number.isFinite(stars) || stars <= 0) return;
     if (!map[rateeId]) map[rateeId] = { total: 0, count: 0 };
-    map[rateeId].total += Number(rating.stars);
+    map[rateeId].total += stars;
     map[rateeId].count += 1;
   });
   return map;
 }
 
-function ratingDisplay(ratingMap, userId) {
+function getRatingLabel(ratingMap, userId) {
   const info = ratingMap[userId];
-  if (!info || info.count === 0) return "No ratings";
+  if (!info || info.count === 0) return "New";
   return `${(info.total / info.count).toFixed(1)}★`;
 }
 
-function computeMatchDetails(me, other, ratingMap) {
+function computeMatch(me, other, ratingMap) {
   const myWanted = parseSkills(me.wantedSkills);
   const myOffered = parseSkills(me.offeredSkills);
-  const otherWanted = parseSkills(other.wantedSkills);
-  const otherOffered = parseSkills(other.offeredSkills);
+  const theirWanted = parseSkills(other.wantedSkills);
+  const theirOffered = parseSkills(other.offeredSkills);
 
   let score = 0;
-  otherOffered.forEach(skill => {
+
+  theirOffered.forEach(skill => {
     if (myWanted.includes(skill)) score += 2;
   });
-  otherWanted.forEach(skill => {
+
+  theirWanted.forEach(skill => {
     if (myOffered.includes(skill)) score += 1;
   });
 
-  if (me.course && other.course && me.course === other.course) score += 1;
-  if (me.yearLevel && other.yearLevel && me.yearLevel === other.yearLevel) score += 1;
+  if (safeText(me.course, "") && me.course === other.course) score += 1;
+  if (safeText(me.yearLevel, "") && me.yearLevel === other.yearLevel) score += 1;
 
-  const ratingInfo = ratingMap[other.id];
-  if (ratingInfo && ratingInfo.count > 0) {
-    score += Math.min(2, (ratingInfo.total / ratingInfo.count) / 2.5);
+  const rating = ratingMap[other.id];
+  if (rating && rating.count > 0) {
+    score += Math.min(2, (rating.total / rating.count) / 2.5);
   }
 
-  const matchedSkills = otherOffered.filter(skill => myWanted.includes(skill));
-  const matchPercent = Math.min(100, Math.max(20, Math.floor(score * 20)));
+  const overlap = theirOffered.filter(skill => myWanted.includes(skill));
+  const percent = Math.min(99, Math.max(35, Math.floor(score * 18)));
 
-  return { score, matchPercent, matchedSkills };
+  return { score, percent, overlap };
 }
 
-function renderRecommended(users, ratingMap, me) {
+function renderRecommended(items, ratingMap) {
   const container = document.getElementById("recommendedList");
   if (!container) return;
 
-  if (!me.offeredSkills && !me.wantedSkills) {
+  if (!items.length) {
     container.innerHTML = `
-      <div class="dashboard-recommend-empty">
-        <p class="empty-state">Add your offered and wanted skills in your profile to get smart recommendations.</p>
-      </div>
+      <article class="v7-person-card recommend-card">
+        <div class="v7-person-main">
+          <div class="v7-person-avatar" style="display:grid;place-items:center;background:#eef3ff;">🔎</div>
+          <div class="v7-person-info">
+            <h4>No matches yet</h4>
+            <p>Add more skills to your profile.</p>
+          </div>
+          <div class="v7-match-ring">0%</div>
+        </div>
+      </article>
     `;
     return;
   }
 
-  if (!users.length) {
-    container.innerHTML = `
-      <div class="dashboard-recommend-empty">
-        <p class="empty-state">No recommendations yet. Try adding more detailed skills to your profile.</p>
-      </div>
+  container.innerHTML = items.map(({ user, match }) => {
+    const avatar = safeText(user.profilePic, "avatars/avatar1.png");
+    const skills = displaySkills(user.offeredSkills, 2);
+    const matchText = match.overlap.length
+      ? match.overlap.slice(0, 2).join(", ")
+      : "Skill partner";
+
+    return `
+      <article class="v7-person-card recommend-card" onclick="openStudentProfile('${user.id}')">
+        <div class="v7-person-main">
+          <img class="v7-person-avatar" src="${escapeHTML(avatar)}" alt="Avatar">
+
+          <div class="v7-person-info">
+            <h4>${escapeHTML(safeText(user.name, "Student"))}</h4>
+            <p>${escapeHTML(safeText(user.course, "Course"))} • ${escapeHTML(safeText(user.yearLevel, "Year"))}</p>
+            <p>${escapeHTML(matchText)}</p>
+          </div>
+
+          <div class="v7-match-ring">${match.percent}%</div>
+        </div>
+
+        <div class="v7-person-tags">
+          <span>${escapeHTML(safeText(user.transactionPreference, "Either"))}</span>
+          <span>${escapeHTML(getRatingLabel(ratingMap, user.id))}</span>
+          ${skills.map(skill => `<span>${escapeHTML(skill)}</span>`).join("")}
+        </div>
+
+        <div class="v7-person-actions">
+          <button onclick="event.stopPropagation(); quickRequest('${user.id}')">Request</button>
+          <button class="secondary-btn" onclick="event.stopPropagation(); openStudentProfile('${user.id}')">View</button>
+        </div>
+      </article>
     `;
-    return;
-  }
-
-  container.innerHTML = "";
-
-  users.forEach((user, index) => {
-    const avatar = user.profilePic && user.profilePic.trim() !== "" ? user.profilePic : "avatars/avatar1.png";
-    const skills = topSkills(user.offeredSkills);
-    const details = computeMatchDetails(me, user, ratingMap);
-
-    const matchText = details.matchedSkills.length > 0
-      ? `Matches your interest in: ${details.matchedSkills.slice(0, 2).join(", ")}`
-      : "Potential skill partner";
-
-    const topBadge = index === 0 ? `<span class="top-match-badge">Top Match</span>` : "";
-
-    const card = document.createElement("div");
-    card.className = "recommend-card recommend-card-polished";
-
-    card.innerHTML = `
-      <div class="recommend-top-row">${topBadge}</div>
-      <img src="${avatar}" class="recommend-avatar" alt="Avatar">
-      <h4>${safeText(user.name, "Student")}</h4>
-      <p class="small-text recommend-subtitle">${safeText(user.course, "N/A")} • ${safeText(user.yearLevel, "N/A")}</p>
-      <div class="recommend-meta">
-        <span class="rating-badge">${ratingDisplay(ratingMap, user.id)}</span>
-        <span class="match-percent">${details.matchPercent}% Match</span>
-      </div>
-      <p class="match-reason">${matchText}</p>
-      <div class="recommend-skills">
-        ${skills.length ? skills.map(skill => `<span class="skill-tag">${skill}</span>`).join("") : `<span class="small-text">No skills listed</span>`}
-      </div>
-      <div class="recommend-actions">
-        <button onclick="event.stopPropagation(); quickRequest('${user.id}')">Quick Request</button>
-        <button class="secondary-btn" onclick="event.stopPropagation(); openStudentProfile('${user.id}')">View Profile</button>
-      </div>
-    `;
-
-    card.onclick = () => {
-      window.location.href = `view-profile.html?uid=${user.id}`;
-    };
-
-    container.appendChild(card);
-  });
+  }).join("");
 }
 
-function showXPPopup(text) {
-  const popup = document.createElement("div");
-  popup.className = "xp-popup";
-  popup.innerText = text;
-  document.body.appendChild(popup);
-  requestAnimationFrame(() => popup.classList.add("show"));
-  setTimeout(() => {
-    popup.classList.remove("show");
-    setTimeout(() => popup.remove(), 250);
-  }, 1800);
+function renderNotifications(items) {
+  const list = document.getElementById("notificationList");
+  if (!list) return;
+
+  if (!items.length) {
+    list.innerHTML = `
+      <div class="notification-item" onclick="goToBrowse()">
+        <div class="notification-icon">✨</div>
+        <div>
+          <h4>All clear</h4>
+          <p>No urgent notifications right now. Discover new skill partners.</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = items.map(item => `
+    <div class="notification-item" onclick="openNotificationTarget('${item.target}')">
+      <div class="notification-icon">${item.icon}</div>
+      <div>
+        <h4>${escapeHTML(item.title)}</h4>
+        <p>${escapeHTML(item.message)}</p>
+      </div>
+    </div>
+  `).join("");
 }
 
 onAuthStateChanged(auth, async (user) => {
   const welcome = document.getElementById("welcome");
+
   if (!user) {
     window.location.href = "index.html";
     return;
@@ -335,209 +227,131 @@ onAuthStateChanged(auth, async (user) => {
       getDocs(collection(db, "users"))
     ]);
 
-    let me = {};
-    if (userSnap.exists()) {
-      me = userSnap.data();
-      if (welcome) welcome.innerText = `Welcome, ${safeText(me.name, "Student")}!`;
-    } else {
-      if (welcome) welcome.innerText = "Welcome!";
+    const me = userSnap.exists() ? userSnap.data() : {};
+    const profileCompletion = getProfileCompletion(me);
+
+    if (welcome) {
+      welcome.innerText = `Welcome, ${safeText(me.name, "Student")}!`;
     }
 
     let completedCount = 0;
+    let pendingIncoming = 0;
     let acceptedCount = 0;
-    let sentCount = 0;
-    let xp = 0;
     let totalStars = 0;
     let ratingCount = 0;
-    let pendingIncoming = 0;
-    let unreadMessages = 0;
-    const myRequestIds = new Set();
+    const notifications = [];
 
-    swapSnapshot.forEach((docSnap) => {
+    swapSnapshot.forEach(docSnap => {
       const request = docSnap.data();
-      const requestId = docSnap.id;
       const isMine = request.requesterId === user.uid || request.receiverId === user.uid;
       if (!isMine) return;
 
-      myRequestIds.add(requestId);
+      if (request.status === "completed") completedCount++;
+      if (request.status === "accepted") acceptedCount++;
 
-      if (request.requesterId === user.uid) {
-        sentCount++;
-        xp += 5;
-      }
-      if (request.status === "accepted") {
-        acceptedCount++;
-        xp += 10;
-      }
-      if (request.status === "completed") {
-        completedCount++;
-        xp += 50;
-      }
       if (request.receiverId === user.uid && request.status === "pending") {
         pendingIncoming++;
       }
     });
 
-    ratingSnapshot.forEach((docSnap) => {
+    ratingSnapshot.forEach(docSnap => {
       const rating = docSnap.data();
       if (rating.rateeId === user.uid) {
-        totalStars += Number(rating.stars);
+        totalStars += Number(rating.stars || 0);
         ratingCount++;
-        if (Number(rating.stars) === 5) xp += 20;
       }
     });
 
-    const avg = ratingCount > 0 ? (totalStars / ratingCount).toFixed(1) : "0.0";
-    const avgRatingNumber = Number(avg);
+    let unreadMessages = 0;
+    const unreadPartners = new Set();
 
-    const unreadByPartner = {};
-
-    messageSnapshot.forEach((docSnap) => {
+    messageSnapshot.forEach(docSnap => {
       const msg = docSnap.data();
       const seenBy = Array.isArray(msg.seenBy) ? msg.seenBy : [];
-      const partnerId = msg.senderId === user.uid ? msg.receiverId : msg.senderId;
-      if (!(msg.senderId === user.uid || msg.receiverId === user.uid)) return;
-
       const isUnread = msg.senderId !== user.uid && !seenBy.includes(user.uid);
-      if (isUnread && partnerId) {
-        unreadByPartner[partnerId] = (unreadByPartner[partnerId] || 0) + 1;
+      if (isUnread) {
+        unreadMessages++;
+        if (msg.senderId) unreadPartners.add(msg.senderId);
       }
     });
 
-    unreadMessages = Object.values(unreadByPartner).reduce((sum, n) => sum + n, 0);
-
-    const profileData = getProfileCompletion(me);
-    xp += Math.floor(profileData.percent / 10) * 5;
-
-    const hasAvatar = me.profilePic && String(me.profilePic).trim() !== "";
-    if (hasAvatar) xp += 5;
-
-    const hasSkillSet =
-      (me.offeredSkills && String(me.offeredSkills).trim() !== "") &&
-      (me.wantedSkills && String(me.wantedSkills).trim() !== "");
-    if (hasSkillSet) xp += 10;
-
-    const level = Math.floor(xp / 100) + 1;
-    const xpIntoLevel = xp % 100;
-    const nextLevelXP = 100 - xpIntoLevel;
-    const rank = getRank(level);
-
-    document.getElementById("swapCount").innerText = completedCount;
-    document.getElementById("xpPoints").innerText = xp;
-    document.getElementById("xpPointsMain").innerText = xp;
-    document.getElementById("avgRating").innerText = `${avg}★`;
-    document.getElementById("levelNumber").innerText = level;
-    document.getElementById("rankTitle").innerText = rank;
-    document.getElementById("xpRemaining").innerText = nextLevelXP;
-    document.getElementById("profileCompletionText").innerText = `Profile completion: ${profileData.percent}%`;
-
-    const xpBar = document.getElementById("xpBar");
-    if (xpBar) {
-      xpBar.style.transition = "width 0.6s ease";
-      requestAnimationFrame(() => {
-        xpBar.style.width = `${xpIntoLevel}%`;
+    if (pendingIncoming > 0) {
+      notifications.push({
+        icon: "📨",
+        title: `${pendingIncoming} request${pendingIncoming === 1 ? "" : "s"} need action`,
+        message: "Tap to review incoming skill swap requests.",
+        target: "requests.html"
       });
     }
 
-    const stats = {
-      sentCount,
-      acceptedCount,
-      completedCount,
-      ratingCount,
-      avgRatingNumber,
-      profileCompletion: profileData.percent
+    if (unreadMessages > 0) {
+      notifications.push({
+        icon: "💬",
+        title: `${unreadMessages} unread message${unreadMessages === 1 ? "" : "s"}`,
+        message: "Tap to open your conversations.",
+        target: "connections.html"
+      });
+    }
+
+    if (profileCompletion < 100) {
+      notifications.push({
+        icon: "👤",
+        title: `Profile is ${profileCompletion}% complete`,
+        message: "Complete your profile to improve your matches.",
+        target: "profile.html"
+      });
+    }
+
+    if (acceptedCount > 0) {
+      notifications.push({
+        icon: "🤝",
+        title: `${acceptedCount} active swap${acceptedCount === 1 ? "" : "s"}`,
+        message: "Tap to manage active exchanges.",
+        target: "requests.html"
+      });
+    }
+
+    const avg = ratingCount > 0 ? (totalStars / ratingCount).toFixed(1) : "0.0";
+    const set = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) el.innerText = value;
     };
 
-    document.getElementById("nextGoalText").innerText = getNextGoalText(stats);
-    document.getElementById("priorityActionText").innerText = getPriorityActionText(stats);
-    document.getElementById("priorityActionTextCard").innerText = getPriorityActionText(stats);
+    set("swapCount", completedCount);
+    set("pendingCount", pendingIncoming);
+    set("messageCount", unreadMessages);
+    set("avgRating", `${avg}★`);
 
+    const badgeCount = pendingIncoming + unreadMessages;
     const requestBadge = document.getElementById("requestBadge");
-    const messageBadge = document.getElementById("messageBadge");
-
-    if (pendingIncoming > 0) {
-      requestBadge.style.display = "inline-block";
-      requestBadge.innerText = pendingIncoming;
-    } else {
-      requestBadge.style.display = "none";
+    if (requestBadge) {
+      requestBadge.style.display = badgeCount > 0 ? "inline-grid" : "none";
+      requestBadge.innerText = badgeCount;
     }
 
-    if (unreadMessages > 0) {
-      messageBadge.style.display = "inline-block";
-      messageBadge.innerText = unreadMessages;
-    } else {
-      messageBadge.style.display = "none";
-    }
-
-    renderMissionPreview(stats);
-    renderBadgePreview(stats);
+    renderNotifications(notifications);
 
     const ratingMap = getRatingMap(ratingSnapshot.docs);
     const candidates = [];
 
-    usersSnapshot.forEach((docSnap) => {
+    usersSnapshot.forEach(docSnap => {
       if (docSnap.id === user.uid) return;
       const other = { id: docSnap.id, ...docSnap.data() };
-      const details = computeMatchDetails(me, other, ratingMap);
-      if (details.score > 0) {
-        candidates.push({ ...other, ...details });
-      }
+      const match = computeMatch(me, other, ratingMap);
+      candidates.push({ user: other, match });
     });
 
     candidates.sort((a, b) => {
-      if (b.score !== a.score) return b.score - a.score;
-      return normalizeDate(b.createdAt) - normalizeDate(a.createdAt);
+      if (b.match.score !== a.match.score) return b.match.score - a.match.score;
+      return normalizeDate(b.user.createdAt) - normalizeDate(a.user.createdAt);
     });
 
-    renderRecommended(candidates.slice(0, 8), ratingMap, me);
-
-    const prevLevelKey = `sti_prev_level_${user.uid}`;
-    const prevLevel = Number(localStorage.getItem(prevLevelKey) || 1);
-    if (level > prevLevel) showXPPopup("🎉 Level Up!");
-    localStorage.setItem(prevLevelKey, String(level));
-
+    renderRecommended(candidates.slice(0, 8), ratingMap);
   } catch (error) {
     console.error("Dashboard error:", error);
     if (welcome) welcome.innerText = "Error loading dashboard.";
   }
 });
-
-window.logout = async function () {
-  await signOut(auth);
-  window.location.href = "index.html";
-};
-
-window.goToProfile = function () {
-  window.location.href = "profile.html";
-};
-
-window.goToBrowse = function () {
-  window.location.href = "browse.html";
-};
-
-window.goToRequests = function () {
-  window.location.href = "requests.html";
-};
-
-window.goToConnections = function () {
-  window.location.href = "connections.html";
-};
-
-window.goToProgress = function () {
-  window.location.href = "progress.html";
-};
-
-window.goToMissions = function () {
-  window.location.href = "missions.html";
-};
-
-window.goToStats = function () {
-  window.location.href = "stats.html";
-};
-
-window.goToRatings = function () {
-  window.location.href = "ratings.html";
-};
 
 window.openStudentProfile = function (uid) {
   window.location.href = `view-profile.html?uid=${uid}`;

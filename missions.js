@@ -49,37 +49,32 @@ function renderMissionList(containerId, missions) {
     const progress = Math.min(100, Math.round((mission.current / mission.target) * 100));
 
     return `
-      <div class="mission-card ${mission.done ? "mission-done" : ""}">
-        <div class="mission-top">
-          <div class="mission-icon">${mission.icon}</div>
-          <span class="mission-badge">${mission.done ? "Completed" : "In Progress"}</span>
+      <article class="mission-card v7-mission-card ${mission.done ? "mission-done" : ""}">
+        <div class="v7-mission-top">
+          <div class="v7-mission-icon">${mission.icon}</div>
+
+          <div class="v7-mission-copy">
+            <h3>${mission.title}</h3>
+            <p>${mission.description}</p>
+          </div>
+
+          <strong class="v7-mission-percent">${progress}%</strong>
         </div>
 
-        <h3>${mission.title}</h3>
-        <p>${mission.description}</p>
-
-        <div class="mission-progress-row">
-          <span>${mission.current}/${mission.target}</span>
-          <strong>${progress}%</strong>
-        </div>
-
-        <div class="mission-bar">
+        <div class="v7-mission-bar">
           <div style="width:${progress}%"></div>
         </div>
 
-        <div class="mission-reward">
-          Reward: <strong>${mission.reward}</strong>
+        <div class="v7-mission-bottom">
+          <span>${mission.done ? "Completed" : `${mission.current}/${mission.target}`} • ${mission.reward}</span>
+          <button onclick="${mission.action}">${mission.done ? "View" : mission.button}</button>
         </div>
-
-        <button onclick="${mission.action}">
-          ${mission.done ? "View" : mission.button}
-        </button>
-      </div>
+      </article>
     `;
   }).join("");
 }
 
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(auth, async user => {
   if (!user) {
     window.location.href = "index.html";
     return;
@@ -102,10 +97,9 @@ onAuthStateChanged(auth, async (user) => {
     let ratingCount = 0;
     let messageCount = 0;
 
-    swapSnapshot.forEach((docSnap) => {
+    swapSnapshot.forEach(docSnap => {
       const request = docSnap.data();
       const isMine = request.requesterId === user.uid || request.receiverId === user.uid;
-
       if (!isMine) return;
 
       if (request.requesterId === user.uid) sentCount++;
@@ -114,20 +108,14 @@ onAuthStateChanged(auth, async (user) => {
       if (request.status === "completed") completedCount++;
     });
 
-    ratingSnapshot.forEach((docSnap) => {
+    ratingSnapshot.forEach(docSnap => {
       const rating = docSnap.data();
-
-      if (rating.rateeId === user.uid) {
-        ratingCount++;
-      }
+      if (rating.rateeId === user.uid) ratingCount++;
     });
 
-    messageSnapshot.forEach((docSnap) => {
+    messageSnapshot.forEach(docSnap => {
       const message = docSnap.data();
-
-      if (message.senderId === user.uid || message.receiverId === user.uid) {
-        messageCount++;
-      }
+      if (message.senderId === user.uid || message.receiverId === user.uid) messageCount++;
     });
 
     const profileCompletion = getProfileCompletion(me);
@@ -135,38 +123,38 @@ onAuthStateChanged(auth, async (user) => {
     const dailyMissions = [
       {
         icon: "📨",
-        title: "Send Your First Request",
-        description: "Start connecting with another student by sending a swap request.",
+        title: "Send First Request",
+        description: "Start connecting with another student.",
         reward: "+5 XP",
         xp: 5,
         current: Math.min(sentCount, 1),
         target: 1,
         done: sentCount >= 1,
-        button: "Browse Students",
+        button: "Browse",
         action: "goToBrowse()"
       },
       {
         icon: "🔥",
         title: "Make 3 Requests",
-        description: "Be active and reach out to more students.",
+        description: "Reach out to more students.",
         reward: "+15 XP",
         xp: 15,
         current: Math.min(sentCount, 3),
         target: 3,
         done: sentCount >= 3,
-        button: "Go to Swipe",
+        button: "Swipe",
         action: "goToSwipe()"
       },
       {
         icon: "💬",
-        title: "Start a Conversation",
-        description: "Send or receive at least one message.",
+        title: "Start Chat",
+        description: "Send or receive one message.",
         reward: "+10 XP",
         xp: 10,
         current: Math.min(messageCount, 1),
         target: 1,
         done: messageCount >= 1,
-        button: "Open Messages",
+        button: "Chats",
         action: "goToConnections()"
       }
     ];
@@ -174,78 +162,78 @@ onAuthStateChanged(auth, async (user) => {
     const milestoneMissions = [
       {
         icon: "👤",
-        title: "Complete Your Profile",
-        description: "Add your details, skills, bio, and transaction preference.",
+        title: "Complete Profile",
+        description: "Add details, bio, skills, and mode.",
         reward: "+20 XP",
         xp: 20,
         current: profileCompletion,
         target: 100,
         done: profileCompletion >= 100,
-        button: "Edit Profile",
+        button: "Edit",
         action: "goToProfile()"
       },
       {
         icon: "🤝",
-        title: "Get One Accepted Request",
-        description: "Have another student accept your swap or payment request.",
+        title: "Get Accepted",
+        description: "Have one request accepted.",
         reward: "+25 XP",
         xp: 25,
         current: Math.min(acceptedCount, 1),
         target: 1,
         done: acceptedCount >= 1,
-        button: "View Requests",
+        button: "Requests",
         action: "goToRequests()"
       },
       {
-        icon: "🏆",
-        title: "Complete One Swap",
-        description: "Finish a successful skill exchange.",
+        icon: "✅",
+        title: "Complete Swap",
+        description: "Finish one successful exchange.",
         reward: "+50 XP",
         xp: 50,
         current: Math.min(completedCount, 1),
         target: 1,
         done: completedCount >= 1,
-        button: "View Progress",
-        action: "goToProgress()"
+        button: "Stats",
+        action: "goToStats()"
       }
     ];
 
     const reputationMissions = [
       {
         icon: "⭐",
-        title: "Receive 3 Ratings",
-        description: "Build trust by getting rated by students you worked with.",
+        title: "Receive Ratings",
+        description: "Collect 3 reviews from swaps.",
         reward: "+30 XP",
         xp: 30,
         current: Math.min(ratingCount, 3),
         target: 3,
         done: ratingCount >= 3,
-        button: "View Ratings",
+        button: "Ratings",
         action: "goToRatings()"
       },
       {
         icon: "📥",
-        title: "Receive 3 Requests",
-        description: "Make your profile attractive enough for others to contact you.",
+        title: "Receive Requests",
+        description: "Make your profile attractive.",
         reward: "+35 XP",
         xp: 35,
         current: Math.min(receivedCount, 3),
         target: 3,
         done: receivedCount >= 3,
-        button: "Improve Profile",
+        button: "Profile",
         action: "goToProfile()"
       },
       {
         icon: "🚀",
         title: "Complete 5 Swaps",
-        description: "Become one of the most active students in the platform.",
+        description: "Become an active skill partner.",
         reward: "+100 XP",
         xp: 100,
         current: Math.min(completedCount, 5),
         target: 5,
         done: completedCount >= 5,
-        button: "View Progress",
-        action: "goToProgress()"
+        button: "Stats",
+        action: "goToStats()"
       }
     ];
 
@@ -259,7 +247,7 @@ onAuthStateChanged(auth, async (user) => {
     const totalXp = completedMissions.reduce((sum, mission) => sum + mission.xp, 0);
 
     document.getElementById("missionsWelcome").innerText =
-      `${me.name || "Student"}, complete missions to earn XP and build your reputation.`;
+      `${me.name || "Student"}, your tasks are organized below.`;
 
     document.getElementById("totalXp").innerText = `${totalXp} XP`;
     document.getElementById("missionRank").innerText = getRank(totalXp);
@@ -270,42 +258,9 @@ onAuthStateChanged(auth, async (user) => {
     renderMissionList("dailyMissionsList", dailyMissions);
     renderMissionList("milestoneMissionsList", milestoneMissions);
     renderMissionList("reputationMissionsList", reputationMissions);
-
   } catch (error) {
     console.error("Missions page error:", error);
     document.getElementById("missionsWelcome").innerText =
       "Error loading missions. Please check your Firebase rules.";
   }
 });
-
-window.goToDashboard = function () {
-  window.location.href = "dashboard.html";
-};
-
-window.goToProgress = function () {
-  window.location.href = "progress.html";
-};
-
-window.goToProfile = function () {
-  window.location.href = "profile.html";
-};
-
-window.goToBrowse = function () {
-  window.location.href = "browse.html";
-};
-
-window.goToSwipe = function () {
-  window.location.href = "swipe.html";
-};
-
-window.goToRequests = function () {
-  window.location.href = "requests.html";
-};
-
-window.goToRatings = function () {
-  window.location.href = "ratings.html";
-};
-
-window.goToConnections = function () {
-  window.location.href = "connections.html";
-};
