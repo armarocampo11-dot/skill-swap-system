@@ -14,16 +14,9 @@
           <h1>Discover</h1>
           <p>Find skill partners faster</p>
         </div>
-        <div class="app-header-actions">
-          <button class="app-round-btn" onclick="goToRequests()">💬</button>
-          <button class="app-round-btn app-avatar-btn" onclick="goToProfile()">👤</button>
-        </div>
+        <div class="app-header-actions"><button class="app-round-btn" title="Requests" onclick="goToRequests()">🔔<span id="requestBadge" class="notification-badge" style="display:none;">0</span></button><button class="app-round-btn app-avatar-btn" title="Profile" onclick="goToProfile()">👤</button><button class="app-round-btn logout-round-btn" title="Logout" onclick="logout()">⏻</button></div>
       </div>
-      <div class="app-tabs">
-        <button  onclick="goToDashboard()">🏠 Dashboard</button>
-        <button class="active" onclick="goToBrowse()">🔎 Browse</button>
-        <button  onclick="goToRequests()">💬 Requests</button>
-      </div>
+      <div class="app-tabs"><button data-route="home" onclick="goToDashboard()">🏠 Dashboard</button><button data-route="requests" onclick="goToRequests()">💬 Requests</button><button data-route="connections" onclick="goToConnections()">🤝 Connections</button></div>
     </header>
     <section class="app-content">
       <section class="app-hero">
@@ -48,6 +41,7 @@
     <button  onclick="goToRequests()">💬<span>Requests</span></button>
     <button  onclick="goToProfile()">👤<span>Profile</span></button>
   </nav>
+  <script type="module" src="common-nav.js"></script>
   <script type="module" src="browse.js"></script>
 </body>
 </html>
