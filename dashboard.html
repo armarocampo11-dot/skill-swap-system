@@ -6,91 +6,88 @@
   <title>Dashboard - STI Skill Swap</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="mobile-app-page">
+<body class="phone-ui">
 
-  <main class="app-screen">
-    <section class="app-header">
-      <div>
-        <h1>STI Skill Swap</h1>
-        <p>Find skill partners across STI campuses</p>
+  <main class="phone-shell">
+    <section class="phone-top">
+      <div class="phone-title-row">
+        <div>
+          <h1>STI Skill Swap</h1>
+          <p>Find skill partners across STI campuses</p>
+        </div>
+        <div class="phone-actions">
+          <button onclick="goToRequests()">🔔<span id="requestBadge" style="display:none;">0</span></button>
+          <button onclick="goToProfile()">👤</button>
+        </div>
       </div>
 
-      <div class="app-header-actions">
-        <button class="app-icon-btn" onclick="goToRequests()">🔔<span id="requestBadge" class="app-dot" style="display:none;">0</span></button>
-        <button class="app-avatar-btn" onclick="goToProfile()">👤</button>
+      <div class="phone-tabs">
+        <button class="active" onclick="goToDashboard()">🏠 Dashboard</button>
+        <button onclick="goToRequests()">💬 Requests</button>
+        <button onclick="goToConnections()">🤝 Connections</button>
       </div>
     </section>
 
-    <section class="app-tabs">
-      <button class="active" onclick="goToDashboard()">🏠 Dashboard</button>
-      <button onclick="goToRequests()">💬 Requests</button>
-      <button onclick="goToConnections()">🤝 Connections</button>
+    <section class="phone-hero">
+      <div class="phone-hero-icon">🔎</div>
+      <div class="phone-hero-copy">
+        <span>Discovery Center</span>
+        <h2>Browse <b>Students</b></h2>
+        <p>Find skill partners faster with cleaner filters, compact cards, and smarter recommendations.</p>
+      </div>
+      <div id="welcome" class="phone-welcome">Loading user...</div>
     </section>
 
-    <section class="app-hero-card">
-      <div class="app-hero-icon">🔎</div>
-      <div>
-        <p class="app-kicker">Discovery Center</p>
-        <h2>Browse <span>Students</span></h2>
-        <p>Find skill partners faster with cleaner cards and smarter recommendations.</p>
-      </div>
-      <div class="app-note" id="welcome">Loading user...</div>
+    <section class="phone-stats">
+      <div><span>🤝</span><strong id="swapCount">0</strong><p>Swaps</p></div>
+      <div><span>⚡</span><strong id="xpPoints">0</strong><p>XP</p></div>
+      <div><span>⭐</span><strong id="avgRating">0.0★</strong><p>Rating</p></div>
+      <div><span>🏆</span><strong id="levelNumber">1</strong><p>Level</p></div>
     </section>
 
-    <section class="app-stats-strip">
-      <div>
-        <span>🤝</span>
-        <strong id="swapCount">0</strong>
-        <p>Swaps</p>
-      </div>
-      <div>
-        <span>⚡</span>
-        <strong id="xpPoints">0</strong>
-        <p>XP</p>
-      </div>
-      <div>
-        <span>⭐</span>
-        <strong id="avgRating">0.0★</strong>
-        <p>Rating</p>
-      </div>
-      <div>
-        <span>🏆</span>
-        <strong id="levelNumber">1</strong>
-        <p>Level</p>
-      </div>
+    <section class="phone-search-row">
+      <button onclick="goToBrowse()">🔍 Search by name, skill, or course</button>
+      <button onclick="goToBrowse()">⚙️ Filters</button>
     </section>
 
-    <section class="app-simple-grid">
-      <article class="app-big-card" onclick="goToProfile()">
-        <div class="app-card-icon">👤</div>
-        <h3>My Profile</h3>
-        <p>Update your details, skills, bio, avatar, and transaction preference.</p>
-        <button>Open Profile</button>
+    <section class="phone-section-head">
+      <h3>Quick Access</h3>
+      <button onclick="goToBrowse()">See all</button>
+    </section>
+
+    <section class="phone-card-row">
+      <article onclick="goToBrowse()">
+        <div>🔎</div>
+        <h4>Discover</h4>
+        <p>Find matches</p>
       </article>
 
-      <article class="app-big-card" onclick="goToBrowse()">
-        <div class="app-card-icon">🔍</div>
-        <h3>Find Matches</h3>
-        <p>Browse students and discover skill partners that match your needs.</p>
-        <button>Browse Students</button>
+      <article onclick="goToMissions()">
+        <div>🎯</div>
+        <h4>Missions</h4>
+        <p>Grow XP</p>
       </article>
 
-      <article class="app-big-card" onclick="goToMissions()">
-        <div class="app-card-icon">🎯</div>
-        <h3>Mission Center</h3>
-        <p>Open your task page and see what actions will grow your account faster.</p>
-        <button>Open Missions</button>
-      </article>
-
-      <article class="app-big-card" onclick="goToRatings()">
-        <div class="app-card-icon">⭐</div>
-        <h3>Ratings & Reviews</h3>
-        <p>See your average rating, total reviews, and what other students said about you.</p>
-        <button>Open Ratings</button>
+      <article onclick="goToRatings()">
+        <div>⭐</div>
+        <h4>Ratings</h4>
+        <p>Reviews</p>
       </article>
     </section>
 
-    <div class="app-hidden-data">
+    <section class="phone-section-head">
+      <h3>Browse By Skills</h3>
+      <button onclick="goToBrowse()">See all</button>
+    </section>
+
+    <section class="phone-skill-row">
+      <article onclick="goToBrowse()">💻<strong>Programming</strong><span>Students</span></article>
+      <article onclick="goToBrowse()">🎨<strong>Design</strong><span>Students</span></article>
+      <article onclick="goToBrowse()">📘<strong>Academic</strong><span>Students</span></article>
+      <article onclick="goToBrowse()">🎤<strong>Communication</strong><span>Students</span></article>
+    </section>
+
+    <div class="phone-hidden">
       <span id="messageBadge"></span>
       <span id="xpPointsMain"></span>
       <span id="rankTitle"></span>
@@ -106,7 +103,7 @@
     </div>
   </main>
 
-  <nav class="app-bottom-nav">
+  <nav class="phone-bottom-nav">
     <button class="active" onclick="goToDashboard()">🏠<span>Home</span></button>
     <button onclick="goToBrowse()">🔎<span>Discover</span></button>
     <button onclick="goToRequests()">💬<span>Requests</span></button>
