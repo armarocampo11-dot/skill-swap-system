@@ -195,14 +195,14 @@ window.goToDashboard = function () {
   window.location.href = "dashboard.html";
 };
 
-window.goToBrowse = function () {
-  window.location.href = "browse.html";
-};
-
 window.goToRequests = function () {
   window.location.href = "requests.html";
 };
 
 window.goToConnections = function () {
   window.location.href = "connections.html";
+};
+
+window.goToSwipe = function () {
+  window.location.href = "swipe.html";
 };

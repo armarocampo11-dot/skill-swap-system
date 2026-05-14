@@ -36,29 +36,35 @@ onAuthStateChanged(auth, async (user) => {
 
   try {
     await loadRatings();
-
-    const querySnapshot = await getDocs(collection(db, "users"));
-    swipeUsers = [];
-
-    querySnapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-
-      if (docSnap.id === user.uid) {
-        currentUserData = data;
-      } else {
-        swipeUsers.push({
-          id: docSnap.id,
-          ...data
-        });
-      }
-    });
-
-    currentIndex = 0;
+    await loadSwipeUsers(user.uid);
     renderSwipeStack();
   } catch (error) {
     console.error("Swipe load error:", error);
+    alert("Error loading swipe page. Check Firebase rules.");
   }
 });
+
+async function loadSwipeUsers(currentUid) {
+  const querySnapshot = await getDocs(collection(db, "users"));
+
+  swipeUsers = [];
+  currentUserData = null;
+
+  querySnapshot.forEach((docSnap) => {
+    const data = docSnap.data();
+
+    if (docSnap.id === currentUid) {
+      currentUserData = data;
+    } else {
+      swipeUsers.push({
+        id: docSnap.id,
+        ...data
+      });
+    }
+  });
+
+  currentIndex = 0;
+}
 
 async function loadRatings() {
   ratingsMap = {};
@@ -69,6 +75,8 @@ async function loadRatings() {
     const rating = docSnap.data();
     const rateeId = rating.rateeId;
 
+    if (!rateeId) return;
+
     if (!ratingsMap[rateeId]) {
       ratingsMap[rateeId] = {
         totalStars: 0,
@@ -76,7 +84,7 @@ async function loadRatings() {
       };
     }
 
-    ratingsMap[rateeId].totalStars += Number(rating.stars);
+    ratingsMap[rateeId].totalStars += Number(rating.stars || 0);
     ratingsMap[rateeId].count += 1;
   });
 }
@@ -89,20 +97,29 @@ function getRatingDisplay(userId) {
   }
 
   const average = (info.totalStars / info.count).toFixed(1);
-  return `${average}★ (${info.count})`;
+  return `${average} ★ (${info.count})`;
+}
+
+function escapeHTML(text) {
+  return String(text || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 function makeSkillTags(skillsText, limit = 3) {
   if (!skillsText || skillsText.trim() === "") {
-    return `<span class="small-text">No skills listed</span>`;
+    return `<span class="skill-tag">No skills listed</span>`;
   }
 
   return skillsText
     .split(",")
-    .map(skill => skill.trim())
+    .map((skill) => skill.trim())
     .filter(Boolean)
     .slice(0, limit)
-    .map(skill => `<span class="skill-tag">${skill}</span>`)
+    .map((skill) => `<span class="skill-tag">${escapeHTML(skill)}</span>`)
     .join("");
 }
 
@@ -110,7 +127,10 @@ function renderSwipeStack() {
   const stack = document.getElementById("swipeStack");
   const empty = document.getElementById("swipeEmptyState");
 
-  if (!stack || !empty) return;
+  if (!stack || !empty) {
+    console.error("Missing swipeStack or swipeEmptyState in swipe.html");
+    return;
+  }
 
   stack.innerHTML = "";
 
@@ -124,80 +144,78 @@ function renderSwipeStack() {
   const visibleUsers = swipeUsers.slice(currentIndex, currentIndex + 3);
 
   visibleUsers.reverse().forEach((userData, reverseIndex) => {
-    const actualLayer = visibleUsers.length - 1 - reverseIndex;
-    const card = createSwipeCard(userData, actualLayer);
+    const layer = visibleUsers.length - 1 - reverseIndex;
+    const card = createSwipeCard(userData, layer);
     stack.appendChild(card);
   });
 }
 
 function createSwipeCard(userData, layer) {
   const userId = userData.id;
-  const avatar = userData.profilePic && userData.profilePic.trim() !== ""
-    ? userData.profilePic
-    : "avatars/avatar1.png";
+
+  const avatar =
+    userData.profilePic && userData.profilePic.trim() !== ""
+      ? userData.profilePic
+      : "avatars/avatar1.png";
 
   const card = document.createElement("div");
   card.className = "swipe-card";
-  // MAKE WHOLE CARD CLICKABLE
-card.addEventListener("click", (e) => {
-  // prevent triggering when clicking buttons
-  const clickedButton = e.target.closest("button");
-  if (clickedButton) return;
 
-  window.location.href = `view-profile.html?uid=${userId}`;
-});
   card.style.zIndex = String(20 - layer);
   card.style.transform = `scale(${1 - layer * 0.035}) translateY(${layer * 10}px)`;
 
   card.innerHTML = `
-    <div class="swipe-card-top">
-      <img src="${avatar}" class="swipe-avatar" alt="Avatar">
-      <div class="swipe-rating">${getRatingDisplay(userId)}</div>
-    </div>
+    <div class="swipe-card-inner">
+      <div class="swipe-card-top">
+        <img src="${escapeHTML(avatar)}" alt="Profile picture" class="swipe-avatar">
 
-    <div class="swipe-body">
-      <h2>${userData.name || "No Name"}</h2>
-      <p class="swipe-meta"><strong>${userData.course || "N/A"}</strong> • ${userData.yearLevel || "N/A"}</p>
-
-      <div class="swipe-mode-row">
-        <span class="compact-mode-badge">${userData.transactionPreference || "Either"}</span>
+        <div>
+          <p class="rating-text">${escapeHTML(getRatingDisplay(userId))}</p>
+          <h2>${escapeHTML(userData.name || "No Name")}</h2>
+          <p class="muted-text">${escapeHTML(userData.course || "N/A")} • ${escapeHTML(userData.yearLevel || "N/A")}</p>
+        </div>
       </div>
 
-      <p class="swipe-section-label">Top Skills</p>
-      <div class="swipe-skills">
+      <div class="preference-pill">
+        ${escapeHTML(userData.transactionPreference || "Either")}
+      </div>
+
+      <h3>Top Skills</h3>
+
+      <div class="skill-tags">
         ${makeSkillTags(userData.offeredSkills)}
       </div>
 
-      <p class="swipe-bio">${userData.bio || "No bio yet."}</p>
-    </div>
+      <p class="bio-text">${escapeHTML(userData.bio || "No bio yet.")}</p>
 
-    <div class="swipe-actions">
-      <button class="secondary-btn" data-action="skip">Skip</button>
-      <button class="view-btn" data-action="profile">View Profile</button>
-      <button class="primary-btn" data-action="like">Interested</button>
+      <div class="swipe-actions">
+        <button type="button" data-action="skip">Skip</button>
+        <button type="button" data-action="profile">View Profile</button>
+        <button type="button" data-action="like">Interested</button>
+      </div>
     </div>
   `;
+
+  card.querySelector('[data-action="skip"]').addEventListener("click", (e) => {
+    e.stopPropagation();
+    swipeLeft(card);
+  });
+
+  card.querySelector('[data-action="profile"]').addEventListener("click", (e) => {
+    e.stopPropagation();
+    window.location.href = `view-profile.html?uid=${userId}`;
+  });
+
+  card.querySelector('[data-action="like"]').addEventListener("click", (e) => {
+    e.stopPropagation();
+    openRequestModal(card, userId, userData.name || "User");
+  });
 
   if (layer === 0) {
     enableSwipe(card, userData);
   } else {
     card.classList.add("swipe-card-back");
   }
-
-  card.querySelector('[data-action="skip"]').onclick = (e) => {
-    e.stopPropagation();
-    swipeLeft(card);
-  };
-
-card.querySelector('[data-action="profile"]').addEventListener("click", (e) => {
-  e.stopPropagation();
-  window.location.href = `view-profile.html?uid=${userId}`;
-});
-
-  card.querySelector('[data-action="like"]').onclick = (e) => {
-    e.stopPropagation();
-    openRequestModal(card, userId, userData.name || "User");
-  };
 
   return card;
 }
@@ -206,10 +224,27 @@ function enableSwipe(card, userData) {
   let startX = 0;
   let currentX = 0;
   let dragging = false;
+  let hasDragged = false;
+
+  card.addEventListener("click", (e) => {
+    if (e.target.closest("button")) return;
+
+    if (hasDragged) {
+      hasDragged = false;
+      return;
+    }
+
+    window.location.href = `view-profile.html?uid=${userData.id}`;
+  });
 
   card.addEventListener("pointerdown", (e) => {
+    if (e.target.closest("button")) return;
+
     dragging = true;
+    hasDragged = false;
     startX = e.clientX;
+    currentX = 0;
+
     card.setPointerCapture(e.pointerId);
     card.classList.add("dragging");
   });
@@ -218,6 +253,11 @@ function enableSwipe(card, userData) {
     if (!dragging) return;
 
     currentX = e.clientX - startX;
+
+    if (Math.abs(currentX) > 10) {
+      hasDragged = true;
+    }
+
     const rotate = currentX * 0.05;
 
     card.style.transform = `translateX(${currentX}px) rotate(${rotate}deg)`;
@@ -226,11 +266,12 @@ function enableSwipe(card, userData) {
 
   const endDrag = () => {
     if (!dragging) return;
+
     dragging = false;
     card.classList.remove("dragging");
 
     if (currentX > 120) {
-      openRequestModal(card, userData.id, userData.name || "User");
+      swipeRightToProfile(card, userData.id);
     } else if (currentX < -120) {
       swipeLeft(card);
     } else {
@@ -247,15 +288,28 @@ function enableSwipe(card, userData) {
 function swipeLeft(card) {
   card.style.transform = "translateX(-140%) rotate(-18deg)";
   card.style.opacity = "0";
+
   setTimeout(() => {
     currentIndex++;
     renderSwipeStack();
   }, 220);
 }
 
+function swipeRightToProfile(card, userId) {
+  card.style.transform = "translateX(140%) rotate(18deg)";
+  card.style.opacity = "0";
+
+  setTimeout(() => {
+    currentIndex++;
+    renderSwipeStack();
+    window.location.href = `view-profile.html?uid=${userId}`;
+  }, 220);
+}
+
 function removeTopCardAfterLike(card) {
   card.style.transform = "translateX(140%) rotate(18deg)";
   card.style.opacity = "0";
+
   setTimeout(() => {
     currentIndex++;
     renderSwipeStack();
@@ -275,10 +329,14 @@ function openRequestModal(card, receiverId, receiverName) {
 
   if (modal) modal.style.display = "flex";
   if (amountInput) amountInput.value = "";
+
   if (messageInput) {
     messageInput.value = "Hi! I'm interested in your skills. Let's do a swap.";
   }
-  if (amountSection) amountSection.style.display = "none";
+
+  if (amountSection) {
+    amountSection.style.display = "none";
+  }
 
   setTimeout(() => {
     window.selectType("Swap");
@@ -289,15 +347,17 @@ window.selectType = function (type) {
   selectedType = type;
 
   const buttons = document.querySelectorAll(".modal-options button");
-  buttons.forEach(btn => btn.classList.remove("active"));
 
-  if (buttons.length >= 3) {
-    if (type === "Swap") buttons[0].classList.add("active");
-    if (type === "Payment") buttons[1].classList.add("active");
-    if (type === "Either") buttons[2].classList.add("active");
-  }
+  buttons.forEach((btn) => {
+    btn.classList.remove("active");
+
+    if (btn.dataset.type === type) {
+      btn.classList.add("active");
+    }
+  });
 
   const amountSection = document.getElementById("amountSection");
+
   if (amountSection) {
     amountSection.style.display = type === "Payment" ? "block" : "none";
   }
@@ -305,12 +365,25 @@ window.selectType = function (type) {
 
 window.closeModal = function () {
   const modal = document.getElementById("requestModal");
-  if (modal) modal.style.display = "none";
+
+  if (modal) {
+    modal.style.display = "none";
+  }
+
+  selectedReceiver = null;
+  selectedReceiverName = "";
+  selectedCard = null;
+  selectedType = "Swap";
 };
 
 window.submitRequest = async function () {
   const message = document.getElementById("messageInput")?.value.trim();
   const amount = document.getElementById("amountInput")?.value.trim() || "";
+
+  if (!selectedReceiver) {
+    alert("No selected user.");
+    return;
+  }
 
   if (!message) {
     alert("Please enter a message.");
@@ -328,17 +401,19 @@ window.submitRequest = async function () {
       requesterName: currentUserData?.name || "Unknown User",
       receiverId: selectedReceiver,
       receiverName: selectedReceiverName,
-      message,
+      message: message,
       status: "pending",
       createdAt: new Date().toISOString(),
       transactionType: selectedType,
       proposedAmount: selectedType === "Payment" ? amount : ""
     });
 
-    closeModal();
+    const cardToRemove = selectedCard;
 
-    if (selectedCard) {
-      removeTopCardAfterLike(selectedCard);
+    window.closeModal();
+
+    if (cardToRemove) {
+      removeTopCardAfterLike(cardToRemove);
     }
   } catch (error) {
     console.error("Swipe request error:", error);
