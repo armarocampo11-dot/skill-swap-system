@@ -7,37 +7,212 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <main class="app-shell">
-    <header class="app-header">
+    <header class="app-header compact-header">
       <div class="app-header-top">
         <div class="app-title">
           <h1>Profile</h1>
-          <p>Edit your skills and student info</p>
+          <p>Keep your skill profile clean and complete</p>
         </div>
-        <div class="app-header-actions"><button class="app-round-btn" title="Requests" onclick="goToRequests()">🔔<span id="requestBadge" class="notification-badge" style="display:none;">0</span></button><button class="app-round-btn app-avatar-btn" title="Profile" onclick="goToProfile()">👤</button><button class="app-round-btn logout-round-btn" title="Logout" onclick="logout()">⏻</button></div>
+
+        <div class="app-header-actions">
+          <button class="app-round-btn" onclick="goToDashboard()" aria-label="Dashboard">🏠</button>
+          <button class="app-round-btn logout-round-btn" onclick="confirmLogout()" aria-label="Logout">↪</button>
+        </div>
       </div>
-      <div class="app-tabs"><button data-route="home" onclick="goToDashboard()">🏠 Dashboard</button><button data-route="requests" onclick="goToRequests()">💬 Requests</button><button data-route="connections" onclick="goToConnections()">🤝 Connections</button></div>
+
+      <div class="app-tabs compact-tabs">
+        <button data-page="dashboard.html" onclick="goToDashboard()">🏠 <span>Dashboard</span></button>
+        <button data-page="requests.html" onclick="goToRequests()">💬 <span>Requests</span></button>
+        <button data-page="connections.html" onclick="goToConnections()">🤝 <span>Connections</span></button>
+      </div>
     </header>
-    <section class="app-content">
-      <section class="app-hero">
-        <div class="app-hero-icon">👤</div>
-        <div>
-          <span class="app-kicker">STI Skill Swap</span>
-          <h2>My <span>Profile</span></h2>
-          <p>Keep your profile clean, trusted, and easy to understand.</p>
+
+    <section class="app-content compact-content">
+
+      <section class="profile-hero-card">
+        <div class="profile-hero-main">
+          <div class="profile-hero-left">
+            <img id="profileHeroAvatar" class="profile-hero-avatar" src="avatars/avatar1.png" alt="Avatar">
+            <div>
+              <p class="profile-kicker">My profile</p>
+              <h1 id="profileHeroName">Loading...</h1>
+              <p id="profileHeroMeta" class="profile-hero-meta">Course • Year Level</p>
+              <div class="profile-hero-trust">
+                <span id="profileHeroRating" class="profile-hero-pill">0.0★</span>
+                <span id="profileHeroSwaps" class="profile-hero-pill soft-pill">0 swaps</span>
+                <span id="profileHeroLevel" class="profile-hero-pill soft-pill">Level 1</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
-      <section class="profile-hero-card"><div class="profile-hero-left"><img id="profileHeroAvatar" class="profile-hero-avatar" src="avatars/avatar1.png" alt="Avatar"><div><span class="profile-kicker">My profile</span><h1 id="profileHeroName">Loading...</h1><p id="profileHeroMeta">Course • Year Level</p><div class="public-profile-pills"><span id="profileHeroRating" class="profile-hero-pill">0.0★</span><span id="profileHeroSwaps" class="profile-hero-pill">0 swaps</span><span id="profileHeroLevel" class="profile-hero-pill">Level 1</span></div></div></div></section>
-      <section class="profile-main-grid"><div class="profile-form-card"><div class="profile-section-head"><div><h2>Edit Profile</h2><p>Keep your profile short and complete.</p></div></div><div class="profile-form-grid"><div><label for="name">Full Name</label><input id="name" type="text"></div><div><label for="studentId">Student ID</label><input id="studentId" type="text"></div><div><label for="course">Course</label><input id="course" type="text"></div><div><label for="yearLevel">Year Level</label><input id="yearLevel" type="text"></div><div><label for="section">Section</label><input id="section" type="text"></div><div><label for="transactionPreference">Preferred Mode</label><select id="transactionPreference"><option value="">Select mode</option><option value="Swap">Swap</option><option value="Paid">Paid</option><option value="Either">Either</option></select></div></div><label for="bio">Bio</label><textarea id="bio" rows="3"></textarea><label for="offeredSkills">Offered Skills</label><textarea id="offeredSkills" rows="3"></textarea><label for="wantedSkills">Wanted Skills</label><textarea id="wantedSkills" rows="3"></textarea><label>Choose Avatar</label><div id="avatarGrid" class="profile-avatar-grid"><button type="button" class="profile-avatar-option" data-avatar="avatars/avatar1.png"><img src="avatars/avatar1.png"></button><button type="button" class="profile-avatar-option" data-avatar="avatars/avatar2.png"><img src="avatars/avatar2.png"></button><button type="button" class="profile-avatar-option" data-avatar="avatars/avatar3.png"><img src="avatars/avatar3.png"></button><button type="button" class="profile-avatar-option" data-avatar="avatars/avatar4.png"><img src="avatars/avatar4.png"></button><button type="button" class="profile-avatar-option" data-avatar="avatars/avatar5.png"><img src="avatars/avatar5.png"></button><button type="button" class="profile-avatar-option" data-avatar="avatars/avatar6.png"><img src="avatars/avatar6.png"></button></div><div class="profile-action-row"><button onclick="saveProfile()">Save Profile</button><button class="secondary-btn" onclick="goToDashboard()">Dashboard</button></div><p id="profileStatus" class="small-text"></p></div><aside class="profile-side-card"><h3>Preview</h3><div class="profile-preview-mini"><img id="profileMiniAvatar" class="profile-mini-avatar" src="avatars/avatar1.png"><div><h4 id="profileMiniName">Your Name</h4><p id="profileMiniMeta">Course • Year</p></div></div><div class="profile-preview-tags"><span id="profilePreviewMode" class="profile-hero-pill">Either</span><span id="profilePreviewRating" class="profile-hero-pill">0.0★</span></div><p id="profilePreviewBio">Your bio preview will appear here.</p><div id="profilePreviewSkills" class="profile-preview-skills"></div><h4>Profile Strength</h4><div class="profile-strength-bar"><div id="profileStrengthFill" class="profile-strength-fill"></div></div><p id="profileStrengthText" class="small-text">0% complete</p></aside></section>
+
+      <section class="profile-main-grid">
+        <div class="profile-form-card compact-form-card">
+          <div class="profile-section-head">
+            <div>
+              <h2>Edit Profile</h2>
+              <p>Use dropdowns so your details stay consistent.</p>
+            </div>
+          </div>
+
+          <div class="profile-form-grid">
+            <div class="profile-field">
+              <label for="name">Full Name</label>
+              <input id="name" class="app-input" type="text" placeholder="Enter your full name">
+            </div>
+
+            <div class="profile-field">
+              <label for="studentId">Student ID</label>
+              <input id="studentId" class="app-input" type="text" placeholder="Enter your student ID">
+            </div>
+
+            <div class="profile-field">
+              <label for="course">Course</label>
+              <select id="course" class="app-input">
+                <option value="">Select course</option>
+                <option value="BSIT">BSIT</option>
+                <option value="BSCS">BSCS</option>
+                <option value="BSCpE">BSCpE</option>
+                <option value="BSBA">BSBA</option>
+                <option value="BSAIS">BSAIS</option>
+                <option value="BSTM">BSTM</option>
+                <option value="BSHM">BSHM</option>
+                <option value="BSMA">BSMA</option>
+                <option value="ACT">ACT</option>
+                <option value="STEM">STEM</option>
+                <option value="ABM">ABM</option>
+                <option value="HUMSS">HUMSS</option>
+                <option value="GAS">GAS</option>
+                <option value="ICT">ICT</option>
+              </select>
+            </div>
+
+            <div class="profile-field">
+              <label for="yearLevel">Year Level</label>
+              <select id="yearLevel" class="app-input">
+                <option value="">Select year level</option>
+                <option value="Grade 11">Grade 11</option>
+                <option value="Grade 12">Grade 12</option>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+              </select>
+            </div>
+
+            <div class="profile-field">
+              <label for="section">Section</label>
+              <select id="section" class="app-input">
+                <option value="">Select section</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+                <option value="H">H</option>
+                <option value="I">I</option>
+                <option value="J">J</option>
+                <option value="101">101</option>
+                <option value="102">102</option>
+                <option value="103">103</option>
+                <option value="104">104</option>
+                <option value="201">201</option>
+                <option value="202">202</option>
+                <option value="203">203</option>
+                <option value="204">204</option>
+              </select>
+            </div>
+
+            <div class="profile-field">
+              <label for="transactionPreference">Preferred Mode</label>
+              <select id="transactionPreference" class="app-input">
+                <option value="">Select mode</option>
+                <option value="Swap">Swap</option>
+                <option value="Paid">Paid</option>
+                <option value="Either">Either</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="profile-field">
+            <label for="bio">Bio</label>
+            <textarea id="bio" class="app-input" rows="3" placeholder="Tell students what you can offer."></textarea>
+          </div>
+
+          <div class="profile-form-grid single-gap-top">
+            <div class="profile-field">
+              <label for="offeredSkills">Offered Skills</label>
+              <textarea id="offeredSkills" class="app-input" rows="3" placeholder="Example: Canva, Math, Editing"></textarea>
+            </div>
+
+            <div class="profile-field">
+              <label for="wantedSkills">Wanted Skills</label>
+              <textarea id="wantedSkills" class="app-input" rows="3" placeholder="Example: Java, Public Speaking"></textarea>
+            </div>
+          </div>
+
+          <div class="profile-field single-gap-top">
+            <label>Choose Avatar</label>
+            <div class="profile-avatar-grid" id="avatarGrid">
+              <button type="button" class="profile-avatar-option" data-avatar="avatars/avatar1.png"><img src="avatars/avatar1.png" alt="Avatar 1"></button>
+              <button type="button" class="profile-avatar-option" data-avatar="avatars/avatar2.png"><img src="avatars/avatar2.png" alt="Avatar 2"></button>
+              <button type="button" class="profile-avatar-option" data-avatar="avatars/avatar3.png"><img src="avatars/avatar3.png" alt="Avatar 3"></button>
+              <button type="button" class="profile-avatar-option" data-avatar="avatars/avatar4.png"><img src="avatars/avatar4.png" alt="Avatar 4"></button>
+              <button type="button" class="profile-avatar-option" data-avatar="avatars/avatar5.png"><img src="avatars/avatar5.png" alt="Avatar 5"></button>
+              <button type="button" class="profile-avatar-option" data-avatar="avatars/avatar6.png"><img src="avatars/avatar6.png" alt="Avatar 6"></button>
+            </div>
+          </div>
+
+          <div class="profile-action-row">
+            <button onclick="saveProfile()">Save Profile</button>
+            <button class="secondary-btn" onclick="goToDashboard()">Dashboard</button>
+          </div>
+
+          <p id="profileStatus" class="small-text"></p>
+        </div>
+
+        <aside class="profile-side-card compact-preview-card">
+          <h3>Preview</h3>
+          <div class="profile-preview-mini">
+            <img id="profileMiniAvatar" class="profile-mini-avatar" src="avatars/avatar1.png" alt="Avatar">
+            <div>
+              <h4 id="profileMiniName">Your Name</h4>
+              <p id="profileMiniMeta">Course • Year</p>
+            </div>
+          </div>
+
+          <div class="profile-preview-tags">
+            <span id="profilePreviewMode" class="profile-hero-pill">Either</span>
+            <span id="profilePreviewRating" class="profile-hero-pill">0.0★</span>
+          </div>
+
+          <p id="profilePreviewBio">Your bio preview will appear here.</p>
+          <div id="profilePreviewSkills" class="profile-preview-skills"></div>
+
+          <div class="profile-strength-card">
+            <h4>Profile Strength</h4>
+            <div class="profile-strength-bar">
+              <div id="profileStrengthFill" class="profile-strength-fill"></div>
+            </div>
+            <p id="profileStrengthText" class="small-text">0% complete</p>
+          </div>
+        </aside>
+      </section>
     </section>
   </main>
-  
+
   <nav class="app-bottom-nav">
-    <button  onclick="goToDashboard()">🏠<span>Home</span></button>
-    <button  onclick="goToBrowse()">🔎<span>Discover</span></button>
-    <button  onclick="goToRequests()">💬<span>Requests</span></button>
-    <button class="active" onclick="goToProfile()">👤<span>Profile</span></button>
+    <button data-page="dashboard.html" onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button data-page="browse.html" onclick="goToBrowse()">🔎<span>Discover</span></button>
+    <button data-page="requests.html" onclick="goToRequests()">💬<span>Requests</span></button>
+    <button data-page="profile.html" onclick="goToProfile()">👤<span>Profile</span></button>
   </nav>
+
   <script type="module" src="common-nav.js"></script>
   <script type="module" src="profile.js"></script>
 </body>
