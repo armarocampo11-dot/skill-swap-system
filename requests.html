@@ -7,96 +7,45 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <div class="navbar">
-    <h2>Requests</h2>
-    <div class="nav-links">
-      <button onclick="goToDashboard()">Dashboard</button>
-      <button onclick="goToBrowse()">Browse</button>
-      <button onclick="goToConnections()">Connections</button>
-    </div>
-  </div>
-
-  <div class="page">
-    <div class="container dashboard-shell">
-
-      <section class="requests-hero-card">
-        <p class="requests-kicker">Request center</p>
-        <h1>My <span class="glow-text">Requests</span></h1>
-        <p>Manage pending, active, completed, and sent requests.</p>
-        <p id="requestsWelcome" class="requests-hero-welcome">Loading requests...</p>
-      </section>
-
-      <section class="requests-filter-grid">
-        <button class="request-filter-card active-filter" data-filter="needs_action">
-          <span class="request-filter-count" id="needsActionCount">0</span>
-          <span class="request-filter-label">Action</span>
-        </button>
-
-        <button class="request-filter-card" data-filter="active">
-          <span class="request-filter-count" id="activeCount">0</span>
-          <span class="request-filter-label">Active</span>
-        </button>
-
-        <button class="request-filter-card" data-filter="completed">
-          <span class="request-filter-count" id="completedCount">0</span>
-          <span class="request-filter-label">Done</span>
-        </button>
-
-        <button class="request-filter-card" data-filter="sent">
-          <span class="request-filter-count" id="sentCount">0</span>
-          <span class="request-filter-label">Sent</span>
-        </button>
-      </section>
-
-      <section class="requests-panel-card">
-        <div class="requests-panel-head">
-          <div>
-            <h2 id="requestBoardTitle">Needs Action</h2>
-            <p id="requestBoardSubtitle">Incoming requests waiting for your response.</p>
-          </div>
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="app-header-top">
+        <div class="app-title">
+          <h1>Requests</h1>
+          <p>Track swaps and pending actions</p>
         </div>
-
-        <div id="requestsList" class="requests-modern-list"></div>
+        <div class="app-header-actions">
+          <button class="app-round-btn" onclick="goToRequests()">💬</button>
+          <button class="app-round-btn app-avatar-btn" onclick="goToProfile()">👤</button>
+        </div>
+      </div>
+      <div class="app-tabs">
+        <button  onclick="goToDashboard()">🏠 Dashboard</button>
+        <button  onclick="goToBrowse()">🔎 Browse</button>
+        <button class="active" onclick="goToRequests()">💬 Requests</button>
+      </div>
+    </header>
+    <section class="app-content">
+      <section class="app-hero">
+        <div class="app-hero-icon">💬</div>
+        <div>
+          <span class="app-kicker">STI Skill Swap</span>
+          <h2>My <span>Requests</span></h2>
+          <p>View pending requests, active swaps, completed trades, and sent requests.</p>
+        </div>
       </section>
-
-    </div>
-  </div>
-
-  <div id="ratingModal" class="app-modal hidden">
-    <div class="app-modal-card">
-      <div class="app-modal-head">
-        <h3>Rate Request</h3>
-        <button class="secondary-btn" onclick="closeRatingModal()">Close</button>
-      </div>
-
-      <p id="ratingModalTarget" class="small-text">Loading...</p>
-
-      <label class="app-label" for="ratingStars">Stars</label>
-      <select id="ratingStars" class="app-input">
-        <option value="5">5 - Excellent</option>
-        <option value="4">4 - Strong</option>
-        <option value="3">3 - Good</option>
-        <option value="2">2 - Fair</option>
-        <option value="1">1 - Poor</option>
-      </select>
-
-      <label class="app-label" for="ratingComment">Comment</label>
-      <textarea id="ratingComment" class="app-input" rows="4" placeholder="Write a short review"></textarea>
-
-      <div class="app-modal-actions">
-        <button onclick="submitRating()">Submit Rating</button>
-      </div>
-    </div>
-  </div>
-
-  <nav class="bottom-nav">
-    <button onclick="goToDashboard()">🏠<span>Home</span></button>
-    <button onclick="goToBrowse()">🔎<span>Discover</span></button>
+      <div id="requestsWelcome" class="app-note">Loading requests...</div>
+      <section class="app-stats request-filter-row"><button class="app-stat request-filter-card active-filter" data-filter="needs_action"><span>⚡</span><strong id="needsActionCount">0</strong><p>Action</p></button><button class="app-stat request-filter-card" data-filter="active"><span>🤝</span><strong id="activeCount">0</strong><p>Active</p></button><button class="app-stat request-filter-card" data-filter="completed"><span>✅</span><strong id="completedCount">0</strong><p>Done</p></button><button class="app-stat request-filter-card" data-filter="sent"><span>📨</span><strong id="sentCount">0</strong><p>Sent</p></button></section>
+      <section class="app-section-head"><div><h3 id="requestBoardTitle">Needs Action</h3><p id="requestBoardSubtitle" class="small-text">Incoming requests waiting for your response.</p></div></section><section id="requestsList" class="requests-modern-list"></section>
+    </section>
+  </main>
+  <div id="ratingModal" class="app-modal hidden"><div class="app-modal-card"><div class="app-modal-head"><h3>Rate Request</h3><button class="secondary-btn" onclick="closeRatingModal()">Close</button></div><p id="ratingModalTarget" class="small-text">Loading...</p><label for="ratingStars">Stars</label><select id="ratingStars"><option value="5">5 - Excellent</option><option value="4">4 - Strong</option><option value="3">3 - Good</option><option value="2">2 - Fair</option><option value="1">1 - Poor</option></select><label for="ratingComment">Comment</label><textarea id="ratingComment" rows="4" placeholder="Write a short review"></textarea><button onclick="submitRating()">Submit Rating</button></div></div>
+  <nav class="app-bottom-nav">
+    <button  onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button  onclick="goToBrowse()">🔎<span>Discover</span></button>
     <button class="active" onclick="goToRequests()">💬<span>Requests</span></button>
-    <button onclick="goToProfile()">👤<span>Profile</span></button>
+    <button  onclick="goToProfile()">👤<span>Profile</span></button>
   </nav>
-
   <script type="module" src="requests.js"></script>
 </body>
 </html>

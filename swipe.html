@@ -7,55 +7,43 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <div class="navbar">
-    <h2>Swipe</h2>
-    <div class="nav-links">
-      <button onclick="goToDashboard()">Dashboard</button>
-      <button onclick="goToBrowse()">Browse</button>
-      <button onclick="goToProfile()">Profile</button>
-    </div>
-  </div>
-
-  <div class="page">
-    <div class="container">
-
-      <section class="dashboard-hero swipe-page-hero">
-        <p class="dashboard-kicker">Quick matching</p>
-        <h1 class="hero-title">Swipe <span class="glow-text">Students</span></h1>
-        <p class="subtitle">Swipe left to skip, right to view and connect.</p>
-      </section>
-
-      <section class="swipe-stage">
-        <div id="swipeStack" class="swipe-stack"></div>
-
-        <div id="swipeEmpty" class="swipe-empty hidden">
-          <div class="reviews-empty-icon">🎉</div>
-          <h3>No more students</h3>
-          <p>You've reached the end of the current list.</p>
-
-          <div class="swipe-empty-actions">
-            <button onclick="reloadSwipeCards()">Reload</button>
-            <button class="secondary-btn" onclick="goToBrowse()">Browse</button>
-          </div>
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="app-header-top">
+        <div class="app-title">
+          <h1>Swipe</h1>
+          <p>Quick matching mode</p>
+        </div>
+        <div class="app-header-actions">
+          <button class="app-round-btn" onclick="goToRequests()">💬</button>
+          <button class="app-round-btn app-avatar-btn" onclick="goToProfile()">👤</button>
+        </div>
+      </div>
+      <div class="app-tabs">
+        <button  onclick="goToDashboard()">🏠 Dashboard</button>
+        <button class="active" onclick="goToBrowse()">🔎 Browse</button>
+        <button  onclick="goToRequests()">💬 Requests</button>
+      </div>
+    </header>
+    <section class="app-content">
+      <section class="app-hero">
+        <div class="app-hero-icon">💙</div>
+        <div>
+          <span class="app-kicker">STI Skill Swap</span>
+          <h2>Swipe <span>Students</span></h2>
+          <p>Skip left, show interest right, or open the full profile.</p>
         </div>
       </section>
-
-      <div class="swipe-actions">
-        <button class="danger-btn" onclick="skipCurrentCard()">Skip</button>
-        <button onclick="interestedCurrentCard()">Interested</button>
-      </div>
-
-    </div>
-  </div>
-
-  <nav class="bottom-nav">
-    <button onclick="goToDashboard()">🏠<span>Home</span></button>
+      <section class="swipe-stage"><div id="swipeStack" class="swipe-stack"></div><div id="swipeEmptyState" class="swipe-empty" style="display:none;"><h3>No more students</h3><p>You reached the end of the current stack.</p><div class="swipe-empty-actions"><button onclick="resetSwipeStack()">Restart</button><button class="secondary-btn" onclick="goToBrowse()">Browse</button></div></div></section><div id="requestModal" class="modal-overlay" style="display:none;"><div class="modal-card"><h3>Send Request</h3><p>Transaction Type</p><div class="modal-options"><button data-type="Swap" onclick="selectType('Swap')">Swap</button><button data-type="Payment" onclick="selectType('Payment')">Payment</button><button data-type="Either" onclick="selectType('Either')">Either</button></div><div id="amountSection" style="display:none;"><label>Amount (₱)</label><input id="amountInput" type="number" min="0"></div><label>Message</label><textarea id="messageInput" rows="4"></textarea><div class="modal-actions"><button onclick="submitRequest()">Send</button><button class="secondary-btn" onclick="closeModal()">Cancel</button></div></div></div>
+    </section>
+  </main>
+  
+  <nav class="app-bottom-nav">
+    <button  onclick="goToDashboard()">🏠<span>Home</span></button>
     <button class="active" onclick="goToBrowse()">🔎<span>Discover</span></button>
-    <button onclick="goToRequests()">💬<span>Requests</span></button>
-    <button onclick="goToProfile()">👤<span>Profile</span></button>
+    <button  onclick="goToRequests()">💬<span>Requests</span></button>
+    <button  onclick="goToProfile()">👤<span>Profile</span></button>
   </nav>
-
   <script type="module" src="swipe.js"></script>
 </body>
 </html>

@@ -7,117 +7,43 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <div class="navbar">
-    <h2>Student</h2>
-    <div class="nav-links">
-      <button onclick="goToDashboard()">Dashboard</button>
-      <button onclick="goToBrowse()">Browse</button>
-      <button onclick="goToRequests()">Requests</button>
-    </div>
-  </div>
-
-  <div class="page">
-    <div class="container dashboard-shell">
-
-      <section class="public-profile-hero">
-        <div class="public-profile-main">
-          <img id="publicAvatar" class="public-profile-avatar" src="avatars/avatar1.png" alt="Avatar">
-
-          <div class="public-profile-copy">
-            <p class="profile-kicker">Student profile</p>
-            <h1 id="publicName">Loading...</h1>
-            <p id="publicMeta" class="public-profile-meta">Course • Year • Section</p>
-
-            <div class="public-profile-pills">
-              <span id="publicRating" class="profile-hero-pill">0.0★</span>
-              <span id="publicSwaps" class="profile-hero-pill soft-pill">0 swaps</span>
-              <span id="publicMode" class="profile-hero-pill soft-pill">Either</span>
-            </div>
-          </div>
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="app-header-top">
+        <div class="app-title">
+          <h1>Student</h1>
+          <p>View student profile</p>
         </div>
-
-        <div class="public-profile-actions">
-          <button onclick="openPublicRequestModal()">Send Request</button>
-          <button class="secondary-btn" onclick="goToSwipe()">Back to Swipe</button>
+        <div class="app-header-actions">
+          <button class="app-round-btn" onclick="goToRequests()">💬</button>
+          <button class="app-round-btn app-avatar-btn" onclick="goToProfile()">👤</button>
         </div>
-      </section>
-
-      <section class="public-profile-main-card">
-        <h2>About</h2>
-        <p id="publicBio" class="public-profile-bio">Loading bio...</p>
-
-        <div class="public-skill-columns">
-          <div class="public-skill-card">
-            <h3>Offered Skills</h3>
-            <div id="publicOfferedSkills" class="public-skill-tags"></div>
-          </div>
-
-          <div class="public-skill-card">
-            <h3>Wanted Skills</h3>
-            <div id="publicWantedSkills" class="public-skill-tags"></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="profile-side-card">
-        <h3>Snapshot</h3>
-        <div class="public-snapshot-list">
-          <div class="public-snapshot-item">
-            <span class="public-snapshot-icon">🪪</span>
-            <div>
-              <p>Student ID</p>
-              <strong id="publicStudentId">Not provided</strong>
-            </div>
-          </div>
-
-          <div class="public-snapshot-item">
-            <span class="public-snapshot-icon">📚</span>
-            <div>
-              <p>Level</p>
-              <strong id="publicLevel">Level 1</strong>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </div>
-  </div>
-
-  <div id="publicRequestModal" class="app-modal hidden">
-    <div class="app-modal-card">
-      <div class="app-modal-head">
-        <h3>Send Request</h3>
-        <button class="secondary-btn" onclick="closePublicRequestModal()">Close</button>
       </div>
-
-      <label for="publicRequestMode">Request Mode</label>
-      <select id="publicRequestMode">
-        <option value="swap">Swap</option>
-        <option value="paid">Paid</option>
-        <option value="either">Either</option>
-      </select>
-
-      <label for="publicRequestSkill">Skill / Request Title</label>
-      <input id="publicRequestSkill" type="text" placeholder="Example: Canva editing">
-
-      <label for="publicRequestAmount">Paid Amount</label>
-      <input id="publicRequestAmount" type="number" min="0" placeholder="Optional">
-
-      <label for="publicRequestMessage">Message</label>
-      <textarea id="publicRequestMessage" rows="4" placeholder="Write a short message"></textarea>
-
-      <button onclick="submitPublicRequest()">Send Request</button>
-    </div>
-  </div>
-
-  <nav class="bottom-nav">
-    <button onclick="goToDashboard()">🏠<span>Home</span></button>
+      <div class="app-tabs">
+        <button  onclick="goToDashboard()">🏠 Dashboard</button>
+        <button class="active" onclick="goToBrowse()">🔎 Browse</button>
+        <button  onclick="goToRequests()">💬 Requests</button>
+      </div>
+    </header>
+    <section class="app-content">
+      <section class="app-hero">
+        <div class="app-hero-icon">👤</div>
+        <div>
+          <span class="app-kicker">STI Skill Swap</span>
+          <h2>Student <span>Profile</span></h2>
+          <p>Check skills, rating, mode, and send a request.</p>
+        </div>
+      </section>
+      <section class="public-profile-hero"><div class="public-profile-main"><img id="publicAvatar" class="public-profile-avatar" src="avatars/avatar1.png"><div><span class="profile-kicker">Student profile</span><h1 id="publicName">Loading...</h1><p id="publicMeta">Course • Year • Section</p><div class="public-profile-pills"><span id="publicRating" class="profile-hero-pill">0.0★</span><span id="publicSwaps" class="profile-hero-pill">0 swaps</span><span id="publicMode" class="profile-hero-pill">Either</span></div></div></div><div class="public-profile-actions"><button onclick="openPublicRequestModal()">Send Request</button><button class="secondary-btn" onclick="goToSwipe()">Back to Swipe</button></div></section><section class="public-profile-main-card"><h2>About</h2><p id="publicBio">Loading bio...</p><div class="public-skill-columns"><div class="public-skill-card"><h3>Offered Skills</h3><div id="publicOfferedSkills" class="public-skill-tags"></div></div><div class="public-skill-card"><h3>Wanted Skills</h3><div id="publicWantedSkills" class="public-skill-tags"></div></div></div></section><section class="profile-side-card"><h3>Snapshot</h3><p>Student ID: <strong id="publicStudentId">Not provided</strong></p><p>Section: <strong id="publicSection">Not provided</strong></p><p>Level: <strong id="publicLevelSide">Level 1</strong></p><p>Rating: <strong id="publicRatingSide">0.0★</strong></p><p>Swaps: <strong id="publicSwapsSide">0</strong></p><p>Mode: <strong id="publicModeSide">Either</strong></p></section>
+    </section>
+  </main>
+  <div id="publicRequestModal" class="app-modal hidden"><div class="app-modal-card"><div class="app-modal-head"><h3>Send Request</h3><button class="secondary-btn" onclick="closePublicRequestModal()">Close</button></div><p id="publicRequestTarget" class="small-text">Loading...</p><label for="publicRequestMode">Request Mode</label><select id="publicRequestMode"><option value="swap">Swap</option><option value="paid">Paid</option><option value="either">Either</option></select><label for="publicRequestSkill">Skill / Request Title</label><input id="publicRequestSkill" type="text"><label for="publicRequestAmount">Paid Amount</label><input id="publicRequestAmount" type="number" min="0"><label for="publicRequestMessage">Message</label><textarea id="publicRequestMessage" rows="4"></textarea><button onclick="submitPublicRequest()">Send Request</button></div></div>
+  <nav class="app-bottom-nav">
+    <button  onclick="goToDashboard()">🏠<span>Home</span></button>
     <button class="active" onclick="goToBrowse()">🔎<span>Discover</span></button>
-    <button onclick="goToRequests()">💬<span>Requests</span></button>
-    <button onclick="goToProfile()">👤<span>Profile</span></button>
+    <button  onclick="goToRequests()">💬<span>Requests</span></button>
+    <button  onclick="goToProfile()">👤<span>Profile</span></button>
   </nav>
-
   <script type="module" src="view-profile.js"></script>
 </body>
 </html>

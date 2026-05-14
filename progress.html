@@ -7,92 +7,43 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <div class="navbar">
-    <h2>Progress</h2>
-    <div class="nav-links">
-      <button onclick="goToDashboard()">Dashboard</button>
-      <button onclick="goToMissions()">Missions</button>
-      <button onclick="goToProfile()">Profile</button>
-    </div>
-  </div>
-
-  <div class="page">
-    <div class="container dashboard-shell">
-
-      <section class="progress-hero-card">
-        <div class="progress-hero-top">
-          <div>
-            <p class="progress-kicker">Progress center</p>
-            <h1>Your <span class="glow-text">Growth</span></h1>
-            <p id="progressWelcome">Loading progress...</p>
-          </div>
-
-          <div class="progress-hero-actions">
-            <button onclick="goToMissions()">Missions</button>
-          </div>
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="app-header-top">
+        <div class="app-title">
+          <h1>Progress</h1>
+          <p>Track your growth</p>
+        </div>
+        <div class="app-header-actions">
+          <button class="app-round-btn" onclick="goToRequests()">💬</button>
+          <button class="app-round-btn app-avatar-btn" onclick="goToProfile()">👤</button>
+        </div>
+      </div>
+      <div class="app-tabs">
+        <button  onclick="goToDashboard()">🏠 Dashboard</button>
+        <button  onclick="goToBrowse()">🔎 Browse</button>
+        <button  onclick="goToRequests()">💬 Requests</button>
+      </div>
+    </header>
+    <section class="app-content">
+      <section class="app-hero">
+        <div class="app-hero-icon">⚡</div>
+        <div>
+          <span class="app-kicker">STI Skill Swap</span>
+          <h2>Your <span>Growth</span></h2>
+          <p>Earn XP through profile completion, swaps, and ratings.</p>
         </div>
       </section>
-
-      <section class="progress-level-card">
-        <div class="progress-level-head">
-          <div>
-            <p class="progress-section-kicker">Level overview</p>
-            <h2>Level <span id="levelNumber">1</span></h2>
-            <p class="progress-soft-text">Earn XP through swaps, missions, ratings, and profile completion.</p>
-          </div>
-
-          <div class="progress-level-chip">
-            <span>XP</span>
-            <strong id="xpPointsMain">0</strong>
-          </div>
-        </div>
-
-        <div class="progress-wrap">
-          <div class="progress-bar-container">
-            <div class="progress-bar" id="xpBar"></div>
-          </div>
-        </div>
-
-        <div class="progress-meter-labels">
-          <span id="xpRemaining">0 XP until next level</span>
-          <span id="profileCompletionText">Profile completion: 0%</span>
-        </div>
-      </section>
-
-      <section class="progress-focus-single">
-        <div class="progress-mini-box">
-          <span class="progress-focus-label">Next Goal</span>
-          <strong id="nextGoalText">Loading...</strong>
-        </div>
-
-        <div class="progress-mini-box">
-          <span class="progress-focus-label">Rank</span>
-          <strong id="rankTitle">Beginner</strong>
-        </div>
-      </section>
-
-      <section class="progress-panel-card">
-        <div class="progress-panel-head">
-          <div>
-            <h3>XP Breakdown</h3>
-            <p>This is where your XP comes from.</p>
-          </div>
-        </div>
-
-        <div id="xpBreakdownList" class="xp-breakdown-list"></div>
-      </section>
-
-    </div>
-  </div>
-
-  <nav class="bottom-nav">
-    <button onclick="goToDashboard()">🏠<span>Home</span></button>
-    <button onclick="goToBrowse()">🔎<span>Discover</span></button>
-    <button onclick="goToRequests()">💬<span>Requests</span></button>
+      <div id="progressWelcome" class="app-note">Loading progress...</div><section class="progress-level-card"><div class="progress-level-head"><div><span class="progress-section-kicker">Level overview</span><h2>Level <span id="levelNumber">1</span></h2><p>Current rank: <strong id="rankTitle">Beginner</strong></p></div><div class="ratings-mini-card"><span class="ratings-mini-label">XP</span><strong id="xpPointsMain">0</strong></div></div><div class="progress-bar-container"><div class="progress-bar" id="xpBar"></div></div><p id="xpRemaining" class="small-text">0 XP until next level</p><p id="profileCompletionText" class="small-text">Profile completion: 0%</p><p id="nextGoalText" class="small-text">Loading...</p></section><section class="app-section-head"><h3>XP Breakdown</h3></section><section id="xpBreakdownList" class="xp-breakdown-list"></section><section class="app-section-head"><h3>Badges</h3></section><section id="badgesList" class="reviews-feed"></section>
+    </section>
+  </main>
+  
+  <nav class="app-bottom-nav">
+    <button  onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button  onclick="goToBrowse()">🔎<span>Discover</span></button>
+    <button  onclick="goToRequests()">💬<span>Requests</span></button>
     <button class="active" onclick="goToProfile()">👤<span>Profile</span></button>
   </nav>
-
   <script type="module" src="progress.js"></script>
 </body>
 </html>

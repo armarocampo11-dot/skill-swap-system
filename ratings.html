@@ -7,106 +7,43 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <div class="navbar">
-    <h2>Ratings</h2>
-    <div class="nav-links">
-      <button onclick="goToDashboard()">Dashboard</button>
-      <button onclick="goToProfile()">Profile</button>
-      <button onclick="goToStats()">Stats</button>
-    </div>
-  </div>
-
-  <div class="page">
-    <div class="container dashboard-shell">
-
-      <section class="ratings-hero-card">
-        <p class="ratings-kicker">Reputation center</p>
-        <h1>My <span class="glow-text">Ratings</span></h1>
-        <p id="ratingsWelcome">Loading your rating history.</p>
-        <span class="reputation-tier-pill" id="ratingStatusHero">Loading.</span>
-      </section>
-
-      <section class="ratings-summary-card-premium">
-        <div class="ratings-summary-top">
-          <div>
-            <p class="ratings-section-kicker">Rating Summary</p>
-            <h2 id="ratingAverageMain">0.0★</h2>
-            <p id="ratingAverageLabel" class="ratings-soft-text">Average: 0.0★</p>
-          </div>
-
-          <div class="ratings-chip">
-            <span>Total Reviews</span>
-            <strong id="ratingCountMain">0</strong>
-          </div>
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="app-header-top">
+        <div class="app-title">
+          <h1>Ratings</h1>
+          <p>Your reputation and feedback</p>
         </div>
-
-        <div class="ratings-progress-track">
-          <div id="ratingsMeterFill" class="ratings-progress-fill"></div>
+        <div class="app-header-actions">
+          <button class="app-round-btn" onclick="goToRequests()">💬</button>
+          <button class="app-round-btn app-avatar-btn" onclick="goToProfile()">👤</button>
         </div>
-
-        <p id="ratingInsightMini" class="small-text">No reviews yet</p>
-      </section>
-
-      <section class="ratings-insight-grid">
-        <div class="ratings-insight-card">
-          <span class="ratings-insight-title">Standing</span>
-          <strong id="ratingStatusText">Loading.</strong>
-          <p id="ratingStatusSubtext">Loading.</p>
-        </div>
-
-        <div class="ratings-insight-card">
-          <span class="ratings-insight-title">Tier</span>
-          <strong id="reputationTierTitle">Loading.</strong>
-          <p id="reputationTierSubtext">Loading.</p>
-          <div class="reputation-tier-pill" id="reputationTierPill">Loading.</div>
+      </div>
+      <div class="app-tabs">
+        <button  onclick="goToDashboard()">🏠 Dashboard</button>
+        <button  onclick="goToBrowse()">🔎 Browse</button>
+        <button  onclick="goToRequests()">💬 Requests</button>
+      </div>
+    </header>
+    <section class="app-content">
+      <section class="app-hero">
+        <div class="app-hero-icon">⭐</div>
+        <div>
+          <span class="app-kicker">STI Skill Swap</span>
+          <h2>My <span>Ratings</span></h2>
+          <p>See reviews from completed swaps.</p>
         </div>
       </section>
-
-      <section class="ratings-side-stack">
-        <div class="ratings-mini-card">
-          <span class="ratings-mini-label">Average</span>
-          <strong id="ratingAverageSide">0.0★</strong>
-        </div>
-
-        <div class="ratings-mini-card">
-          <span class="ratings-mini-label">Reviews</span>
-          <strong id="ratingCountSide">0</strong>
-        </div>
-
-        <div class="ratings-mini-card">
-          <span class="ratings-mini-label">5-Star</span>
-          <strong id="fiveStarCount">0</strong>
-        </div>
-
-        <div class="ratings-mini-card reputation-mini-card">
-          <span class="ratings-mini-label">Trust</span>
-          <strong id="trustSnapshotValue">New</strong>
-          <p id="trustSnapshotText" class="ratings-mini-subtext">Start collecting reviews.</p>
-        </div>
-      </section>
-
-      <section class="ratings-reviews-card">
-        <div class="ratings-panel-head">
-          <div>
-            <h3>Reviews</h3>
-            <p>Feedback from completed swaps.</p>
-          </div>
-        </div>
-
-        <div id="reviewsList" class="reviews-feed"></div>
-      </section>
-
-    </div>
-  </div>
-
-  <nav class="bottom-nav">
-    <button onclick="goToDashboard()">🏠<span>Home</span></button>
-    <button onclick="goToBrowse()">🔎<span>Discover</span></button>
-    <button onclick="goToRequests()">💬<span>Requests</span></button>
+      <div id="ratingsWelcome" class="app-note">Loading your rating history...</div><section class="ratings-summary-card-premium"><div class="ratings-summary-top"><div><span class="ratings-section-kicker">Rating Summary</span><h2 id="ratingAverageMain">0.0★</h2><p id="ratingAverageLabel">Average: 0.0★</p></div><div class="ratings-mini-card"><span>Total</span><strong id="ratingCountMain">0</strong></div></div><div class="ratings-progress-track"><div id="ratingsMeterFill" class="ratings-progress-fill"></div></div><p id="ratingInsightMini" class="small-text">No reviews yet</p></section><section class="ratings-insight-grid"><div class="ratings-insight-card"><span>Standing</span><strong id="ratingStatusText">Loading...</strong><p id="ratingStatusSubtext">Loading...</p></div><div class="ratings-insight-card"><span>Tier</span><strong id="reputationTierTitle">Loading...</strong><p id="reputationTierSubtext">Loading...</p><div id="reputationTierPill" class="reputation-tier-pill">Loading...</div></div></section><section class="ratings-side-stack"><div class="ratings-mini-card"><span>Average</span><strong id="ratingAverageSide">0.0★</strong></div><div class="ratings-mini-card"><span>Reviews</span><strong id="ratingCountSide">0</strong></div><div class="ratings-mini-card"><span>5-Star</span><strong id="fiveStarCount">0</strong></div><div class="ratings-mini-card"><span>Trust</span><strong id="trustSnapshotValue">New</strong><p id="trustSnapshotText">Start collecting reviews.</p></div></section><section class="app-section-head"><h3>Reviews</h3><span id="ratingStatusHero" class="reputation-tier-pill">Loading...</span></section><section id="reviewsList" class="reviews-feed"></section>
+    </section>
+  </main>
+  
+  <nav class="app-bottom-nav">
+    <button  onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button  onclick="goToBrowse()">🔎<span>Discover</span></button>
+    <button  onclick="goToRequests()">💬<span>Requests</span></button>
     <button class="active" onclick="goToProfile()">👤<span>Profile</span></button>
   </nav>
-
   <script type="module" src="ratings.js"></script>
 </body>
 </html>

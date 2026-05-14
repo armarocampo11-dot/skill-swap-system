@@ -6,89 +6,46 @@
   <title>Missions - STI Skill Swap</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="missions-page">
-
-  <div class="navbar">
-    <h2>Missions</h2>
-    <div class="nav-links">
-      <button onclick="goToDashboard()">Dashboard</button>
-      <button onclick="goToSwipe()">Swipe</button>
-      <button onclick="goToProfile()">Profile</button>
-    </div>
-  </div>
-
-  <div class="page">
-    <div class="container">
-
-      <section class="dashboard-hero card">
-        <p class="dashboard-kicker">Mission center</p>
-        <h1 class="hero-title">Growth <span class="glow-text">Missions</span></h1>
-        <p id="missionsWelcome" class="dashboard-welcome">Loading missions...</p>
-      </section>
-
-      <section class="mission-stats">
-        <div class="mission-stat-card">
-          <p>Total XP</p>
-          <h2 id="totalXp">0 XP</h2>
-          <span id="missionRank" class="mission-badge">Starter</span>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="app-header-top">
+        <div class="app-title">
+          <h1>Missions</h1>
+          <p>Complete tasks and grow XP</p>
         </div>
-
-        <div class="mission-stat-card">
-          <p>Completed</p>
-          <h2 id="completedMissions">0</h2>
+        <div class="app-header-actions">
+          <button class="app-round-btn" onclick="goToRequests()">💬</button>
+          <button class="app-round-btn app-avatar-btn" onclick="goToProfile()">👤</button>
         </div>
-
-        <div class="mission-stat-card">
-          <p>Active</p>
-          <h2 id="activeMissions">0</h2>
-        </div>
-
-        <div class="mission-stat-card">
-          <p>Profile</p>
-          <h2 id="profilePercent">0%</h2>
+      </div>
+      <div class="app-tabs">
+        <button  onclick="goToDashboard()">🏠 Dashboard</button>
+        <button  onclick="goToBrowse()">🔎 Browse</button>
+        <button  onclick="goToRequests()">💬 Requests</button>
+      </div>
+    </header>
+    <section class="app-content">
+      <section class="app-hero">
+        <div class="app-hero-icon">🎯</div>
+        <div>
+          <span class="app-kicker">STI Skill Swap</span>
+          <h2>Growth <span>Missions</span></h2>
+          <p>Small tasks that keep your account active and trusted.</p>
         </div>
       </section>
-
-      <section class="card">
-        <div class="dashboard-section-head">
-          <div>
-            <h2>Daily Missions</h2>
-            <p class="small-text">Small tasks to stay active.</p>
-          </div>
-        </div>
-        <div id="dailyMissionsList" class="mission-grid"></div>
-      </section>
-
-      <section class="card">
-        <div class="dashboard-section-head">
-          <div>
-            <h2>Milestone Missions</h2>
-            <p class="small-text">Long-term growth goals.</p>
-          </div>
-        </div>
-        <div id="milestoneMissionsList" class="mission-grid"></div>
-      </section>
-
-      <section class="card">
-        <div class="dashboard-section-head">
-          <div>
-            <h2>Reputation Missions</h2>
-            <p class="small-text">Build trust through swaps.</p>
-          </div>
-        </div>
-        <div id="reputationMissionsList" class="mission-grid"></div>
-      </section>
-
-    </div>
-  </div>
-
-  <nav class="bottom-nav">
-    <button onclick="goToDashboard()">🏠<span>Home</span></button>
-    <button onclick="goToBrowse()">🔎<span>Discover</span></button>
-    <button onclick="goToRequests()">💬<span>Requests</span></button>
-    <button onclick="goToProfile()">👤<span>Profile</span></button>
+      <div id="missionsWelcome" class="app-note">Loading missions...</div>
+      <section class="mission-stats"><div class="mission-stat-card"><p>Total XP</p><h2 id="totalXp">0 XP</h2><span id="missionRank" class="mission-badge">Starter</span></div><div class="mission-stat-card"><p>Completed</p><h2 id="completedMissions">0</h2></div><div class="mission-stat-card"><p>Active</p><h2 id="activeMissions">0</h2></div><div class="mission-stat-card"><p>Profile</p><h2 id="profilePercent">0%</h2></div></section>
+      <section class="app-section-head"><h3>Daily Missions</h3></section><section id="dailyMissionsList" class="mission-grid"></section><section class="app-section-head"><h3>Milestone Missions</h3></section><section id="milestoneMissionsList" class="mission-grid"></section><section class="app-section-head"><h3>Reputation Missions</h3></section><section id="reputationMissionsList" class="mission-grid"></section>
+    </section>
+  </main>
+  
+  <nav class="app-bottom-nav">
+    <button  onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button  onclick="goToBrowse()">🔎<span>Discover</span></button>
+    <button  onclick="goToRequests()">💬<span>Requests</span></button>
+    <button class="active" onclick="goToProfile()">👤<span>Profile</span></button>
   </nav>
-
   <script type="module" src="missions.js"></script>
 </body>
 </html>

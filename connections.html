@@ -7,75 +7,46 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <div class="navbar">
-    <h2>Connections</h2>
-    <div class="nav-links">
-      <button onclick="goToDashboard()">Dashboard</button>
-      <button onclick="goToRequests()">Requests</button>
-      <button onclick="goToBrowse()">Browse</button>
-    </div>
-  </div>
-
-  <div class="page">
-    <div class="container dashboard-shell">
-
-      <section class="dashboard-hero card">
-        <p class="dashboard-kicker">Message center</p>
-        <h1 class="hero-title">My <span class="glow-text">Chats</span></h1>
-        <p class="subtitle">Your accepted swaps are grouped by person.</p>
-        <p id="connectionsWelcome" class="dashboard-welcome">Loading conversations...</p>
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="app-header-top">
+        <div class="app-title">
+          <h1>Connections</h1>
+          <p>Your active chats and accepted swaps</p>
+        </div>
+        <div class="app-header-actions">
+          <button class="app-round-btn" onclick="goToRequests()">💬</button>
+          <button class="app-round-btn app-avatar-btn" onclick="goToProfile()">👤</button>
+        </div>
+      </div>
+      <div class="app-tabs">
+        <button  onclick="goToDashboard()">🏠 Dashboard</button>
+        <button  onclick="goToBrowse()">🔎 Browse</button>
+        <button  onclick="goToRequests()">💬 Requests</button>
+      </div>
+    </header>
+    <section class="app-content">
+      <section class="app-hero">
+        <div class="app-hero-icon">🤝</div>
+        <div>
+          <span class="app-kicker">STI Skill Swap</span>
+          <h2>Active <span>Chats</span></h2>
+          <p>Continue conversations with your accepted skill partners.</p>
+        </div>
       </section>
-
-      <section class="chat-app-shell">
-        <aside class="chat-sidebar">
-          <div class="chat-sidebar-top">
-            <h3>Chats</h3>
-            <p class="small-text">Unread and newest appear first.</p>
-          </div>
-          <div id="conversationList" class="chat-conversation-list"></div>
-        </aside>
-
-        <section class="chat-main-panel">
-          <div id="threadHeader" class="chat-main-header">
-            <div class="chat-main-header-left">
-              <img id="threadAvatar" class="chat-main-avatar" src="avatars/avatar1.png" alt="Avatar">
-              <div>
-                <h3 id="threadName">Select a conversation</h3>
-                <p id="threadSubtext" class="small-text">Messages will appear here.</p>
-              </div>
-            </div>
-          </div>
-
-          <div id="threadMessages" class="chat-message-area">
-            <div class="chat-empty-state">
-              <div class="chat-empty-icon">💬</div>
-              <h4>No conversation selected</h4>
-              <p>Choose a chat to start messaging.</p>
-            </div>
-          </div>
-
-          <div class="chat-status-row">
-            <span id="typingStatus" class="chat-typing-status"></span>
-          </div>
-
-          <div class="chat-composer-bar">
-            <textarea id="threadInput" class="chat-composer-input" rows="1" placeholder="Type a message..."></textarea>
-            <button id="sendThreadBtn" class="chat-send-btn">Send</button>
-          </div>
-        </section>
-      </section>
-
-    </div>
-  </div>
-
-  <nav class="bottom-nav">
-    <button onclick="goToDashboard()">🏠<span>Home</span></button>
-    <button onclick="goToBrowse()">🔎<span>Discover</span></button>
-    <button onclick="goToRequests()">💬<span>Requests</span></button>
+      <div id="connectionsWelcome" class="app-note">Loading conversations...</div>
+      <section class="app-section-head"><h3>Messages</h3><button onclick="goToBrowse()">Find Students</button></section>
+      <section id="conversationList" class="chat-conversation-list"></section>
+      <section class="chat-main-panel"><div id="threadHeader" class="chat-main-header"><div class="chat-main-header-left"><img id="threadAvatar" class="chat-main-avatar" src="avatars/avatar1.png" alt="Avatar"><div><h3 id="threadName">Select a conversation</h3><p id="threadSubtext" class="small-text">Your messages will appear here.</p></div></div></div><div id="threadMessages" class="chat-message-area"><div class="chat-empty-state"><div class="chat-empty-icon">💬</div><h4>No conversation selected</h4><p>Choose a chat to start messaging.</p></div></div><div class="chat-status-row"><span id="typingStatus" class="small-text"></span></div><div class="chat-composer-bar"><textarea id="threadInput" rows="1" placeholder="Type a message..."></textarea><button id="sendThreadBtn">Send</button></div></section>
+    </section>
+  </main>
+  
+  <nav class="app-bottom-nav">
+    <button  onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button  onclick="goToBrowse()">🔎<span>Discover</span></button>
+    <button  onclick="goToRequests()">💬<span>Requests</span></button>
     <button class="active" onclick="goToProfile()">👤<span>Profile</span></button>
   </nav>
-
   <script type="module" src="connections.js"></script>
 </body>
 </html>

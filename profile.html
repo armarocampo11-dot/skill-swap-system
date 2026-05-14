@@ -7,158 +7,44 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <div class="navbar">
-    <h2>Profile</h2>
-    <div class="nav-links">
-      <button onclick="goToDashboard()">Dashboard</button>
-      <button onclick="goToBrowse()">Browse</button>
-      <button onclick="goToRequests()">Requests</button>
-    </div>
-  </div>
-
-  <div class="page">
-    <div class="container dashboard-shell">
-
-      <section class="profile-hero-card">
-        <div class="profile-hero-main">
-          <div class="profile-hero-left">
-            <img id="profileHeroAvatar" class="profile-hero-avatar" src="avatars/avatar1.png" alt="Avatar">
-            <div>
-              <p class="profile-kicker">My profile</p>
-              <h1 id="profileHeroName">Loading...</h1>
-              <p id="profileHeroMeta" class="profile-hero-meta">Course • Year Level</p>
-              <div class="profile-hero-trust">
-                <span id="profileHeroRating" class="profile-hero-pill">0.0★</span>
-                <span id="profileHeroSwaps" class="profile-hero-pill soft-pill">0 swaps</span>
-                <span id="profileHeroLevel" class="profile-hero-pill soft-pill">Level 1</span>
-              </div>
-            </div>
-          </div>
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="app-header-top">
+        <div class="app-title">
+          <h1>Profile</h1>
+          <p>Edit your skills and student info</p>
+        </div>
+        <div class="app-header-actions">
+          <button class="app-round-btn" onclick="goToRequests()">💬</button>
+          <button class="app-round-btn app-avatar-btn" onclick="goToProfile()">👤</button>
+        </div>
+      </div>
+      <div class="app-tabs">
+        <button  onclick="goToDashboard()">🏠 Dashboard</button>
+        <button  onclick="goToBrowse()">🔎 Browse</button>
+        <button  onclick="goToRequests()">💬 Requests</button>
+      </div>
+    </header>
+    <section class="app-content">
+      <section class="app-hero">
+        <div class="app-hero-icon">👤</div>
+        <div>
+          <span class="app-kicker">STI Skill Swap</span>
+          <h2>My <span>Profile</span></h2>
+          <p>Keep your profile clean, trusted, and easy to understand.</p>
         </div>
       </section>
-
-      <section class="profile-main-grid">
-        <div class="profile-form-card">
-          <div class="profile-section-head">
-            <div>
-              <h2>Edit Profile</h2>
-              <p>Keep your profile clean and complete.</p>
-            </div>
-          </div>
-
-          <div class="profile-form-grid">
-            <div class="profile-field">
-              <label for="name">Full Name</label>
-              <input id="name" class="app-input" type="text" placeholder="Enter your full name">
-            </div>
-
-            <div class="profile-field">
-              <label for="studentId">Student ID</label>
-              <input id="studentId" class="app-input" type="text" placeholder="Enter your student ID">
-            </div>
-
-            <div class="profile-field">
-              <label for="course">Course</label>
-              <input id="course" class="app-input" type="text" placeholder="Example: BSCpE">
-            </div>
-
-            <div class="profile-field">
-              <label for="yearLevel">Year Level</label>
-              <input id="yearLevel" class="app-input" type="text" placeholder="Example: 2nd year">
-            </div>
-
-            <div class="profile-field">
-              <label for="section">Section</label>
-              <input id="section" class="app-input" type="text" placeholder="Enter your section">
-            </div>
-
-            <div class="profile-field">
-              <label for="transactionPreference">Preferred Mode</label>
-              <select id="transactionPreference" class="app-input">
-                <option value="">Select mode</option>
-                <option value="Swap">Swap</option>
-                <option value="Paid">Paid</option>
-                <option value="Either">Either</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="profile-field">
-            <label for="bio">Bio</label>
-            <textarea id="bio" class="app-input" rows="3" placeholder="Tell students what you can offer."></textarea>
-          </div>
-
-          <div class="profile-form-grid single-gap-top">
-            <div class="profile-field">
-              <label for="offeredSkills">Offered Skills</label>
-              <textarea id="offeredSkills" class="app-input" rows="3" placeholder="Example: Canva, Math, Editing"></textarea>
-            </div>
-
-            <div class="profile-field">
-              <label for="wantedSkills">Wanted Skills</label>
-              <textarea id="wantedSkills" class="app-input" rows="3" placeholder="Example: Java, Public Speaking"></textarea>
-            </div>
-          </div>
-
-          <div class="profile-field single-gap-top">
-            <label>Choose Avatar</label>
-            <div class="profile-avatar-grid" id="avatarGrid">
-              <button type="button" class="profile-avatar-option" data-avatar="avatars/avatar1.png"><img src="avatars/avatar1.png" alt="Avatar 1"></button>
-              <button type="button" class="profile-avatar-option" data-avatar="avatars/avatar2.png"><img src="avatars/avatar2.png" alt="Avatar 2"></button>
-              <button type="button" class="profile-avatar-option" data-avatar="avatars/avatar3.png"><img src="avatars/avatar3.png" alt="Avatar 3"></button>
-              <button type="button" class="profile-avatar-option" data-avatar="avatars/avatar4.png"><img src="avatars/avatar4.png" alt="Avatar 4"></button>
-              <button type="button" class="profile-avatar-option" data-avatar="avatars/avatar5.png"><img src="avatars/avatar5.png" alt="Avatar 5"></button>
-              <button type="button" class="profile-avatar-option" data-avatar="avatars/avatar6.png"><img src="avatars/avatar6.png" alt="Avatar 6"></button>
-            </div>
-          </div>
-
-          <div class="profile-action-row">
-            <button onclick="saveProfile()">Save Profile</button>
-            <button class="secondary-btn" onclick="goToDashboard()">Dashboard</button>
-          </div>
-
-          <p id="profileStatus" class="small-text"></p>
-        </div>
-
-        <aside class="profile-side-card">
-          <h3>Preview</h3>
-          <div class="profile-preview-mini">
-            <img id="profileMiniAvatar" class="profile-mini-avatar" src="avatars/avatar1.png" alt="Avatar">
-            <div>
-              <h4 id="profileMiniName">Your Name</h4>
-              <p id="profileMiniMeta">Course • Year</p>
-            </div>
-          </div>
-
-          <div class="profile-preview-tags">
-            <span id="profilePreviewMode" class="profile-hero-pill">Either</span>
-            <span id="profilePreviewRating" class="profile-hero-pill">0.0★</span>
-          </div>
-
-          <p id="profilePreviewBio">Your bio preview will appear here.</p>
-          <div id="profilePreviewSkills" class="profile-preview-skills"></div>
-
-          <div class="profile-strength-card">
-            <h4>Profile Strength</h4>
-            <div class="profile-strength-bar">
-              <div id="profileStrengthFill" class="profile-strength-fill"></div>
-            </div>
-            <p id="profileStrengthText" class="small-text">0% complete</p>
-          </div>
-        </aside>
-      </section>
-
-    </div>
-  </div>
-
-  <nav class="bottom-nav">
-    <button onclick="goToDashboard()">🏠<span>Home</span></button>
-    <button onclick="goToBrowse()">🔎<span>Discover</span></button>
-    <button onclick="goToRequests()">💬<span>Requests</span></button>
+      <section class="profile-hero-card"><div class="profile-hero-left"><img id="profileHeroAvatar" class="profile-hero-avatar" src="avatars/avatar1.png" alt="Avatar"><div><span class="profile-kicker">My profile</span><h1 id="profileHeroName">Loading...</h1><p id="profileHeroMeta">Course • Year Level</p><div class="public-profile-pills"><span id="profileHeroRating" class="profile-hero-pill">0.0★</span><span id="profileHeroSwaps" class="profile-hero-pill">0 swaps</span><span id="profileHeroLevel" class="profile-hero-pill">Level 1</span></div></div></div></section>
+      <section class="profile-main-grid"><div class="profile-form-card"><div class="profile-section-head"><div><h2>Edit Profile</h2><p>Keep your profile short and complete.</p></div></div><div class="profile-form-grid"><div><label for="name">Full Name</label><input id="name" type="text"></div><div><label for="studentId">Student ID</label><input id="studentId" type="text"></div><div><label for="course">Course</label><input id="course" type="text"></div><div><label for="yearLevel">Year Level</label><input id="yearLevel" type="text"></div><div><label for="section">Section</label><input id="section" type="text"></div><div><label for="transactionPreference">Preferred Mode</label><select id="transactionPreference"><option value="">Select mode</option><option value="Swap">Swap</option><option value="Paid">Paid</option><option value="Either">Either</option></select></div></div><label for="bio">Bio</label><textarea id="bio" rows="3"></textarea><label for="offeredSkills">Offered Skills</label><textarea id="offeredSkills" rows="3"></textarea><label for="wantedSkills">Wanted Skills</label><textarea id="wantedSkills" rows="3"></textarea><label>Choose Avatar</label><div id="avatarGrid" class="profile-avatar-grid"><button type="button" class="profile-avatar-option" data-avatar="avatars/avatar1.png"><img src="avatars/avatar1.png"></button><button type="button" class="profile-avatar-option" data-avatar="avatars/avatar2.png"><img src="avatars/avatar2.png"></button><button type="button" class="profile-avatar-option" data-avatar="avatars/avatar3.png"><img src="avatars/avatar3.png"></button><button type="button" class="profile-avatar-option" data-avatar="avatars/avatar4.png"><img src="avatars/avatar4.png"></button><button type="button" class="profile-avatar-option" data-avatar="avatars/avatar5.png"><img src="avatars/avatar5.png"></button><button type="button" class="profile-avatar-option" data-avatar="avatars/avatar6.png"><img src="avatars/avatar6.png"></button></div><div class="profile-action-row"><button onclick="saveProfile()">Save Profile</button><button class="secondary-btn" onclick="goToDashboard()">Dashboard</button></div><p id="profileStatus" class="small-text"></p></div><aside class="profile-side-card"><h3>Preview</h3><div class="profile-preview-mini"><img id="profileMiniAvatar" class="profile-mini-avatar" src="avatars/avatar1.png"><div><h4 id="profileMiniName">Your Name</h4><p id="profileMiniMeta">Course • Year</p></div></div><div class="profile-preview-tags"><span id="profilePreviewMode" class="profile-hero-pill">Either</span><span id="profilePreviewRating" class="profile-hero-pill">0.0★</span></div><p id="profilePreviewBio">Your bio preview will appear here.</p><div id="profilePreviewSkills" class="profile-preview-skills"></div><h4>Profile Strength</h4><div class="profile-strength-bar"><div id="profileStrengthFill" class="profile-strength-fill"></div></div><p id="profileStrengthText" class="small-text">0% complete</p></aside></section>
+    </section>
+  </main>
+  
+  <nav class="app-bottom-nav">
+    <button  onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button  onclick="goToBrowse()">🔎<span>Discover</span></button>
+    <button  onclick="goToRequests()">💬<span>Requests</span></button>
     <button class="active" onclick="goToProfile()">👤<span>Profile</span></button>
   </nav>
-
   <script type="module" src="profile.js"></script>
 </body>
 </html>

@@ -7,85 +7,47 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <div class="navbar">
-    <h2>Discover</h2>
-    <div class="nav-links">
-      <button onclick="goToDashboard()">Dashboard</button>
-      <button onclick="goToRequests()">Requests</button>
-      <button onclick="goToConnections()">Connections</button>
-    </div>
-  </div>
-
-  <div class="page">
-    <div class="container dashboard-shell">
-
-      <section class="browse-hero-card">
-        <p class="browse-kicker">Discovery center</p>
-        <h1>Browse <span class="glow-text">Students</span></h1>
-        <p>Search, filter, and connect with skill partners.</p>
-        <p id="browseWelcome" class="browse-hero-welcome">Loading student recommendations...</p>
-      </section>
-
-      <section class="browse-controls-card">
-        <input id="browseSearchInput" class="browse-search-input" type="text" placeholder="Search by name, skill, or course">
-        <div class="browse-results-meta">
-          <span id="browseResultCount">0 students</span>
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="app-header-top">
+        <div class="app-title">
+          <h1>Discover</h1>
+          <p>Find skill partners faster</p>
         </div>
-        <div id="categoryCards" class="browse-category-grid"></div>
-      </section>
-
-      <section class="browse-list-card">
-        <div class="browse-list-head">
-          <div>
-            <h2 id="browseSectionTitle">Recommended Students</h2>
-            <p id="browseSectionSubtitle">Students who may match your skills.</p>
-          </div>
+        <div class="app-header-actions">
+          <button class="app-round-btn" onclick="goToRequests()">💬</button>
+          <button class="app-round-btn app-avatar-btn" onclick="goToProfile()">👤</button>
         </div>
-        <div id="browseUsersGrid" class="browse-users-grid"></div>
+      </div>
+      <div class="app-tabs">
+        <button  onclick="goToDashboard()">🏠 Dashboard</button>
+        <button class="active" onclick="goToBrowse()">🔎 Browse</button>
+        <button  onclick="goToRequests()">💬 Requests</button>
+      </div>
+    </header>
+    <section class="app-content">
+      <section class="app-hero">
+        <div class="app-hero-icon">🔎</div>
+        <div>
+          <span class="app-kicker">STI Skill Swap</span>
+          <h2>Browse <span>Students</span></h2>
+          <p>Search, filter, and connect with skill partners.</p>
+        </div>
       </section>
-
-    </div>
-  </div>
-
-  <div id="quickRequestModal" class="app-modal hidden">
-    <div class="app-modal-card">
-      <div class="app-modal-head">
-        <h3>Send Request</h3>
-        <button class="secondary-btn" onclick="closeQuickRequestModal()">Close</button>
-      </div>
-
-      <p id="quickRequestTarget" class="small-text">Loading...</p>
-
-      <label class="app-label" for="requestMode">Request Mode</label>
-      <select id="requestMode" class="app-input">
-        <option value="swap">Swap</option>
-        <option value="paid">Paid</option>
-        <option value="either">Either</option>
-      </select>
-
-      <label class="app-label" for="requestSkill">Skill / Request Title</label>
-      <input id="requestSkill" class="app-input" type="text" placeholder="Example: Canva editing">
-
-      <label class="app-label" for="requestAmount">Paid Amount</label>
-      <input id="requestAmount" class="app-input" type="number" min="0" placeholder="Optional">
-
-      <label class="app-label" for="requestMessage">Message</label>
-      <textarea id="requestMessage" class="app-input" rows="4" placeholder="Write a short message"></textarea>
-
-      <div class="app-modal-actions">
-        <button onclick="submitQuickRequest()">Send Request</button>
-      </div>
-    </div>
-  </div>
-
-  <nav class="bottom-nav">
-    <button onclick="goToDashboard()">🏠<span>Home</span></button>
+      <div id="browseWelcome" class="app-note">Loading student recommendations...</div>
+      <section class="app-stats"><div class="app-stat"><span>👥</span><strong id="browseResultCount">0</strong><p>Students</p></div><div class="app-stat"><span>🟢</span><strong>Live</strong><p>Browse</p></div><div class="app-stat"><span>⭐</span><strong>Skills</strong><p>Match</p></div><div class="app-stat"><span>💙</span><strong>Smart</strong><p>Filter</p></div></section>
+      <section class="app-search-row"><input id="browseSearchInput" class="browse-search-input" type="text" placeholder="Search by name, skill, or course"><button onclick="document.getElementById('browseSearchInput').focus()">⚙️ Filter</button></section>
+      <section class="app-section-head"><h3>Browse By Skills</h3><button onclick="goToBrowse()">See all</button></section><section id="categoryCards" class="browse-category-grid"></section>
+      <section class="app-section-head"><div><h3 id="browseSectionTitle">Recommended For You</h3><p id="browseSectionSubtitle" class="small-text">Students who may match your interests.</p></div></section><section id="browseUsersGrid" class="browse-users-grid"></section>
+    </section>
+  </main>
+  <div id="quickRequestModal" class="app-modal hidden"><div class="app-modal-card"><div class="app-modal-head"><h3>Send Request</h3><button class="secondary-btn" onclick="closeQuickRequestModal()">Close</button></div><p id="quickRequestTarget" class="small-text">Loading...</p><label for="requestMode">Request Mode</label><select id="requestMode"><option value="swap">Swap</option><option value="paid">Paid</option><option value="either">Either</option></select><label for="requestSkill">Skill / Request Title</label><input id="requestSkill" type="text" placeholder="Example: Canva editing"><label for="requestAmount">Paid Amount</label><input id="requestAmount" type="number" min="0" placeholder="Optional"><label for="requestMessage">Message</label><textarea id="requestMessage" rows="4" placeholder="Write a short message"></textarea><button onclick="submitQuickRequest()">Send Request</button></div></div>
+  <nav class="app-bottom-nav">
+    <button  onclick="goToDashboard()">🏠<span>Home</span></button>
     <button class="active" onclick="goToBrowse()">🔎<span>Discover</span></button>
-    <button onclick="goToRequests()">💬<span>Requests</span></button>
-    <button onclick="goToProfile()">👤<span>Profile</span></button>
+    <button  onclick="goToRequests()">💬<span>Requests</span></button>
+    <button  onclick="goToProfile()">👤<span>Profile</span></button>
   </nav>
-
   <script type="module" src="browse.js"></script>
 </body>
 </html>
