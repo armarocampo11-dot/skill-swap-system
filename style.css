@@ -8809,3 +8809,947 @@ body.phone-ui {
   box-shadow: 0 10px 20px rgba(70,80,239,.22);
   font-size: 14px;
 }
+
+:root {
+  --app-bg: #f6f8ff;
+  --app-surface: #ffffff;
+  --app-surface-soft: #f1f4ff;
+  --app-primary: #4f56f3;
+  --app-primary-2: #3f8df6;
+  --app-text: #0f172a;
+  --app-text-soft: #667085;
+  --app-border: #e6eaff;
+  --app-shadow: 0 14px 34px rgba(42, 64, 140, 0.11);
+  --app-shadow-soft: 0 8px 20px rgba(42, 64, 140, 0.08);
+  --app-radius-xl: 26px;
+  --app-radius-lg: 20px;
+  --app-radius-md: 15px;
+}
+
+body {
+  background: var(--app-bg);
+  color: var(--app-text);
+  animation: none;
+  font-family: Arial, sans-serif;
+}
+
+.navbar {
+  background: linear-gradient(135deg, #5962f6, #4687f5);
+  color: #ffffff;
+  box-shadow: none;
+  border: none;
+}
+
+.navbar h2 {
+  color: #ffffff;
+  font-weight: 900;
+}
+
+.nav-links button,
+button {
+  background: var(--app-primary);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(79, 86, 243, 0.18);
+}
+
+.secondary-btn {
+  background: #eef2ff;
+  color: #38406f;
+  box-shadow: none;
+}
+
+.danger-btn {
+  background: #ef4444;
+}
+
+.success-btn {
+  background: #22a56a;
+}
+
+.page {
+  background: var(--app-bg);
+}
+
+.container,
+.card,
+.dashboard-hero,
+.dashboard-progress-card,
+.dashboard-missions-card,
+.dashboard-badges-card,
+.dashboard-action-card,
+.browse-hero-card,
+.browse-controls-card,
+.browse-list-card,
+.requests-hero-card,
+.requests-panel-card,
+.ratings-hero-card,
+.ratings-summary-card-premium,
+.progress-hero-card,
+.progress-level-card,
+.progress-panel-card,
+.progress-mini-stats-card,
+.profile-hero-card,
+.profile-form-card,
+.profile-side-card,
+.public-profile-hero,
+.public-profile-main-card,
+.public-skill-card,
+.stats-summary-card,
+.chat-sidebar,
+.chat-main-panel,
+.mission-card,
+.mission-stat-card,
+.mission-xp-card {
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  box-shadow: var(--app-shadow);
+  color: var(--app-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+.section-title,
+.hero-title {
+  color: var(--app-text);
+}
+
+p,
+.subtitle,
+.small-text,
+.dashboard-welcome,
+.browse-hero-welcome,
+.requests-hero-welcome,
+.progress-soft-text,
+.ratings-soft-text,
+.profile-hero-meta,
+.public-profile-meta {
+  color: var(--app-text-soft);
+}
+
+.glow-text {
+  background: linear-gradient(90deg, var(--app-primary), var(--app-primary-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+input,
+textarea,
+select,
+.app-input {
+  background: #f8faff;
+  border: 1px solid var(--app-border);
+  color: var(--app-text);
+  box-shadow: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.app-input:focus {
+  border-color: #8ba3ff;
+  box-shadow: 0 0 0 4px rgba(79, 86, 243, 0.11);
+}
+
+@media (max-width: 768px) {
+  body {
+    background: var(--app-bg);
+    padding-bottom: 92px;
+    overflow-x: hidden;
+  }
+
+  .navbar {
+    position: relative;
+    top: auto;
+    padding: 34px 18px 22px;
+    border-radius: 0 0 28px 28px;
+    display: block;
+  }
+
+  .navbar h2 {
+    font-size: 29px;
+    line-height: 1.05;
+    margin-bottom: 8px;
+  }
+
+  .nav-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+    margin-top: 18px;
+  }
+
+  .nav-links button {
+    margin: 0;
+    min-height: 46px;
+    padding: 8px 7px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
+    font-size: 12px;
+  }
+
+  .nav-links button:first-child {
+    background: #ffffff;
+    color: var(--app-text);
+  }
+
+  .page {
+    padding: 14px 12px 104px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .card,
+  .dashboard-hero,
+  .dashboard-progress-card,
+  .dashboard-missions-card,
+  .dashboard-badges-card,
+  .dashboard-action-card,
+  .browse-hero-card,
+  .browse-controls-card,
+  .browse-list-card,
+  .requests-hero-card,
+  .requests-panel-card,
+  .ratings-hero-card,
+  .ratings-summary-card-premium,
+  .progress-hero-card,
+  .progress-level-card,
+  .progress-panel-card,
+  .progress-mini-stats-card,
+  .profile-hero-card,
+  .profile-form-card,
+  .profile-side-card,
+  .public-profile-hero,
+  .public-profile-main-card,
+  .public-skill-card,
+  .stats-summary-card,
+  .mission-card,
+  .mission-stat-card,
+  .mission-xp-card {
+    border-radius: var(--app-radius-xl);
+    padding: 17px;
+    margin: 12px 0;
+    box-shadow: var(--app-shadow-soft);
+    transform: none;
+  }
+
+  .card:hover,
+  .dashboard-action-card:hover,
+  .browse-user-card:hover,
+  .request-card:hover,
+  .recommend-card:hover {
+    transform: none;
+  }
+
+  h1,
+  .hero-title {
+    font-size: 26px;
+    line-height: 1.12;
+    text-align: left;
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 21px;
+    line-height: 1.18;
+  }
+
+  h3 {
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  p,
+  .subtitle,
+  .small-text {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  button {
+    min-height: 43px;
+    border-radius: 14px;
+    font-size: 13px;
+    padding: 10px 13px;
+  }
+
+  input,
+  textarea,
+  select,
+  .app-input {
+    min-height: 44px;
+    border-radius: 14px;
+    font-size: 13px;
+    padding: 11px 13px;
+    margin-bottom: 12px;
+  }
+
+  .grid-2,
+  .dashboard-top-grid,
+  .dashboard-top-grid-v2,
+  .dashboard-gamify-grid,
+  .dashboard-actions-grid,
+  .dashboard-recommend-layout,
+  .browse-controls-top,
+  .browse-category-grid,
+  .browse-users-grid,
+  .requests-filter-grid,
+  .ratings-main-grid,
+  .ratings-insight-grid,
+  .progress-center-layout,
+  .progress-level-head,
+  .profile-main-grid,
+  .profile-form-grid,
+  .public-profile-grid,
+  .public-skill-columns,
+  .stats-grid-2,
+  .stats-grid-1,
+  .mission-grid,
+  .mission-stats {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .dashboard-stat-grid,
+  .dashboard-stat-grid-v2,
+  .stat-row,
+  .stats-grid-2,
+  .requests-filter-grid,
+  .mission-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-hero,
+  .browse-hero-card,
+  .requests-hero-card,
+  .ratings-hero-card,
+  .progress-hero-card,
+  .profile-hero-card,
+  .public-profile-hero {
+    padding: 19px;
+  }
+
+  .dashboard-kicker,
+  .browse-kicker,
+  .requests-kicker,
+  .ratings-kicker,
+  .progress-kicker,
+  .profile-kicker,
+  .dashboard-panel-label,
+  .progress-section-kicker,
+  .ratings-section-kicker,
+  .eyebrow {
+    font-size: 11px;
+    color: var(--app-primary);
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .dashboard-section-head,
+  .browse-list-head,
+  .requests-panel-head,
+  .progress-panel-head,
+  .ratings-summary-top,
+  .profile-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .dashboard-section-head button,
+  .browse-list-head button,
+  .requests-panel-head button {
+    min-height: 36px;
+    font-size: 12px;
+    padding: 8px 11px;
+  }
+
+  .dashboard-progress-metrics,
+  .xp-insight-row,
+  .ratings-insight-grid,
+  .progress-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 9px;
+  }
+
+  .stat-box,
+  .stats-box,
+  .progress-metric-chip,
+  .xp-insight-box,
+  .ratings-insight-card,
+  .progress-mini-box,
+  .mission-stat-card {
+    border-radius: 18px;
+    padding: 13px 9px;
+    background: #ffffff;
+    border: 1px solid var(--app-border);
+    box-shadow: var(--app-shadow-soft);
+    text-align: center;
+  }
+
+  .stat-box h3,
+  .stats-box h3,
+  .mission-stat-card h2 {
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+
+  .stat-box p,
+  .stats-box p,
+  .mission-stat-card p {
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  .progress-bar-container,
+  .progress-wrap,
+  .mission-progress-track,
+  .mission-bar,
+  .ratings-progress-track,
+  .profile-strength-bar {
+    height: 9px;
+    background: #e8eefb;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .progress-bar,
+  .mission-progress-fill,
+  .mission-bar div,
+  .ratings-progress-fill,
+  .profile-strength-fill {
+    background: linear-gradient(90deg, #3478f6, #5962f6);
+  }
+
+  .mission-card {
+    padding: 16px;
+  }
+
+  .mission-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .mission-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 15px;
+    background: var(--app-surface-soft);
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+  }
+
+  .mission-card h3 {
+    font-size: 17px;
+    margin: 12px 0 6px;
+    color: #12215a;
+  }
+
+  .mission-card p {
+    font-size: 13px;
+    color: var(--app-text-soft);
+    margin-bottom: 11px;
+  }
+
+  .mission-badge,
+  .mission-status,
+  .achievement-badge-state {
+    background: #eef5ff;
+    color: #145399;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .mission-card button {
+    width: 100%;
+    margin: 10px 0 0;
+  }
+
+  .browse-search-wrap,
+  .browse-search-input {
+    width: 100%;
+  }
+
+  .browse-results-meta {
+    font-size: 12px;
+    color: var(--app-text-soft);
+  }
+
+  .browse-category-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 4px;
+  }
+
+  .browse-category-card,
+  .category-card {
+    min-width: 128px;
+    max-width: 128px;
+    min-height: 112px;
+    padding: 12px;
+    border-radius: 18px;
+    background: #ffffff;
+    border: 1px solid var(--app-border);
+    box-shadow: var(--app-shadow-soft);
+    text-align: left;
+  }
+
+  .browse-category-card strong,
+  .category-title {
+    font-size: 13px;
+  }
+
+  .browse-category-card span,
+  .category-subtitle {
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  .browse-user-card,
+  .recommend-card,
+  .compact-user-card {
+    min-width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    border-radius: 20px;
+    padding: 14px;
+    background: #ffffff;
+    border: 1px solid var(--app-border);
+    box-shadow: var(--app-shadow-soft);
+  }
+
+  .browse-user-main,
+  .compact-user-card,
+  .request-card-top,
+  .public-profile-main,
+  .profile-hero-main,
+  .profile-hero-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .browse-user-avatar,
+  .compact-avatar,
+  .recommend-avatar,
+  .profile-hero-avatar,
+  .public-profile-avatar,
+  .profile-mini-avatar,
+  .chat-list-avatar,
+  .chat-main-avatar {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .browse-user-text h3,
+  .compact-name-row h3,
+  .recommend-card h4 {
+    font-size: 16px;
+    margin: 0 0 4px;
+    text-align: left;
+  }
+
+  .browse-user-meta,
+  .recommend-subtitle,
+  .compact-meta {
+    font-size: 11px;
+  }
+
+  .browse-user-actions,
+  .recommend-actions,
+  .compact-right,
+  .profile-action-row,
+  .modal-actions,
+  .public-profile-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+  }
+
+  .browse-user-actions button,
+  .recommend-actions button,
+  .compact-right button,
+  .profile-action-row button,
+  .public-profile-actions button {
+    width: 100%;
+    margin: 0;
+    font-size: 12px;
+  }
+
+  .skill-tag,
+  .browse-skill-tag,
+  .profile-preview-skill,
+  .compact-mode-badge,
+  .compact-rating-badge,
+  .browse-rating-pill,
+  .browse-soft-pill,
+  .rating-badge,
+  .match-percent,
+  .profile-hero-pill {
+    padding: 5px 9px;
+    font-size: 11px;
+    border-radius: 999px;
+  }
+
+  .requests-modern-list,
+  .reviews-list,
+  .xp-breakdown-list,
+  .badges-list,
+  .missions-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .request-filter-card {
+    min-height: 74px;
+    border-radius: 18px;
+    background: #ffffff;
+    border: 1px solid var(--app-border);
+    box-shadow: var(--app-shadow-soft);
+  }
+
+  .request-filter-count {
+    font-size: 22px;
+  }
+
+  .request-filter-label {
+    font-size: 11px;
+  }
+
+  .request-card,
+  .review-feed-card,
+  .achievement-badge,
+  .xp-breakdown-row {
+    border-radius: 18px;
+    padding: 14px;
+    background: #ffffff;
+    border: 1px solid var(--app-border);
+    box-shadow: var(--app-shadow-soft);
+  }
+
+  .ratings-summary-card-premium h2,
+  .progress-level-card h2 {
+    font-size: 28px;
+  }
+
+  .review-feed-top,
+  .achievement-badge-top,
+  .xp-breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .profile-avatar-grid,
+  .avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .profile-avatar-option,
+  .avatar-option {
+    width: 100%;
+    height: 74px;
+    border-radius: 18px;
+    background: #ffffff;
+    border: 1px solid var(--app-border);
+  }
+
+  .profile-avatar-option img {
+    width: 56px;
+    height: 56px;
+  }
+
+  .profile-tip-list {
+    padding-left: 18px;
+    color: var(--app-text-soft);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .public-profile-actions {
+    width: 100%;
+  }
+
+  .public-snapshot-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .chat-app-shell {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .chat-sidebar,
+  .chat-main-panel {
+    border-radius: 22px;
+    padding: 14px;
+    background: #ffffff;
+    border: 1px solid var(--app-border);
+    box-shadow: var(--app-shadow-soft);
+  }
+
+  .chat-conversation-list {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .chat-list-item {
+    min-width: 210px;
+    border-radius: 18px;
+    padding: 11px;
+    background: #f8faff;
+    border: 1px solid var(--app-border);
+  }
+
+  .chat-message-area,
+  #messagesBox {
+    min-height: 350px;
+    max-height: 56vh;
+    overflow-y: auto;
+    background: #f8faff;
+    border-radius: 18px;
+    padding: 12px;
+  }
+
+  .chat-composer-bar {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 9px;
+    align-items: end;
+  }
+
+  .chat-composer-input,
+  #messageInput {
+    margin: 0;
+    min-height: 44px;
+    max-height: 90px;
+  }
+
+  .chat-send-btn {
+    margin: 0;
+    min-width: 70px;
+  }
+
+  .chat-bubble {
+    max-width: 82%;
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .swipe-page-hero {
+    text-align: left;
+  }
+
+  .swipe-stage {
+    min-height: 520px;
+  }
+
+  .swipe-stack {
+    width: 100%;
+    min-height: 500px;
+  }
+
+  .swipe-card {
+    width: 100%;
+    max-width: 360px;
+    border-radius: 26px;
+  }
+
+  .swipe-card-inner {
+    padding: 18px;
+    border-radius: 26px;
+  }
+
+  .swipe-avatar {
+    width: 72px;
+    height: 72px;
+  }
+
+  .swipe-card h2 {
+    font-size: 23px;
+  }
+
+  .swipe-actions,
+  .swipe-empty-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 9px;
+  }
+
+  .modal,
+  .modal-overlay,
+  .app-modal {
+    padding: 14px;
+    align-items: flex-end;
+  }
+
+  .modal-content,
+  .modal-card,
+  .app-modal-card {
+    width: 100%;
+    max-width: 430px;
+    border-radius: 24px 24px 0 0;
+    padding: 18px;
+  }
+
+  .modal-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .horizontal-scroll,
+  .dashboard-recommend-scroll {
+    display: flex;
+    gap: 11px;
+    overflow-x: auto;
+    padding: 4px 2px 8px;
+  }
+
+  .empty-state,
+  .browse-empty-state,
+  .reviews-empty-state,
+  .chat-empty-state,
+  .swipe-empty {
+    border-radius: 20px;
+    padding: 18px;
+    background: #ffffff;
+    border: 1px solid var(--app-border);
+    box-shadow: var(--app-shadow-soft);
+  }
+
+  .status {
+    font-size: 11px;
+    padding: 5px 9px;
+  }
+
+  .notification-badge {
+    font-size: 10px;
+    min-width: 18px;
+    padding: 2px 6px;
+  }
+}
+
+@media (max-width: 430px) {
+  .page {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .navbar {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .navbar h2 {
+    font-size: 28px;
+  }
+
+  .nav-links {
+    gap: 8px;
+  }
+
+  .nav-links button {
+    font-size: 11px;
+    min-height: 44px;
+  }
+
+  .browse-user-actions,
+  .recommend-actions,
+  .compact-right,
+  .profile-action-row,
+  .public-profile-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-stat-grid,
+  .dashboard-stat-grid-v2,
+  .stat-row,
+  .stats-grid-2,
+  .requests-filter-grid,
+  .mission-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .profile-avatar-grid,
+  .avatar-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 769px) {
+  body {
+    background: #f6f8ff;
+  }
+
+  .page {
+    padding: 28px 18px 42px;
+  }
+
+  .container {
+    max-width: 1180px;
+  }
+
+  .dashboard-shell {
+    max-width: 1180px;
+  }
+
+  .dashboard-top-grid,
+  .dashboard-top-grid-v2,
+  .dashboard-gamify-grid,
+  .dashboard-actions-grid,
+  .ratings-main-grid,
+  .progress-center-layout,
+  .profile-main-grid,
+  .public-profile-grid,
+  .chat-app-shell {
+    align-items: start;
+  }
+
+  .dashboard-actions-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .browse-users-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .requests-filter-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .mission-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
