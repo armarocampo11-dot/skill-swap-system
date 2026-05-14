@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <main class="app-shell">
     <header class="app-header compact-header">
       <div class="app-header-top">
@@ -15,80 +14,70 @@
           <h1>Swipe</h1>
           <p>Quickly discover skill partners</p>
         </div>
-
         <div class="app-header-actions">
           <button class="app-round-btn" onclick="goToBrowse()">🔎</button>
           <button class="app-round-btn app-avatar-btn" onclick="goToProfile()">👤</button>
         </div>
       </div>
-
       <div class="app-tabs compact-tabs">
         <button data-page="dashboard.html" onclick="goToDashboard()">🏠 <span>Dashboard</span></button>
         <button data-page="browse.html" onclick="goToBrowse()">🔎 <span>Discover</span></button>
         <button data-page="requests.html" onclick="goToRequests()">💬 <span>Requests</span></button>
       </div>
     </header>
-
     <section class="app-content compact-content">
       <section class="app-hero compact-hero">
         <div class="app-hero-icon">💫</div>
         <div>
           <span class="app-kicker">Swipe Mode</span>
           <h2>Find <span>Matches</span></h2>
-          <p>Drag left to skip. Drag right or tap view to open the profile.</p>
+          <p>Drag left to skip. Drag right to open profile. Tap request to connect.</p>
         </div>
       </section>
-
       <section class="swipe-stage">
-        <div id="swipeStack" class="swipe-stack"></div>
-
+        <div id="swipeStack" class="swipe-stack">
+          <div class="swipe-empty"><h3>Loading students...</h3><p>Please wait while the stack is prepared.</p></div>
+        </div>
         <div id="swipeEmptyState" class="swipe-empty" style="display:none;">
           <div class="reviews-empty-icon">🎉</div>
           <h3>No more students</h3>
           <p>You’ve reached the end of the current stack.</p>
-
           <div class="swipe-empty-actions">
             <button onclick="resetSwipeStack()">Restart</button>
             <button class="secondary-btn" onclick="goToBrowse()">Browse</button>
           </div>
         </div>
       </section>
+      <div class="swipe-hint"><span>← Skip</span><span>Drag card</span><span>View →</span></div>
     </section>
   </main>
-
   <div id="requestModal" class="modal-overlay" style="display:none;">
     <div class="modal-card">
       <h2>Send Request</h2>
-
       <p>Transaction Type:</p>
       <div class="modal-options">
         <button data-type="Swap" onclick="selectType('Swap')">Swap</button>
         <button data-type="Payment" onclick="selectType('Payment')">Payment</button>
         <button data-type="Either" onclick="selectType('Either')">Either</button>
       </div>
-
       <div id="amountSection" style="display:none;">
         <label>Amount (₱):</label>
         <input id="amountInput" type="number" min="0" placeholder="Enter amount">
       </div>
-
       <label>Message:</label>
       <textarea id="messageInput" rows="4" placeholder="Write your message..."></textarea>
-
       <div class="modal-actions">
         <button onclick="submitRequest()">Send</button>
         <button class="secondary-btn" onclick="closeModal()">Cancel</button>
       </div>
     </div>
   </div>
-
   <nav class="app-bottom-nav">
     <button data-page="dashboard.html" onclick="goToDashboard()">🏠<span>Home</span></button>
     <button data-page="browse.html" onclick="goToBrowse()">🔎<span>Discover</span></button>
     <button data-page="requests.html" onclick="goToRequests()">💬<span>Requests</span></button>
     <button data-page="profile.html" onclick="goToProfile()">👤<span>Profile</span></button>
   </nav>
-
   <script type="module" src="common-nav.js"></script>
   <script type="module" src="swipe.js"></script>
 </body>

@@ -1,266 +1,57 @@
 import { app } from "./firebase-config.js";
-
-import {
-  getAuth,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  collection,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-function getProfileCompletion(me) {
-  const checks = [
-    me.name,
-    me.course,
-    me.yearLevel,
-    me.studentId,
-    me.section,
-    me.bio,
-    me.offeredSkills,
-    me.wantedSkills,
-    me.transactionPreference
-  ];
-
-  const filled = checks.filter(value => value && String(value).trim() !== "").length;
-  return Math.round((filled / checks.length) * 100);
+function completion(me) {
+  const fields = [me.name,me.course,me.yearLevel,me.studentId,me.section,me.bio,me.offeredSkills,me.wantedSkills,me.transactionPreference];
+  return Math.round((fields.filter(v => v && String(v).trim() !== "").length / fields.length) * 100);
 }
-
-function getRank(totalXp) {
-  if (totalXp >= 200) return "Skill Master";
-  if (totalXp >= 120) return "Trusted Swapper";
-  if (totalXp >= 60) return "Active Learner";
-  if (totalXp >= 20) return "Rising Student";
-  return "Starter";
-}
-
-function renderMissionList(containerId, missions) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  container.innerHTML = missions.map(mission => {
-    const progress = Math.min(100, Math.round((mission.current / mission.target) * 100));
-
-    return `
-      <article class="mission-card v7-mission-card ${mission.done ? "mission-done" : ""}">
-        <div class="v7-mission-top">
-          <div class="v7-mission-icon">${mission.icon}</div>
-
-          <div class="v7-mission-copy">
-            <h3>${mission.title}</h3>
-            <p>${mission.description}</p>
-          </div>
-
-          <strong class="v7-mission-percent">${progress}%</strong>
-        </div>
-
-        <div class="v7-mission-bar">
-          <div style="width:${progress}%"></div>
-        </div>
-
-        <div class="v7-mission-bottom">
-          <span>${mission.done ? "Completed" : `${mission.current}/${mission.target}`} • ${mission.reward}</span>
-          <button onclick="${mission.action}">${mission.done ? "View" : mission.button}</button>
-        </div>
-      </article>
-    `;
+function rank(xp) { if (xp >= 200) return "Skill Master"; if (xp >= 120) return "Trusted Swapper"; if (xp >= 60) return "Active Learner"; if (xp >= 20) return "Rising Student"; return "Starter"; }
+function renderMissionList(id, missions) {
+  const box = document.getElementById(id);
+  if (!box) return;
+  box.innerHTML = missions.map(m => {
+    const p = Math.min(100, Math.round((m.current / m.target) * 100));
+    return `<article class="mission-card v8-mission-card ${m.done ? "mission-done" : ""}"><div class="v8-mission-top"><div class="v8-mission-icon">${m.icon}</div><div class="v8-mission-copy"><h3>${m.title}</h3><p>${m.description}</p></div><strong class="v8-mission-percent">${p}%</strong></div><div class="v8-mission-bar"><div style="width:${p}%"></div></div><div class="v8-mission-bottom"><span>${m.done ? "Completed" : `${m.current}/${m.target}`} • ${m.reward}</span><button onclick="${m.action}">${m.done ? "View" : m.button}</button></div></article>`;
   }).join("");
 }
-
 onAuthStateChanged(auth, async user => {
-  if (!user) {
-    window.location.href = "index.html";
-    return;
-  }
-
+  if (!user) { location.href = "index.html"; return; }
   try {
-    const [userSnap, swapSnapshot, ratingSnapshot, messageSnapshot] = await Promise.all([
-      getDoc(doc(db, "users", user.uid)),
-      getDocs(collection(db, "swapRequests")),
-      getDocs(collection(db, "ratings")),
-      getDocs(collection(db, "messages"))
-    ]);
-
+    const [userSnap, swapSnap, ratingSnap, messageSnap] = await Promise.all([getDoc(doc(db,"users",user.uid)), getDocs(collection(db,"swapRequests")), getDocs(collection(db,"ratings")), getDocs(collection(db,"messages"))]);
     const me = userSnap.exists() ? userSnap.data() : {};
-
-    let completedCount = 0;
-    let acceptedCount = 0;
-    let sentCount = 0;
-    let receivedCount = 0;
-    let ratingCount = 0;
-    let messageCount = 0;
-
-    swapSnapshot.forEach(docSnap => {
-      const request = docSnap.data();
-      const isMine = request.requesterId === user.uid || request.receiverId === user.uid;
-      if (!isMine) return;
-
-      if (request.requesterId === user.uid) sentCount++;
-      if (request.receiverId === user.uid) receivedCount++;
-      if (request.status === "accepted") acceptedCount++;
-      if (request.status === "completed") completedCount++;
-    });
-
-    ratingSnapshot.forEach(docSnap => {
-      const rating = docSnap.data();
-      if (rating.rateeId === user.uid) ratingCount++;
-    });
-
-    messageSnapshot.forEach(docSnap => {
-      const message = docSnap.data();
-      if (message.senderId === user.uid || message.receiverId === user.uid) messageCount++;
-    });
-
-    const profileCompletion = getProfileCompletion(me);
-
-    const dailyMissions = [
-      {
-        icon: "📨",
-        title: "Send First Request",
-        description: "Start connecting with another student.",
-        reward: "+5 XP",
-        xp: 5,
-        current: Math.min(sentCount, 1),
-        target: 1,
-        done: sentCount >= 1,
-        button: "Browse",
-        action: "goToBrowse()"
-      },
-      {
-        icon: "🔥",
-        title: "Make 3 Requests",
-        description: "Reach out to more students.",
-        reward: "+15 XP",
-        xp: 15,
-        current: Math.min(sentCount, 3),
-        target: 3,
-        done: sentCount >= 3,
-        button: "Swipe",
-        action: "goToSwipe()"
-      },
-      {
-        icon: "💬",
-        title: "Start Chat",
-        description: "Send or receive one message.",
-        reward: "+10 XP",
-        xp: 10,
-        current: Math.min(messageCount, 1),
-        target: 1,
-        done: messageCount >= 1,
-        button: "Chats",
-        action: "goToConnections()"
-      }
+    let completed=0, accepted=0, sent=0, received=0, ratings=0, messages=0;
+    swapSnap.forEach(d => { const r=d.data(); const mine=r.requesterId===user.uid||r.receiverId===user.uid; if(!mine) return; if(r.requesterId===user.uid) sent++; if(r.receiverId===user.uid) received++; if(r.status==="accepted") accepted++; if(r.status==="completed") completed++; });
+    ratingSnap.forEach(d => { if(d.data().rateeId===user.uid) ratings++; });
+    messageSnap.forEach(d => { const m=d.data(); if(m.senderId===user.uid||m.receiverId===user.uid) messages++; });
+    const pc = completion(me);
+    const daily = [
+      {icon:"📨",title:"Send First Request",description:"Start connecting with another student.",reward:"+5 XP",xp:5,current:Math.min(sent,1),target:1,done:sent>=1,button:"Browse",action:"goToBrowse()"},
+      {icon:"🔥",title:"Make 3 Requests",description:"Reach out to more students.",reward:"+15 XP",xp:15,current:Math.min(sent,3),target:3,done:sent>=3,button:"Swipe",action:"goToSwipe()"},
+      {icon:"💬",title:"Start Chat",description:"Send or receive one message.",reward:"+10 XP",xp:10,current:Math.min(messages,1),target:1,done:messages>=1,button:"Chats",action:"goToConnections()"}
     ];
-
-    const milestoneMissions = [
-      {
-        icon: "👤",
-        title: "Complete Profile",
-        description: "Add details, bio, skills, and mode.",
-        reward: "+20 XP",
-        xp: 20,
-        current: profileCompletion,
-        target: 100,
-        done: profileCompletion >= 100,
-        button: "Edit",
-        action: "goToProfile()"
-      },
-      {
-        icon: "🤝",
-        title: "Get Accepted",
-        description: "Have one request accepted.",
-        reward: "+25 XP",
-        xp: 25,
-        current: Math.min(acceptedCount, 1),
-        target: 1,
-        done: acceptedCount >= 1,
-        button: "Requests",
-        action: "goToRequests()"
-      },
-      {
-        icon: "✅",
-        title: "Complete Swap",
-        description: "Finish one successful exchange.",
-        reward: "+50 XP",
-        xp: 50,
-        current: Math.min(completedCount, 1),
-        target: 1,
-        done: completedCount >= 1,
-        button: "Stats",
-        action: "goToStats()"
-      }
+    const milestone = [
+      {icon:"👤",title:"Complete Profile",description:"Add details, bio, skills, and mode.",reward:"+20 XP",xp:20,current:pc,target:100,done:pc>=100,button:"Edit",action:"goToProfile()"},
+      {icon:"🤝",title:"Get Accepted",description:"Have one request accepted.",reward:"+25 XP",xp:25,current:Math.min(accepted,1),target:1,done:accepted>=1,button:"Requests",action:"goToRequests()"},
+      {icon:"✅",title:"Complete Swap",description:"Finish one successful exchange.",reward:"+50 XP",xp:50,current:Math.min(completed,1),target:1,done:completed>=1,button:"Stats",action:"goToStats()"}
     ];
-
-    const reputationMissions = [
-      {
-        icon: "⭐",
-        title: "Receive Ratings",
-        description: "Collect 3 reviews from swaps.",
-        reward: "+30 XP",
-        xp: 30,
-        current: Math.min(ratingCount, 3),
-        target: 3,
-        done: ratingCount >= 3,
-        button: "Ratings",
-        action: "goToRatings()"
-      },
-      {
-        icon: "📥",
-        title: "Receive Requests",
-        description: "Make your profile attractive.",
-        reward: "+35 XP",
-        xp: 35,
-        current: Math.min(receivedCount, 3),
-        target: 3,
-        done: receivedCount >= 3,
-        button: "Profile",
-        action: "goToProfile()"
-      },
-      {
-        icon: "🚀",
-        title: "Complete 5 Swaps",
-        description: "Become an active skill partner.",
-        reward: "+100 XP",
-        xp: 100,
-        current: Math.min(completedCount, 5),
-        target: 5,
-        done: completedCount >= 5,
-        button: "Stats",
-        action: "goToStats()"
-      }
+    const reputation = [
+      {icon:"⭐",title:"Receive Ratings",description:"Collect 3 reviews from swaps.",reward:"+30 XP",xp:30,current:Math.min(ratings,3),target:3,done:ratings>=3,button:"Ratings",action:"goToRatings()"},
+      {icon:"📥",title:"Receive Requests",description:"Make your profile attractive.",reward:"+35 XP",xp:35,current:Math.min(received,3),target:3,done:received>=3,button:"Profile",action:"goToProfile()"},
+      {icon:"🚀",title:"Complete 5 Swaps",description:"Become an active skill partner.",reward:"+100 XP",xp:100,current:Math.min(completed,5),target:5,done:completed>=5,button:"Stats",action:"goToStats()"}
     ];
-
-    const allMissions = [
-      ...dailyMissions,
-      ...milestoneMissions,
-      ...reputationMissions
-    ];
-
-    const completedMissions = allMissions.filter(mission => mission.done);
-    const totalXp = completedMissions.reduce((sum, mission) => sum + mission.xp, 0);
-
-    document.getElementById("missionsWelcome").innerText =
-      `${me.name || "Student"}, your tasks are organized below.`;
-
-    document.getElementById("totalXp").innerText = `${totalXp} XP`;
-    document.getElementById("missionRank").innerText = getRank(totalXp);
-    document.getElementById("completedMissions").innerText = completedMissions.length;
-    document.getElementById("activeMissions").innerText = allMissions.length - completedMissions.length;
-    document.getElementById("profilePercent").innerText = `${profileCompletion}%`;
-
-    renderMissionList("dailyMissionsList", dailyMissions);
-    renderMissionList("milestoneMissionsList", milestoneMissions);
-    renderMissionList("reputationMissionsList", reputationMissions);
-  } catch (error) {
-    console.error("Missions page error:", error);
-    document.getElementById("missionsWelcome").innerText =
-      "Error loading missions. Please check your Firebase rules.";
-  }
+    const all = [...daily,...milestone,...reputation];
+    const done = all.filter(m => m.done);
+    const xp = done.reduce((s,m)=>s+m.xp,0);
+    document.getElementById("missionsWelcome").innerText = `${me.name || "Student"}, your tasks are organized below.`;
+    document.getElementById("totalXp").innerText = `${xp} XP`;
+    document.getElementById("missionRank").innerText = rank(xp);
+    document.getElementById("completedMissions").innerText = done.length;
+    document.getElementById("activeMissions").innerText = all.length-done.length;
+    document.getElementById("profilePercent").innerText = `${pc}%`;
+    renderMissionList("dailyMissionsList", daily); renderMissionList("milestoneMissionsList", milestone); renderMissionList("reputationMissionsList", reputation);
+  } catch(e) { console.error("Missions error:", e); const w=document.getElementById("missionsWelcome"); if(w) w.innerText="Error loading missions."; }
 });

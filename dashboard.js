@@ -1,17 +1,6 @@
 import { app } from "./firebase-config.js";
-
-import {
-  getAuth,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  collection,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -21,342 +10,170 @@ function safeText(value, fallback = "Student") {
   const text = String(value).trim();
   return text === "" ? fallback : text;
 }
-
-function escapeHTML(value) {
-  return String(value || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+function esc(value) {
+  return String(value || "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
-
 function parseSkills(text) {
-  return safeText(text, "")
-    .split(",")
-    .map(skill => skill.trim().toLowerCase())
-    .filter(Boolean);
+  return safeText(text, "").split(",").map(s => s.trim()).filter(Boolean);
 }
-
-function displaySkills(text, limit = 2) {
-  return safeText(text, "")
-    .split(",")
-    .map(skill => skill.trim())
-    .filter(Boolean)
-    .slice(0, limit);
+function lowerSkills(text) {
+  return parseSkills(text).map(s => s.toLowerCase());
 }
-
-function normalizeDate(value) {
-  if (!value) return 0;
-  if (typeof value === "object" && typeof value.toDate === "function") {
-    try {
-      return value.toDate().getTime();
-    } catch {
-      return 0;
-    }
-  }
-  const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? 0 : parsed.getTime();
+function profileCompletion(me) {
+  const fields = [me.name, me.course, me.yearLevel, me.studentId, me.section, me.bio, me.offeredSkills, me.wantedSkills, me.transactionPreference];
+  return Math.round((fields.filter(v => safeText(v, "") !== "").length / fields.length) * 100);
 }
-
-function getProfileCompletion(me) {
-  const checks = [
-    me.name,
-    me.course,
-    me.yearLevel,
-    me.studentId,
-    me.section,
-    me.bio,
-    me.offeredSkills,
-    me.wantedSkills,
-    me.transactionPreference
-  ];
-
-  const filled = checks.filter(value => safeText(value, "") !== "").length;
-  return Math.round((filled / checks.length) * 100);
-}
-
-function getRatingMap(ratingDocs) {
+function buildRatingMap(docs) {
   const map = {};
-  ratingDocs.forEach(docSnap => {
-    const rating = docSnap.data();
-    const rateeId = rating.rateeId;
-    const stars = Number(rating.stars || 0);
-    if (!rateeId || !Number.isFinite(stars) || stars <= 0) return;
-    if (!map[rateeId]) map[rateeId] = { total: 0, count: 0 };
-    map[rateeId].total += stars;
-    map[rateeId].count += 1;
+  docs.forEach(d => {
+    const r = d.data();
+    const id = r.rateeId;
+    const stars = Number(r.stars || 0);
+    if (!id || !stars) return;
+    if (!map[id]) map[id] = { total: 0, count: 0 };
+    map[id].total += stars;
+    map[id].count += 1;
   });
   return map;
 }
-
-function getRatingLabel(ratingMap, userId) {
-  const info = ratingMap[userId];
-  if (!info || info.count === 0) return "New";
-  return `${(info.total / info.count).toFixed(1)}★`;
+function ratingLabel(map, id) {
+  const r = map[id];
+  if (!r || !r.count) return "New";
+  return `${(r.total / r.count).toFixed(1)}★`;
 }
-
-function computeMatch(me, other, ratingMap) {
-  const myWanted = parseSkills(me.wantedSkills);
-  const myOffered = parseSkills(me.offeredSkills);
-  const theirWanted = parseSkills(other.wantedSkills);
-  const theirOffered = parseSkills(other.offeredSkills);
-
+function matchScore(me, other, ratingMap) {
+  const myWanted = lowerSkills(me.wantedSkills);
+  const myOffered = lowerSkills(me.offeredSkills);
+  const theirWanted = lowerSkills(other.wantedSkills);
+  const theirOffered = lowerSkills(other.offeredSkills);
   let score = 0;
-
-  theirOffered.forEach(skill => {
-    if (myWanted.includes(skill)) score += 2;
-  });
-
-  theirWanted.forEach(skill => {
-    if (myOffered.includes(skill)) score += 1;
-  });
-
-  if (safeText(me.course, "") && me.course === other.course) score += 1;
-  if (safeText(me.yearLevel, "") && me.yearLevel === other.yearLevel) score += 1;
-
-  const rating = ratingMap[other.id];
-  if (rating && rating.count > 0) {
-    score += Math.min(2, (rating.total / rating.count) / 2.5);
-  }
-
-  const overlap = theirOffered.filter(skill => myWanted.includes(skill));
-  const percent = Math.min(99, Math.max(35, Math.floor(score * 18)));
-
-  return { score, percent, overlap };
+  theirOffered.forEach(s => { if (myWanted.includes(s)) score += 2; });
+  theirWanted.forEach(s => { if (myOffered.includes(s)) score += 1; });
+  if (me.course && other.course && me.course === other.course) score += 1;
+  if (me.yearLevel && other.yearLevel && me.yearLevel === other.yearLevel) score += 1;
+  const rate = ratingMap[other.id];
+  if (rate && rate.count) score += Math.min(2, (rate.total / rate.count) / 2.5);
+  const overlap = theirOffered.filter(s => myWanted.includes(s));
+  return { score, percent: Math.min(99, Math.max(35, Math.floor(score * 18))), overlap };
 }
-
 function renderRecommended(items, ratingMap) {
-  const container = document.getElementById("recommendedList");
-  if (!container) return;
-
+  const box = document.getElementById("recommendedList");
+  if (!box) return;
   if (!items.length) {
-    container.innerHTML = `
-      <article class="v7-person-card recommend-card">
-        <div class="v7-person-main">
-          <div class="v7-person-avatar" style="display:grid;place-items:center;background:#eef3ff;">🔎</div>
-          <div class="v7-person-info">
-            <h4>No matches yet</h4>
-            <p>Add more skills to your profile.</p>
-          </div>
-          <div class="v7-match-ring">0%</div>
-        </div>
-      </article>
-    `;
+    box.innerHTML = `<article class="v8-person-card"><div class="v8-person-main"><div class="v8-avatar" style="display:grid;place-items:center;background:#eef3ff;">🔎</div><div class="v8-info"><h4>No matches yet</h4><p>Add more skills to your profile.</p><p>Then come back here.</p></div><div class="v8-match">0%</div></div></article>`;
     return;
   }
-
-  container.innerHTML = items.map(({ user, match }) => {
+  box.innerHTML = items.map(({ user, match }) => {
     const avatar = safeText(user.profilePic, "avatars/avatar1.png");
-    const skills = displaySkills(user.offeredSkills, 2);
-    const matchText = match.overlap.length
-      ? match.overlap.slice(0, 2).join(", ")
-      : "Skill partner";
-
+    const skills = parseSkills(user.offeredSkills).slice(0, 2);
+    const matchText = match.overlap.length ? match.overlap.slice(0, 2).join(", ") : "Skill partner";
     return `
-      <article class="v7-person-card recommend-card" onclick="openStudentProfile('${user.id}')">
-        <div class="v7-person-main">
-          <img class="v7-person-avatar" src="${escapeHTML(avatar)}" alt="Avatar">
-
-          <div class="v7-person-info">
-            <h4>${escapeHTML(safeText(user.name, "Student"))}</h4>
-            <p>${escapeHTML(safeText(user.course, "Course"))} • ${escapeHTML(safeText(user.yearLevel, "Year"))}</p>
-            <p>${escapeHTML(matchText)}</p>
+      <article class="v8-person-card" onclick="openStudentProfile('${user.id}')">
+        <div class="v8-person-main">
+          <img class="v8-avatar" src="${esc(avatar)}" alt="Avatar">
+          <div class="v8-info">
+            <h4>${esc(safeText(user.name, "Student"))}</h4>
+            <p>${esc(safeText(user.course, "Course"))} • ${esc(safeText(user.yearLevel, "Year"))}</p>
+            <p>${esc(matchText)}</p>
           </div>
-
-          <div class="v7-match-ring">${match.percent}%</div>
+          <div class="v8-match">${match.percent}%</div>
         </div>
-
-        <div class="v7-person-tags">
-          <span>${escapeHTML(safeText(user.transactionPreference, "Either"))}</span>
-          <span>${escapeHTML(getRatingLabel(ratingMap, user.id))}</span>
-          ${skills.map(skill => `<span>${escapeHTML(skill)}</span>`).join("")}
+        <div class="v8-tags">
+          <span>${esc(safeText(user.transactionPreference, "Either"))}</span>
+          <span>${esc(ratingLabel(ratingMap, user.id))}</span>
+          ${skills.map(s => `<span>${esc(s)}</span>`).join("")}
         </div>
-
-        <div class="v7-person-actions">
+        <div class="v8-actions">
           <button onclick="event.stopPropagation(); quickRequest('${user.id}')">Request</button>
           <button class="secondary-btn" onclick="event.stopPropagation(); openStudentProfile('${user.id}')">View</button>
         </div>
-      </article>
-    `;
+      </article>`;
   }).join("");
 }
-
 function renderNotifications(items) {
   const list = document.getElementById("notificationList");
   if (!list) return;
-
-  if (!items.length) {
-    list.innerHTML = `
-      <div class="notification-item" onclick="goToBrowse()">
-        <div class="notification-icon">✨</div>
-        <div>
-          <h4>All clear</h4>
-          <p>No urgent notifications right now. Discover new skill partners.</p>
-        </div>
-      </div>
-    `;
-    return;
-  }
-
   list.innerHTML = items.map(item => `
     <div class="notification-item" onclick="openNotificationTarget('${item.target}')">
       <div class="notification-icon">${item.icon}</div>
-      <div>
-        <h4>${escapeHTML(item.title)}</h4>
-        <p>${escapeHTML(item.message)}</p>
-      </div>
-    </div>
-  `).join("");
+      <div><h4>${esc(item.title)}</h4><p>${esc(item.message)}</p></div>
+      <div class="notification-chevron">›</div>
+    </div>`).join("");
 }
-
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(auth, async user => {
   const welcome = document.getElementById("welcome");
-
   if (!user) {
-    window.location.href = "index.html";
+    location.href = "index.html";
     return;
   }
-
   try {
-    const [userSnap, swapSnapshot, ratingSnapshot, messageSnapshot, usersSnapshot] = await Promise.all([
+    const [userSnap, swapSnap, ratingSnap, messageSnap, usersSnap] = await Promise.all([
       getDoc(doc(db, "users", user.uid)),
       getDocs(collection(db, "swapRequests")),
       getDocs(collection(db, "ratings")),
       getDocs(collection(db, "messages")),
       getDocs(collection(db, "users"))
     ]);
-
     const me = userSnap.exists() ? userSnap.data() : {};
-    const profileCompletion = getProfileCompletion(me);
-
-    if (welcome) {
-      welcome.innerText = `Welcome, ${safeText(me.name, "Student")}!`;
-    }
-
-    let completedCount = 0;
-    let pendingIncoming = 0;
-    let acceptedCount = 0;
-    let totalStars = 0;
-    let ratingCount = 0;
-    const notifications = [];
-
-    swapSnapshot.forEach(docSnap => {
-      const request = docSnap.data();
-      const isMine = request.requesterId === user.uid || request.receiverId === user.uid;
-      if (!isMine) return;
-
-      if (request.status === "completed") completedCount++;
-      if (request.status === "accepted") acceptedCount++;
-
-      if (request.receiverId === user.uid && request.status === "pending") {
-        pendingIncoming++;
+    if (welcome) welcome.innerText = `Welcome, ${safeText(me.name, "Student")}!`;
+    let completed = 0, pending = 0, active = 0, sent = 0, totalStars = 0, ratingCount = 0, unread = 0;
+    const pendingItems = [], activeItems = [], unreadBySender = {};
+    swapSnap.forEach(d => {
+      const r = d.data();
+      const mine = r.requesterId === user.uid || r.receiverId === user.uid;
+      if (!mine) return;
+      if (r.status === "completed") completed++;
+      if (r.status === "accepted") { active++; activeItems.push({ id: d.id, ...r }); }
+      if (r.requesterId === user.uid) sent++;
+      if (r.receiverId === user.uid && r.status === "pending") { pending++; pendingItems.push({ id: d.id, ...r }); }
+    });
+    ratingSnap.forEach(d => {
+      const r = d.data();
+      if (r.rateeId === user.uid) { totalStars += Number(r.stars || 0); ratingCount++; }
+    });
+    messageSnap.forEach(d => {
+      const m = d.data();
+      const seenBy = Array.isArray(m.seenBy) ? m.seenBy : [];
+      const addressedToMe = m.receiverId === user.uid || (Array.isArray(m.participants) && m.participants.includes(user.uid));
+      if (m.senderId !== user.uid && addressedToMe && !seenBy.includes(user.uid)) {
+        unread++;
+        const sender = m.senderName || m.senderId || "Student";
+        unreadBySender[sender] = (unreadBySender[sender] || 0) + 1;
       }
     });
-
-    ratingSnapshot.forEach(docSnap => {
-      const rating = docSnap.data();
-      if (rating.rateeId === user.uid) {
-        totalStars += Number(rating.stars || 0);
-        ratingCount++;
-      }
-    });
-
-    let unreadMessages = 0;
-    const unreadPartners = new Set();
-
-    messageSnapshot.forEach(docSnap => {
-      const msg = docSnap.data();
-      const seenBy = Array.isArray(msg.seenBy) ? msg.seenBy : [];
-      const isUnread = msg.senderId !== user.uid && !seenBy.includes(user.uid);
-      if (isUnread) {
-        unreadMessages++;
-        if (msg.senderId) unreadPartners.add(msg.senderId);
-      }
-    });
-
-    if (pendingIncoming > 0) {
-      notifications.push({
-        icon: "📨",
-        title: `${pendingIncoming} request${pendingIncoming === 1 ? "" : "s"} need action`,
-        message: "Tap to review incoming skill swap requests.",
-        target: "requests.html"
-      });
-    }
-
-    if (unreadMessages > 0) {
-      notifications.push({
-        icon: "💬",
-        title: `${unreadMessages} unread message${unreadMessages === 1 ? "" : "s"}`,
-        message: "Tap to open your conversations.",
-        target: "connections.html"
-      });
-    }
-
-    if (profileCompletion < 100) {
-      notifications.push({
-        icon: "👤",
-        title: `Profile is ${profileCompletion}% complete`,
-        message: "Complete your profile to improve your matches.",
-        target: "profile.html"
-      });
-    }
-
-    if (acceptedCount > 0) {
-      notifications.push({
-        icon: "🤝",
-        title: `${acceptedCount} active swap${acceptedCount === 1 ? "" : "s"}`,
-        message: "Tap to manage active exchanges.",
-        target: "requests.html"
-      });
-    }
-
-    const avg = ratingCount > 0 ? (totalStars / ratingCount).toFixed(1) : "0.0";
-    const set = (id, value) => {
-      const el = document.getElementById(id);
-      if (el) el.innerText = value;
-    };
-
-    set("swapCount", completedCount);
-    set("pendingCount", pendingIncoming);
-    set("messageCount", unreadMessages);
+    const avg = ratingCount ? (totalStars / ratingCount).toFixed(1) : "0.0";
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+    set("swapCount", completed);
+    set("pendingCount", pending);
+    set("messageCount", unread);
     set("avgRating", `${avg}★`);
-
-    const badgeCount = pendingIncoming + unreadMessages;
-    const requestBadge = document.getElementById("requestBadge");
-    if (requestBadge) {
-      requestBadge.style.display = badgeCount > 0 ? "inline-grid" : "none";
-      requestBadge.innerText = badgeCount;
-    }
-
-    renderNotifications(notifications);
-
-    const ratingMap = getRatingMap(ratingSnapshot.docs);
+    set("xpPoints", sent + active + completed);
+    set("levelNumber", active + completed);
+    const badge = document.getElementById("requestBadge");
+    const badgeCount = pending + unread;
+    if (badge) { badge.style.display = badgeCount ? "inline-grid" : "none"; badge.innerText = badgeCount > 9 ? "9+" : badgeCount; }
+    const notifs = [];
+    pendingItems.slice(0, 4).forEach(r => notifs.push({ icon: "📨", title: `New request from ${safeText(r.requesterName, "Student")}`, message: safeText(r.message, "Tap to review this skill request."), target: "requests.html" }));
+    Object.entries(unreadBySender).slice(0, 4).forEach(([sender, count]) => notifs.push({ icon: "💬", title: `${count} unread message${count === 1 ? "" : "s"}`, message: `Tap to open messages from ${sender}.`, target: "connections.html" }));
+    activeItems.slice(0, 3).forEach(r => notifs.push({ icon: "🤝", title: `Active swap with ${r.requesterId === user.uid ? safeText(r.receiverName, "Student") : safeText(r.requesterName, "Student")}`, message: "Tap to manage this exchange.", target: "requests.html" }));
+    const pc = profileCompletion(me);
+    if (pc < 100) notifs.push({ icon: "👤", title: `Profile ${pc}% complete`, message: "Complete your profile to improve matches.", target: "profile.html" });
+    if (!notifs.length) notifs.push({ icon: "✨", title: "No urgent alerts", message: "Discover students, swipe matches, or update your profile.", target: "browse.html" });
+    renderNotifications(notifs);
+    const ratingMap = buildRatingMap(ratingSnap.docs);
     const candidates = [];
-
-    usersSnapshot.forEach(docSnap => {
-      if (docSnap.id === user.uid) return;
-      const other = { id: docSnap.id, ...docSnap.data() };
-      const match = computeMatch(me, other, ratingMap);
+    usersSnap.forEach(d => {
+      if (d.id === user.uid) return;
+      const other = { id: d.id, ...d.data() };
+      const match = matchScore(me, other, ratingMap);
       candidates.push({ user: other, match });
     });
-
-    candidates.sort((a, b) => {
-      if (b.match.score !== a.match.score) return b.match.score - a.match.score;
-      return normalizeDate(b.user.createdAt) - normalizeDate(a.user.createdAt);
-    });
-
+    candidates.sort((a, b) => b.match.score - a.match.score);
     renderRecommended(candidates.slice(0, 8), ratingMap);
-  } catch (error) {
-    console.error("Dashboard error:", error);
+  } catch (err) {
+    console.error("Dashboard error:", err);
     if (welcome) welcome.innerText = "Error loading dashboard.";
   }
 });
-
-window.openStudentProfile = function (uid) {
-  window.location.href = `view-profile.html?uid=${uid}`;
-};
-
-window.quickRequest = function (uid) {
-  window.location.href = `view-profile.html?uid=${uid}`;
-};
+window.openStudentProfile = uid => { location.href = `view-profile.html?uid=${uid}`; };
+window.quickRequest = uid => { location.href = `view-profile.html?uid=${uid}`; };

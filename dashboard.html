@@ -17,7 +17,7 @@
         </div>
 
         <div class="app-header-actions">
-          <button class="app-round-btn" data-notification-button onclick="toggleNotifications()" aria-label="Notifications">🔔<span id="requestBadge" class="notification-badge" style="display:none;">0</span></button>
+          <button class="app-round-btn" onclick="toggleNotifications()" aria-label="Notifications">🔔<span id="requestBadge" class="notification-badge" style="display:none;">0</span></button>
           <button class="app-round-btn app-avatar-btn" onclick="goToProfile()" aria-label="Profile">👤</button>
           <button class="app-round-btn logout-round-btn" onclick="confirmLogout()" aria-label="Logout">↪</button>
         </div>
@@ -136,11 +136,13 @@
   </main>
 
   <section id="notificationPanel" class="notification-panel">
-    <div class="notification-panel-head">
-      <h3>Notifications</h3>
-      <button onclick="closeNotifications()">Close</button>
+    <div class="notification-sheet">
+      <div class="notification-panel-head">
+        <h3>Notifications</h3>
+        <button onclick="closeNotifications()">Close</button>
+      </div>
+      <div id="notificationList" class="notification-list"></div>
     </div>
-    <div id="notificationList" class="notification-list"></div>
   </section>
 
   <nav class="app-bottom-nav">
