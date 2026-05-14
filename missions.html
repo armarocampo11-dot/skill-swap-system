@@ -6,80 +6,65 @@
   <title>Missions - STI Skill Swap</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="missions-page">
-  <div class="page">
-    <div class="container">
-      <div class="top-nav">
-        <h1>STI Skill Swap</h1>
-        <div class="nav-buttons">
-          <button onclick="goToDashboard()">Dashboard</button>
-          <button onclick="goToSwipe()">Swipe</button>
-          <button onclick="goToProfile()">Profile</button>
-          <button onclick="goToProgress()">Progress</button>
-        </div>
+<body class="mobile-app-page missions-page">
+
+  <main class="app-screen mission-app-screen">
+    <section class="app-header">
+      <div>
+        <h1>Mission Center</h1>
+        <p id="missionsWelcome">Loading missions...</p>
       </div>
 
-      <section class="mission-hero">
-        <div>
-          <p class="eyebrow">Mission Center</p>
-          <h1>Your Growth Missions</h1>
-          <p id="missionsWelcome">Loading missions...</p>
-        </div>
+      <div class="app-header-actions">
+        <button class="app-icon-btn" onclick="goToDashboard()">🏠</button>
+      </div>
+    </section>
 
-        <div class="mission-xp-card">
-          <p>Total XP</p>
-          <h2 id="totalXp">0 XP</h2>
-          <span id="missionRank">Starter</span>
-        </div>
-      </section>
+    <section class="app-stats-strip">
+      <div>
+        <span>🏆</span>
+        <strong id="totalXp">0 XP</strong>
+        <p id="missionRank">Starter</p>
+      </div>
+      <div>
+        <span>✅</span>
+        <strong id="completedMissions">0</strong>
+        <p>Done</p>
+      </div>
+      <div>
+        <span>🔥</span>
+        <strong id="activeMissions">0</strong>
+        <p>Active</p>
+      </div>
+      <div>
+        <span>👤</span>
+        <strong id="profilePercent">0%</strong>
+        <p>Profile</p>
+      </div>
+    </section>
 
-      <section class="mission-stats">
-        <div class="mission-stat-card">
-          <p>Completed</p>
-          <h2 id="completedMissions">0</h2>
-        </div>
-        <div class="mission-stat-card">
-          <p>Active</p>
-          <h2 id="activeMissions">0</h2>
-        </div>
-        <div class="mission-stat-card">
-          <p>Profile</p>
-          <h2 id="profilePercent">0%</h2>
-        </div>
-      </section>
+    <section class="mission-simple-section">
+      <h2>Daily Missions</h2>
+      <div id="dailyMissionsList" class="mission-grid"></div>
+    </section>
 
-      <section class="mission-section">
-        <div class="section-title">
-          <h2>Daily Missions</h2>
-          <p>Small tasks that help you stay active.</p>
-        </div>
-        <div id="dailyMissionsList" class="mission-grid"></div>
-      </section>
+    <section class="mission-simple-section">
+      <h2>Milestone Missions</h2>
+      <div id="milestoneMissionsList" class="mission-grid"></div>
+    </section>
 
-      <section class="mission-section">
-        <div class="section-title">
-          <h2>Milestone Missions</h2>
-          <p>Long-term goals that build your reputation.</p>
-        </div>
-        <div id="milestoneMissionsList" class="mission-grid"></div>
-      </section>
+    <section class="mission-simple-section">
+      <h2>Reputation Missions</h2>
+      <div id="reputationMissionsList" class="mission-grid"></div>
+    </section>
+  </main>
 
-      <section class="mission-section">
-        <div class="section-title">
-          <h2>Reputation Missions</h2>
-          <p>Become a trusted skill-swap student.</p>
-        </div>
-        <div id="reputationMissionsList" class="mission-grid"></div>
-      </section>
-    </div>
-  </div>
-
-  <div class="app-bottom-nav">
-    <button onclick="goToDashboard()"><span>🏠</span>Home</button>
-    <button onclick="goToBrowse()"><span>🔎</span>Discover</button>
-    <button onclick="goToRequests()"><span>💬</span>Requests</button>
-    <button onclick="goToProfile()"><span>👤</span>Profile</button>
-  </div>
+  <nav class="app-bottom-nav">
+    <button onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button onclick="goToBrowse()">🔎<span>Discover</span></button>
+    <button onclick="goToRequests()">💬<span>Requests</span></button>
+    <button onclick="goToProfile()">👤<span>Profile</span></button>
+  </nav>
 
   <script type="module" src="missions.js"></script>
 </body>
