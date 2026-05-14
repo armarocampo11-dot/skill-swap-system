@@ -6889,3 +6889,377 @@ hr {
   }
 }
 
+.missions-page .mission-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #071f68, #1746a2);
+  color: white;
+  margin: 24px 0;
+}
+
+.missions-page .mission-xp-card {
+  min-width: 190px;
+  padding: 22px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.15);
+  text-align: center;
+}
+
+.missions-page .mission-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.missions-page .mission-stat-card {
+  padding: 22px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 10px 28px rgba(7, 31, 104, 0.1);
+  border: 1px solid #e4ecfb;
+}
+
+.missions-page .mission-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.missions-page .mission-card {
+  padding: 22px;
+  border-radius: 22px;
+  background: white;
+  border: 1px solid #e4ecfb;
+  box-shadow: 0 12px 30px rgba(7, 31, 104, 0.09);
+}
+
+.missions-page .mission-card h3 {
+  color: #071f68;
+}
+
+.missions-page .mission-card p {
+  color: #60739a;
+  font-size: 14px;
+}
+
+.missions-page .mission-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.missions-page .mission-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: #eef4ff;
+  font-size: 24px;
+}
+
+.missions-page .mission-badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eef4ff;
+  color: #1746a2;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.missions-page .mission-done {
+  border-color: #8fd19e;
+  background: linear-gradient(180deg, #ffffff, #f3fff6);
+}
+
+.missions-page .mission-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: #e9effa;
+  overflow: hidden;
+  margin: 8px 0 14px;
+}
+
+.missions-page .mission-bar div {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1746a2, #4f8cff);
+}
+
+.missions-page .mission-card button {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 12px;
+  background: #071f68;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .missions-page .mission-hero {
+    flex-direction: column;
+  }
+
+  .missions-page .mission-stats,
+  .missions-page .mission-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================= */
+/* MISSIONS PAGE UI IMPROVE */
+/* ========================= */
+
+.missions-page .container {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+.missions-page .mission-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+
+  padding: 22px 28px;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #071f68,
+      #1746a2
+    );
+
+  color: white;
+
+  margin: 20px 0;
+
+  box-shadow:
+    0 16px 40px rgba(7,31,104,0.18);
+}
+
+.missions-page .mission-hero h1 {
+  font-size: 24px;
+  margin: 6px 0;
+  color: white;
+}
+
+.missions-page .mission-hero p {
+  color: rgba(255,255,255,0.88);
+}
+
+.missions-page .mission-xp-card {
+  min-width: 170px;
+
+  padding: 18px;
+
+  border-radius: 22px;
+
+  background:
+    rgba(255,255,255,0.14);
+
+  backdrop-filter: blur(10px);
+
+  text-align: center;
+
+  border:
+    1px solid rgba(255,255,255,0.14);
+}
+
+.missions-page .mission-xp-card h2 {
+  margin: 10px 0;
+  font-size: 30px;
+  color: white;
+}
+
+.missions-page .mission-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.missions-page .mission-stat-card {
+  padding: 22px;
+
+  border-radius: 22px;
+
+  background: white;
+
+  border:
+    1px solid #e4ecfb;
+
+  box-shadow:
+    0 10px 30px rgba(7,31,104,0.08);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.missions-page .mission-stat-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 18px 36px rgba(7,31,104,0.12);
+}
+
+.missions-page .mission-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.missions-page .mission-card {
+  padding: 22px;
+
+  border-radius: 24px;
+
+  background: white;
+
+  border:
+    1px solid #e4ecfb;
+
+  box-shadow:
+    0 12px 30px rgba(7,31,104,0.08);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.missions-page .mission-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 20px 42px rgba(7,31,104,0.14);
+}
+
+.missions-page .mission-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.missions-page .mission-icon {
+  width: 46px;
+  height: 46px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 16px;
+
+  background: #eef4ff;
+
+  font-size: 24px;
+}
+
+.missions-page .mission-badge {
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  background: #eef4ff;
+
+  color: #1746a2;
+
+  font-size: 12px;
+
+  font-weight: 800;
+}
+
+.missions-page .mission-done {
+  border-color: #8fd19e;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #f3fff6
+    );
+}
+
+.missions-page .mission-bar {
+  height: 10px;
+
+  border-radius: 999px;
+
+  background: #e9effa;
+
+  overflow: hidden;
+
+  margin: 8px 0 14px;
+}
+
+.missions-page .mission-bar div {
+  height: 100%;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #1746a2,
+      #4f8cff
+    );
+}
+
+.missions-page .mission-card button {
+  width: 100%;
+
+  border: none;
+
+  border-radius: 14px;
+
+  padding: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #4f46e5,
+      #6366f1
+    );
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.missions-page .mission-card button:hover {
+  transform: translateY(-2px);
+
+  opacity: 0.92;
+}
+
+.missions-page .mission-section {
+  margin-top: 38px;
+}
+
+@media (max-width: 900px) {
+
+  .missions-page .mission-hero {
+    flex-direction: column;
+  }
+
+  .missions-page .mission-stats,
+  .missions-page .mission-grid {
+    grid-template-columns: 1fr;
+  }
+
+}

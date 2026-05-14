@@ -6,51 +6,71 @@
   <title>Missions - STI Skill Swap</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-
-  <div class="navbar">
-    <h2>STI Skill Swap</h2>
-    <div class="nav-links">
-      <button onclick="goToDashboard()">Dashboard</button>
-      <button onclick="goToProgress()">Progress</button>
-      <button onclick="goToProfile()">Profile</button>
-    </div>
-  </div>
-
+<body class="missions-page">
   <div class="page">
-    <div class="container dashboard-shell">
+    <div class="container">
+      <div class="top-nav">
+        <h1>STI Skill Swap</h1>
+        <div class="nav-buttons">
+          <button onclick="goToDashboard()">Dashboard</button>
+          <button onclick="goToSwipe()">Swipe</button>
+          <button onclick="goToProfile()">Profile</button>
+          <button onclick="goToProgress()">Progress</button>
+        </div>
+      </div>
 
-      <section class="dashboard-hero card">
-        <div class="dashboard-hero-copy">
-          <p class="dashboard-kicker">Mission center</p>
-          <h1 class="hero-title">Your <span class="glow-text">Missions</span></h1>
-          <p class="subtitle">A dedicated page for action-based growth goals.</p>
-          <p id="missionsWelcome" class="dashboard-welcome">Loading missions...</p>
+      <section class="mission-hero">
+        <div>
+          <p class="eyebrow">Mission Center</p>
+          <h1>Your Growth Missions</h1>
+          <p id="missionsWelcome">Loading missions...</p>
+        </div>
+
+        <div class="mission-xp-card">
+          <p>Total XP</p>
+          <h2 id="totalXp">0 XP</h2>
+          <span id="missionRank">Starter</span>
         </div>
       </section>
 
-      <section class="dashboard-gamify-grid missions-page-grid">
-        <div class="card dashboard-missions-card">
-          <div class="dashboard-section-head">
-            <div>
-              <h2 class="section-title">📅 Daily Missions</h2>
-              <p class="small-text">Quick actions to push your account forward.</p>
-            </div>
-          </div>
-          <div id="dailyMissionsList" class="missions-list"></div>
+      <section class="mission-stats">
+        <div class="mission-stat-card">
+          <p>Completed</p>
+          <h2 id="completedMissions">0</h2>
         </div>
-
-        <div class="card dashboard-missions-card">
-          <div class="dashboard-section-head">
-            <div>
-              <h2 class="section-title">🚀 Milestone Missions</h2>
-              <p class="small-text">Longer-term tasks that build your reputation.</p>
-            </div>
-          </div>
-          <div id="milestoneMissionsList" class="missions-list"></div>
+        <div class="mission-stat-card">
+          <p>Active</p>
+          <h2 id="activeMissions">0</h2>
+        </div>
+        <div class="mission-stat-card">
+          <p>Profile</p>
+          <h2 id="profilePercent">0%</h2>
         </div>
       </section>
 
+      <section class="mission-section">
+        <div class="section-title">
+          <h2>Daily Missions</h2>
+          <p>Small tasks that help you stay active.</p>
+        </div>
+        <div id="dailyMissionsList" class="mission-grid"></div>
+      </section>
+
+      <section class="mission-section">
+        <div class="section-title">
+          <h2>Milestone Missions</h2>
+          <p>Long-term goals that build your reputation.</p>
+        </div>
+        <div id="milestoneMissionsList" class="mission-grid"></div>
+      </section>
+
+      <section class="mission-section">
+        <div class="section-title">
+          <h2>Reputation Missions</h2>
+          <p>Become a trusted skill-swap student.</p>
+        </div>
+        <div id="reputationMissionsList" class="mission-grid"></div>
+      </section>
     </div>
   </div>
 
