@@ -7,13 +7,13 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <div class="navbar">
-    <h2>STI Skill Swap</h2>
+    <h2>Profile</h2>
     <div class="nav-links">
       <button onclick="goToDashboard()">Dashboard</button>
       <button onclick="goToBrowse()">Browse</button>
       <button onclick="goToRequests()">Requests</button>
-      <button onclick="goToConnections()">Connections</button>
     </div>
   </div>
 
@@ -43,7 +43,7 @@
           <div class="profile-section-head">
             <div>
               <h2>Edit Profile</h2>
-              <p>Keep your profile strong so other students trust and choose you faster.</p>
+              <p>Keep your profile clean and complete.</p>
             </div>
           </div>
 
@@ -86,18 +86,18 @@
 
           <div class="profile-field">
             <label for="bio">Bio</label>
-            <textarea id="bio" class="app-input" rows="4" placeholder="Tell students what you can offer and what kind of help you are looking for"></textarea>
+            <textarea id="bio" class="app-input" rows="3" placeholder="Tell students what you can offer."></textarea>
           </div>
 
           <div class="profile-form-grid single-gap-top">
             <div class="profile-field">
               <label for="offeredSkills">Offered Skills</label>
-              <textarea id="offeredSkills" class="app-input" rows="4" placeholder="Example: Canva editing, Math tutoring, Video editing"></textarea>
+              <textarea id="offeredSkills" class="app-input" rows="3" placeholder="Example: Canva, Math, Editing"></textarea>
             </div>
 
             <div class="profile-field">
               <label for="wantedSkills">Wanted Skills</label>
-              <textarea id="wantedSkills" class="app-input" rows="4" placeholder="Example: Coding help, Presentation coaching, Layout design"></textarea>
+              <textarea id="wantedSkills" class="app-input" rows="3" placeholder="Example: Java, Public Speaking"></textarea>
             </div>
           </div>
 
@@ -115,61 +115,49 @@
 
           <div class="profile-action-row">
             <button onclick="saveProfile()">Save Profile</button>
-            <button class="secondary-btn" onclick="goToDashboard()">Back to Dashboard</button>
+            <button class="secondary-btn" onclick="goToDashboard()">Dashboard</button>
           </div>
+
+          <p id="profileStatus" class="small-text"></p>
         </div>
 
-        <div class="profile-side-column">
-          <div class="profile-side-card">
-            <h3>Profile Strength</h3>
-            <p class="small-text">A stronger profile gets better trust and better matches.</p>
+        <aside class="profile-side-card">
+          <h3>Preview</h3>
+          <div class="profile-preview-mini">
+            <img id="profileMiniAvatar" class="profile-mini-avatar" src="avatars/avatar1.png" alt="Avatar">
+            <div>
+              <h4 id="profileMiniName">Your Name</h4>
+              <p id="profileMiniMeta">Course • Year</p>
+            </div>
+          </div>
+
+          <div class="profile-preview-tags">
+            <span id="profilePreviewMode" class="profile-hero-pill">Either</span>
+            <span id="profilePreviewRating" class="profile-hero-pill">0.0★</span>
+          </div>
+
+          <p id="profilePreviewBio">Your bio preview will appear here.</p>
+          <div id="profilePreviewSkills" class="profile-preview-skills"></div>
+
+          <div class="profile-strength-card">
+            <h4>Profile Strength</h4>
             <div class="profile-strength-bar">
               <div id="profileStrengthFill" class="profile-strength-fill"></div>
             </div>
-            <p id="profileStrengthText" class="profile-strength-text">0% complete</p>
+            <p id="profileStrengthText" class="small-text">0% complete</p>
           </div>
-
-          <div class="profile-side-card">
-            <h3>Public Preview</h3>
-            <div class="profile-preview-mini">
-              <img id="profileMiniAvatar" class="profile-mini-avatar" src="avatars/avatar1.png" alt="Avatar">
-              <div>
-                <h4 id="profileMiniName">Your Name</h4>
-                <p id="profileMiniMeta" class="small-text">Course • Year</p>
-              </div>
-            </div>
-
-            <div class="profile-preview-tags">
-              <span id="profilePreviewMode" class="browse-soft-pill">Either</span>
-              <span id="profilePreviewRating" class="browse-rating-pill">0.0★</span>
-            </div>
-
-            <p id="profilePreviewBio" class="small-text">Your bio preview will appear here.</p>
-
-            <div id="profilePreviewSkills" class="profile-preview-skill-tags"></div>
-          </div>
-
-          <div class="profile-side-card">
-            <h3>What helps most</h3>
-            <ul class="profile-tip-list">
-              <li>Complete your student ID and course</li>
-              <li>Add clear offered and wanted skills</li>
-              <li>Write a simple bio students can understand quickly</li>
-              <li>Choose an avatar so chats and browse feel more personal</li>
-            </ul>
-          </div>
-        </div>
+        </aside>
       </section>
 
     </div>
   </div>
 
-  <div class="app-bottom-nav">
-    <button onclick="goToDashboard()"><span>🏠</span>Home</button>
-    <button onclick="goToBrowse()"><span>🔎</span>Discover</button>
-    <button onclick="goToRequests()"><span>💬</span>Requests</button>
-    <button onclick="goToProfile()"><span>👤</span>Profile</button>
-  </div>
+  <nav class="bottom-nav">
+    <button onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button onclick="goToBrowse()">🔎<span>Discover</span></button>
+    <button onclick="goToRequests()">💬<span>Requests</span></button>
+    <button class="active" onclick="goToProfile()">👤<span>Profile</span></button>
+  </nav>
 
   <script type="module" src="profile.js"></script>
 </body>

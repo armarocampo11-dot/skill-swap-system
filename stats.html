@@ -9,10 +9,11 @@
 <body>
 
   <div class="navbar">
-    <h2>STI Skill Swap</h2>
+    <h2>Stats</h2>
     <div class="nav-links">
       <button onclick="goToDashboard()">Dashboard</button>
       <button onclick="goToProfile()">Profile</button>
+      <button onclick="goToRatings()">Ratings</button>
     </div>
   </div>
 
@@ -20,95 +21,65 @@
     <div class="container dashboard-shell">
 
       <section class="dashboard-hero card">
-        <div class="dashboard-hero-copy">
-          <p class="dashboard-kicker">Performance center</p>
-          <h1 class="hero-title">Swap <span class="glow-text">Stats</span></h1>
-          <p class="subtitle">Track request performance, completed swaps, and your recent activity history.</p>
-          <p id="statsWelcome" class="dashboard-welcome">Loading stats...</p>
+        <p class="dashboard-kicker">Performance center</p>
+        <h1 class="hero-title">Swap <span class="glow-text">Stats</span></h1>
+        <p id="statsWelcome" class="dashboard-welcome">Loading stats.</p>
+      </section>
+
+      <section class="stats-grid-2">
+        <div class="stats-box">
+          <h3 id="totalRequests">0</h3>
+          <p>Total Requests</p>
+        </div>
+
+        <div class="stats-box">
+          <h3 id="completedSwaps">0</h3>
+          <p>Completed</p>
+        </div>
+
+        <div class="stats-box">
+          <h3 id="acceptedRequests">0</h3>
+          <p>Active</p>
+        </div>
+
+        <div class="stats-box">
+          <h3 id="rejectedFailed">0</h3>
+          <p>Failed</p>
         </div>
       </section>
 
-      <section class="dashboard-gamify-grid">
-        <div class="card stats-summary-card">
-          <div class="dashboard-section-head">
-            <div>
-              <h2 class="section-title">My Swap Stats</h2>
-              <p class="small-text">Your current request and transaction performance.</p>
-            </div>
-          </div>
-
-          <div class="stats-grid-2">
-            <div class="stats-box">
-              <h3 id="totalRequests">0</h3>
-              <p>Total Requests</p>
-            </div>
-
-            <div class="stats-box">
-              <h3 id="completedSwaps">0</h3>
-              <p>Completed Swaps</p>
-            </div>
-
-            <div class="stats-box">
-              <h3 id="acceptedRequests">0</h3>
-              <p>Accepted / Active</p>
-            </div>
-
-            <div class="stats-box">
-              <h3 id="rejectedFailed">0</h3>
-              <p>Rejected / Failed</p>
-            </div>
-          </div>
+      <section class="stats-grid-2">
+        <div class="stats-box">
+          <h3 id="successRate">0%</h3>
+          <p>Success Rate</p>
         </div>
 
-        <div class="card stats-summary-card">
-          <div class="dashboard-section-head">
-            <div>
-              <h2 class="section-title">Performance Overview</h2>
-              <p class="small-text">A simple summary of how your swap activity is going.</p>
-            </div>
-          </div>
-
-          <div class="stats-grid-1">
-            <div class="stats-box">
-              <h3 id="successRate">0%</h3>
-              <p>Success Rate</p>
-            </div>
-
-            <div class="stats-box">
-              <h3 id="ratingAverage">0.0★</h3>
-              <p>Average Rating</p>
-            </div>
-
-            <div class="stats-box">
-              <h3 id="historyCount">0</h3>
-              <p>History Entries</p>
-            </div>
-          </div>
+        <div class="stats-box">
+          <h3 id="ratingAverage">0.0★</h3>
+          <p>Rating</p>
         </div>
       </section>
 
-      <section class="card stats-history-card">
+      <section class="card">
         <div class="dashboard-section-head">
           <div>
-            <h2 class="section-title">My History</h2>
-            <p class="small-text">Recent request and swap activity connected to your account.</p>
+            <h2>Recent Activity</h2>
+            <p class="small-text">Your latest swap history.</p>
           </div>
         </div>
 
-        <div id="historyList" class="stats-history-list">
-          <p class="small-text">Loading history...</p>
-        </div>
+        <div id="activityHistory" class="requests-modern-list"></div>
       </section>
 
     </div>
   </div>
 
-  <div class="app-bottom-nav">
-    <button onclick="goToDashboard()"><span>🏠</span>Home</button>
-    <button onclick="goToBrowse()"><span>🔎</span>Discover</button>
-    <button onclick="goToRequests()"><span>💬</span>Requests</button>
-    <button onclick="goToProfile()"><span>👤</span>Profile</button>
-  </div>
+  <nav class="bottom-nav">
+    <button onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button onclick="goToBrowse()">🔎<span>Discover</span></button>
+    <button onclick="goToRequests()">💬<span>Requests</span></button>
+    <button onclick="goToProfile()">👤<span>Profile</span></button>
+  </nav>
 
   <script type="module" src="stats.js"></script>
 </body>

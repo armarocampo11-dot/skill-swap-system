@@ -9,38 +9,31 @@
 <body>
 
   <div class="navbar">
-    <h2>STI Skill Swap Chat</h2>
+    <h2>Chat</h2>
     <div class="nav-links">
-      <button class="secondary-btn" onclick="goBack()">Connections</button>
+      <button onclick="goBack()">Connections</button>
     </div>
   </div>
 
   <div class="page">
     <div class="container">
 
-      <div class="card" style="margin-bottom: 16px;">
-        <h1 class="hero-title" style="margin-bottom: 10px;">
-          <span id="chatPartner">Loading...</span>
+      <section class="card">
+        <h1 class="hero-title">
+          <span id="chatPartner">Loading.</span>
         </h1>
-        <p id="chatMeta" class="subtitle" style="margin-bottom: 10px;">Loading chat info...</p>
+        <p id="chatMeta" class="subtitle">Loading chat info.</p>
         <div id="chatStatus"></div>
-      </div>
+      </section>
 
-      <div id="messagesBox" class="card" style="min-height: 260px; max-height: 360px; overflow-y: auto;"></div>
+      <section id="messagesBox" class="chat-message-area"></section>
 
-      <div class="grid-2" style="grid-template-columns: 1fr auto; margin-top: 14px;">
-        <input type="text" id="messageInput" placeholder="Type your message here..." />
+      <section class="chat-composer-bar">
+        <input type="text" id="messageInput" placeholder="Type your message..." />
         <button onclick="sendMessage()">Send</button>
-      </div>
+      </section>
 
     </div>
-  </div>
-
-  <div class="app-bottom-nav">
-    <button onclick="goToDashboard()"><span>🏠</span>Home</button>
-    <button onclick="goToBrowse()"><span>🔎</span>Discover</button>
-    <button onclick="goToRequests()"><span>💬</span>Requests</button>
-    <button onclick="goToProfile()"><span>👤</span>Profile</button>
   </div>
 
   <script type="module" src="chat.js"></script>

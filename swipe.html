@@ -3,76 +3,58 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Swipe Mode - STI Skill Swap</title>
+  <title>Swipe - STI Skill Swap</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <div class="navbar">
-    <h2>STI Skill Swap</h2>
+    <h2>Swipe</h2>
     <div class="nav-links">
-      <button onclick="goToBrowse()">Browse</button>
       <button onclick="goToDashboard()">Dashboard</button>
+      <button onclick="goToBrowse()">Browse</button>
+      <button onclick="goToProfile()">Profile</button>
     </div>
   </div>
 
   <div class="page">
     <div class="container">
-      <div class="card swipe-page-hero">
-        <h1 class="hero-title">Swipe <span class="glow-text">Mode</span></h1>
-        <p class="subtitle">Skip left, show interest right, or open the full profile.</p>
-      </div>
 
-      <div class="swipe-stage">
-        <div id="swipeEmptyState" class="card swipe-empty" style="display:none;">
-          <h2>No more students</h2>
-          <p class="small-text">You’ve reached the end of the current stack.</p>
+      <section class="dashboard-hero swipe-page-hero">
+        <p class="dashboard-kicker">Quick matching</p>
+        <h1 class="hero-title">Swipe <span class="glow-text">Students</span></h1>
+        <p class="subtitle">Swipe left to skip, right to view and connect.</p>
+      </section>
+
+      <section class="swipe-stage">
+        <div id="swipeStack" class="swipe-stack"></div>
+
+        <div id="swipeEmpty" class="swipe-empty hidden">
+          <div class="reviews-empty-icon">🎉</div>
+          <h3>No more students</h3>
+          <p>You've reached the end of the current list.</p>
+
           <div class="swipe-empty-actions">
-            <button onclick="resetSwipeStack()">Restart Stack</button>
-            <button class="secondary-btn" onclick="goToBrowse()">Back to Browse</button>
+            <button onclick="reloadSwipeCards()">Reload</button>
+            <button class="secondary-btn" onclick="goToBrowse()">Browse</button>
           </div>
         </div>
+      </section>
 
-  <div id="swipeStack" class="swipe-stack"></div>
+      <div class="swipe-actions">
+        <button class="danger-btn" onclick="skipCurrentCard()">Skip</button>
+        <button onclick="interestedCurrentCard()">Interested</button>
+      </div>
 
-<div id="swipeEmptyState" class="card swipe-empty" style="display:none;">
-  <h2>No more students</h2>
-  <p>You’ve reached the end of the current stack.</p>
-  <button onclick="resetSwipeStack()">Restart Stack</button>
-  <button onclick="goToBrowse()">Back to Browse</button>
-</div>
-
-<div id="requestModal" class="modal-overlay" style="display:none;">
-  <div class="modal-card">
-    <h2>Send Request</h2>
-
-    <p>Transaction Type:</p>
-    <div class="modal-options">
-      <button data-type="Swap" onclick="selectType('Swap')">Swap</button>
-      <button data-type="Payment" onclick="selectType('Payment')">Payment</button>
-      <button data-type="Either" onclick="selectType('Either')">Either</button>
     </div>
-
-    <div id="amountSection" style="display:none;">
-      <label>Amount (₱):</label>
-      <input id="amountInput" type="number" placeholder="Enter amount">
-    </div>
-
-    <label>Message:</label>
-    <textarea id="messageInput"></textarea>
-
-    <button onclick="submitRequest()">Send</button>
-    <button onclick="closeModal()">Cancel</button>
-  </div>
-</div>
   </div>
 
-  <div class="app-bottom-nav">
-    <button onclick="goToDashboard()"><span>🏠</span>Home</button>
-    <button onclick="goToBrowse()"><span>🔎</span>Discover</button>
-    <button onclick="goToRequests()"><span>💬</span>Requests</button>
-    <button onclick="goToProfile()"><span>👤</span>Profile</button>
-  </div>
+  <nav class="bottom-nav">
+    <button onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button class="active" onclick="goToBrowse()">🔎<span>Discover</span></button>
+    <button onclick="goToRequests()">💬<span>Requests</span></button>
+    <button onclick="goToProfile()">👤<span>Profile</span></button>
+  </nav>
 
   <script type="module" src="swipe.js"></script>
 </body>

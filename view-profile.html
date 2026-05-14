@@ -7,13 +7,13 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <div class="navbar">
-    <h2>STI Skill Swap</h2>
+    <h2>Student</h2>
     <div class="nav-links">
       <button onclick="goToDashboard()">Dashboard</button>
       <button onclick="goToBrowse()">Browse</button>
       <button onclick="goToRequests()">Requests</button>
-      <button onclick="goToConnections()">Connections</button>
     </div>
   </div>
 
@@ -27,7 +27,7 @@
           <div class="public-profile-copy">
             <p class="profile-kicker">Student profile</p>
             <h1 id="publicName">Loading...</h1>
-            <p id="publicMeta" class="public-profile-meta">Course • Year Level • Section</p>
+            <p id="publicMeta" class="public-profile-meta">Course • Year • Section</p>
 
             <div class="public-profile-pills">
               <span id="publicRating" class="profile-hero-pill">0.0★</span>
@@ -35,72 +35,47 @@
               <span id="publicMode" class="profile-hero-pill soft-pill">Either</span>
             </div>
           </div>
+        </div>
 
-          <div class="public-profile-actions">
-            <button onclick="openPublicRequestModal()">Send Request</button>
-            <button class="secondary-btn" onclick="goToSwipe()">Back to Swipe</button>
+        <div class="public-profile-actions">
+          <button onclick="openPublicRequestModal()">Send Request</button>
+          <button class="secondary-btn" onclick="goToSwipe()">Back to Swipe</button>
+        </div>
+      </section>
+
+      <section class="public-profile-main-card">
+        <h2>About</h2>
+        <p id="publicBio" class="public-profile-bio">Loading bio...</p>
+
+        <div class="public-skill-columns">
+          <div class="public-skill-card">
+            <h3>Offered Skills</h3>
+            <div id="publicOfferedSkills" class="public-skill-tags"></div>
+          </div>
+
+          <div class="public-skill-card">
+            <h3>Wanted Skills</h3>
+            <div id="publicWantedSkills" class="public-skill-tags"></div>
           </div>
         </div>
       </section>
 
-      <section class="public-profile-grid">
-        <div class="public-profile-main-card">
-          <div class="profile-section-head">
+      <section class="profile-side-card">
+        <h3>Snapshot</h3>
+        <div class="public-snapshot-list">
+          <div class="public-snapshot-item">
+            <span class="public-snapshot-icon">🪪</span>
             <div>
-              <h2>About</h2>
-              <p>A quick overview of what this student offers and what they want to learn.</p>
+              <p>Student ID</p>
+              <strong id="publicStudentId">Not provided</strong>
             </div>
           </div>
 
-          <p id="publicBio" class="public-profile-bio">Loading bio...</p>
-
-          <div class="public-skill-columns">
-            <div class="public-skill-card">
-              <h3>Offered Skills</h3>
-              <div id="publicOfferedSkills" class="public-skill-tags"></div>
-            </div>
-
-            <div class="public-skill-card">
-              <h3>Wanted Skills</h3>
-              <div id="publicWantedSkills" class="public-skill-tags"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="public-profile-side-column">
-          <div class="profile-side-card">
-            <h3>Quick Snapshot</h3>
-            <div class="public-snapshot-list">
-              <div class="public-snapshot-row">
-                <span>Student ID</span>
-                <strong id="publicStudentId">Not set</strong>
-              </div>
-              <div class="public-snapshot-row">
-                <span>Section</span>
-                <strong id="publicSection">Not set</strong>
-              </div>
-              <div class="public-snapshot-row">
-                <span>Preferred Mode</span>
-                <strong id="publicModeSide">Either</strong>
-              </div>
-            </div>
-          </div>
-
-          <div class="profile-side-card">
-            <h3>Trust Signals</h3>
-            <div class="public-snapshot-list">
-              <div class="public-snapshot-row">
-                <span>Average Rating</span>
-                <strong id="publicRatingSide">0.0★</strong>
-              </div>
-              <div class="public-snapshot-row">
-                <span>Completed Swaps</span>
-                <strong id="publicSwapsSide">0</strong>
-              </div>
-              <div class="public-snapshot-row">
-                <span>Level</span>
-                <strong id="publicLevelSide">1</strong>
-              </div>
+          <div class="public-snapshot-item">
+            <span class="public-snapshot-icon">📚</span>
+            <div>
+              <p>Level</p>
+              <strong id="publicLevel">Level 1</strong>
             </div>
           </div>
         </div>
@@ -116,36 +91,32 @@
         <button class="secondary-btn" onclick="closePublicRequestModal()">Close</button>
       </div>
 
-      <p id="publicRequestTarget" class="small-text">Loading...</p>
-
-      <label class="app-label" for="publicRequestMode">Request Mode</label>
-      <select id="publicRequestMode" class="app-input">
+      <label for="publicRequestMode">Request Mode</label>
+      <select id="publicRequestMode">
         <option value="swap">Swap</option>
         <option value="paid">Paid</option>
         <option value="either">Either</option>
       </select>
 
-      <label class="app-label" for="publicRequestSkill">Skill / Request Title</label>
-      <input id="publicRequestSkill" class="app-input" type="text" placeholder="Example: Canva editing, tutoring, coding help">
+      <label for="publicRequestSkill">Skill / Request Title</label>
+      <input id="publicRequestSkill" type="text" placeholder="Example: Canva editing">
 
-      <label class="app-label" for="publicRequestAmount">Paid Amount (optional)</label>
-      <input id="publicRequestAmount" class="app-input" type="number" min="0" placeholder="Enter amount only if needed">
+      <label for="publicRequestAmount">Paid Amount</label>
+      <input id="publicRequestAmount" type="number" min="0" placeholder="Optional">
 
-      <label class="app-label" for="publicRequestMessage">Message</label>
-      <textarea id="publicRequestMessage" class="app-input" rows="4" placeholder="Write a short message"></textarea>
+      <label for="publicRequestMessage">Message</label>
+      <textarea id="publicRequestMessage" rows="4" placeholder="Write a short message"></textarea>
 
-      <div class="app-modal-actions">
-        <button onclick="submitPublicRequest()">Send Request</button>
-      </div>
+      <button onclick="submitPublicRequest()">Send Request</button>
     </div>
   </div>
 
-  <div class="app-bottom-nav">
-    <button onclick="goToDashboard()"><span>🏠</span>Home</button>
-    <button onclick="goToBrowse()"><span>🔎</span>Discover</button>
-    <button onclick="goToRequests()"><span>💬</span>Requests</button>
-    <button onclick="goToProfile()"><span>👤</span>Profile</button>
-  </div>
+  <nav class="bottom-nav">
+    <button onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button class="active" onclick="goToBrowse()">🔎<span>Discover</span></button>
+    <button onclick="goToRequests()">💬<span>Requests</span></button>
+    <button onclick="goToProfile()">👤<span>Profile</span></button>
+  </nav>
 
   <script type="module" src="view-profile.js"></script>
 </body>

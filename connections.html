@@ -7,8 +7,9 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <div class="navbar">
-    <h2>STI Skill Swap</h2>
+    <h2>Connections</h2>
     <div class="nav-links">
       <button onclick="goToDashboard()">Dashboard</button>
       <button onclick="goToRequests()">Requests</button>
@@ -18,13 +19,12 @@
 
   <div class="page">
     <div class="container dashboard-shell">
+
       <section class="dashboard-hero card">
-        <div class="dashboard-hero-copy">
-          <p class="dashboard-kicker">Message center</p>
-          <h1 class="hero-title">My <span class="glow-text">Connections</span></h1>
-          <p class="subtitle">Clean messaging with one conversation per person.</p>
-          <p id="connectionsWelcome" class="dashboard-welcome">Loading conversations...</p>
-        </div>
+        <p class="dashboard-kicker">Message center</p>
+        <h1 class="hero-title">My <span class="glow-text">Chats</span></h1>
+        <p class="subtitle">Your accepted swaps are grouped by person.</p>
+        <p id="connectionsWelcome" class="dashboard-welcome">Loading conversations...</p>
       </section>
 
       <section class="chat-app-shell">
@@ -42,7 +42,7 @@
               <img id="threadAvatar" class="chat-main-avatar" src="avatars/avatar1.png" alt="Avatar">
               <div>
                 <h3 id="threadName">Select a conversation</h3>
-                <p id="threadSubtext" class="small-text">Your messages will appear here.</p>
+                <p id="threadSubtext" class="small-text">Messages will appear here.</p>
               </div>
             </div>
           </div>
@@ -51,7 +51,7 @@
             <div class="chat-empty-state">
               <div class="chat-empty-icon">💬</div>
               <h4>No conversation selected</h4>
-              <p>Choose a chat from the left side to start messaging.</p>
+              <p>Choose a chat to start messaging.</p>
             </div>
           </div>
 
@@ -60,20 +60,21 @@
           </div>
 
           <div class="chat-composer-bar">
-            <textarea id="threadInput" class="chat-composer-input" rows="2" placeholder="Type your message..."></textarea>
-            <button class="chat-send-btn" onclick="sendThreadMessage()">Send</button>
+            <textarea id="threadInput" class="chat-composer-input" rows="1" placeholder="Type a message..."></textarea>
+            <button id="sendThreadBtn" class="chat-send-btn">Send</button>
           </div>
         </section>
       </section>
+
     </div>
   </div>
 
-  <div class="app-bottom-nav">
-    <button onclick="goToDashboard()"><span>🏠</span>Home</button>
-    <button onclick="goToBrowse()"><span>🔎</span>Discover</button>
-    <button onclick="goToRequests()"><span>💬</span>Requests</button>
-    <button onclick="goToProfile()"><span>👤</span>Profile</button>
-  </div>
+  <nav class="bottom-nav">
+    <button onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button onclick="goToBrowse()">🔎<span>Discover</span></button>
+    <button onclick="goToRequests()">💬<span>Requests</span></button>
+    <button class="active" onclick="goToProfile()">👤<span>Profile</span></button>
+  </nav>
 
   <script type="module" src="connections.js"></script>
 </body>

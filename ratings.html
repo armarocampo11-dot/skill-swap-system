@@ -9,7 +9,7 @@
 <body>
 
   <div class="navbar">
-    <h2>STI Skill Swap</h2>
+    <h2>Ratings</h2>
     <div class="nav-links">
       <button onclick="goToDashboard()">Dashboard</button>
       <button onclick="goToProfile()">Profile</button>
@@ -21,155 +21,91 @@
     <div class="container dashboard-shell">
 
       <section class="ratings-hero-card">
-        <div class="ratings-hero-top">
-          <p class="ratings-kicker">Reputation Center</p>
-          <div class="ratings-hero-actions">
-            <button onclick="goToStats()">Open Stats</button>
-            <button class="secondary-btn" onclick="goToDashboard()">Back to Dashboard</button>
-          </div>
-        </div>
+        <p class="ratings-kicker">Reputation center</p>
+        <h1>My <span class="glow-text">Ratings</span></h1>
+        <p id="ratingsWelcome">Loading your rating history.</p>
+        <span class="reputation-tier-pill" id="ratingStatusHero">Loading.</span>
+      </section>
 
-        <div class="ratings-hero-main">
+      <section class="ratings-summary-card-premium">
+        <div class="ratings-summary-top">
           <div>
-            <h1>My <span class="glow-text">Ratings</span></h1>
-            <p id="ratingsWelcome">Loading your rating history...</p>
+            <p class="ratings-section-kicker">Rating Summary</p>
+            <h2 id="ratingAverageMain">0.0★</h2>
+            <p id="ratingAverageLabel" class="ratings-soft-text">Average: 0.0★</p>
           </div>
 
-          <div class="ratings-hero-rank">
-            <span class="ratings-rank-label">Reputation Status</span>
-            <strong id="ratingStatusHero">Loading...</strong>
+          <div class="ratings-chip">
+            <span>Total Reviews</span>
+            <strong id="ratingCountMain">0</strong>
           </div>
+        </div>
+
+        <div class="ratings-progress-track">
+          <div id="ratingsMeterFill" class="ratings-progress-fill"></div>
+        </div>
+
+        <p id="ratingInsightMini" class="small-text">No reviews yet</p>
+      </section>
+
+      <section class="ratings-insight-grid">
+        <div class="ratings-insight-card">
+          <span class="ratings-insight-title">Standing</span>
+          <strong id="ratingStatusText">Loading.</strong>
+          <p id="ratingStatusSubtext">Loading.</p>
+        </div>
+
+        <div class="ratings-insight-card">
+          <span class="ratings-insight-title">Tier</span>
+          <strong id="reputationTierTitle">Loading.</strong>
+          <p id="reputationTierSubtext">Loading.</p>
+          <div class="reputation-tier-pill" id="reputationTierPill">Loading.</div>
         </div>
       </section>
 
-      <section class="ratings-main-grid">
-        <div class="ratings-summary-card-premium">
-          <div class="ratings-summary-top">
-            <div>
-              <p class="ratings-section-kicker">Rating Summary</p>
-              <h2 id="ratingAverageMain">0.0★</h2>
-              <p class="ratings-soft-text">This reflects how students experienced working with you.</p>
-            </div>
-
-            <div class="ratings-chip">
-              <span>Total Reviews</span>
-              <strong id="ratingCountMain">0</strong>
-            </div>
-          </div>
-
-          <div class="ratings-progress-wrap">
-            <div class="ratings-progress-track">
-              <div id="ratingsMeterFill" class="ratings-progress-fill"></div>
-            </div>
-
-            <div class="ratings-progress-labels">
-              <span id="ratingAverageLabel">Average: 0.0★</span>
-              <span id="ratingInsightMini">No reviews yet</span>
-            </div>
-          </div>
-
-          <div class="ratings-insight-grid">
-            <div class="ratings-insight-card">
-              <span class="ratings-insight-title">Current Standing</span>
-              <strong id="ratingStatusText">Loading...</strong>
-              <p id="ratingStatusSubtext">Loading...</p>
-            </div>
-
-            <div class="ratings-insight-card">
-              <span class="ratings-insight-title">Reputation Tier</span>
-              <strong id="reputationTierTitle">Loading...</strong>
-              <p id="reputationTierSubtext">Loading...</p>
-              <div class="reputation-tier-pill" id="reputationTierPill">Loading...</div>
-            </div>
-          </div>
+      <section class="ratings-side-stack">
+        <div class="ratings-mini-card">
+          <span class="ratings-mini-label">Average</span>
+          <strong id="ratingAverageSide">0.0★</strong>
         </div>
 
-        <div class="ratings-side-stack">
-          <div class="ratings-mini-card">
-            <span class="ratings-mini-label">Average Rating</span>
-            <strong id="ratingAverageSide">0.0★</strong>
-          </div>
+        <div class="ratings-mini-card">
+          <span class="ratings-mini-label">Reviews</span>
+          <strong id="ratingCountSide">0</strong>
+        </div>
 
-          <div class="ratings-mini-card">
-            <span class="ratings-mini-label">Total Reviews</span>
-            <strong id="ratingCountSide">0</strong>
-          </div>
+        <div class="ratings-mini-card">
+          <span class="ratings-mini-label">5-Star</span>
+          <strong id="fiveStarCount">0</strong>
+        </div>
 
-          <div class="ratings-mini-card">
-            <span class="ratings-mini-label">5-Star Reviews</span>
-            <strong id="fiveStarCount">0</strong>
-          </div>
-
-          <div class="ratings-mini-card reputation-mini-card">
-            <span class="ratings-mini-label">Trust Snapshot</span>
-            <strong id="trustSnapshotValue">New</strong>
-            <p id="trustSnapshotText" class="ratings-mini-subtext">
-              Start collecting reviews to grow your reputation.
-            </p>
-          </div>
+        <div class="ratings-mini-card reputation-mini-card">
+          <span class="ratings-mini-label">Trust</span>
+          <strong id="trustSnapshotValue">New</strong>
+          <p id="trustSnapshotText" class="ratings-mini-subtext">Start collecting reviews.</p>
         </div>
       </section>
 
-      <section class="ratings-bottom-grid">
-        <div class="ratings-reviews-card">
-          <div class="ratings-panel-head">
-            <div>
-              <h3>Reviews</h3>
-              <p>Real feedback from students you've worked with.</p>
-            </div>
-          </div>
-
-          <div id="reviewsList" class="reviews-feed">
-            <div class="reviews-empty-state">
-              <div class="reviews-empty-icon">⭐</div>
-              <h4>No reviews yet</h4>
-              <p>Complete your first swap to start building your reputation.</p>
-              <button class="empty-cta-btn" onclick="goToBrowse()">Find your first match</button>
-            </div>
+      <section class="ratings-reviews-card">
+        <div class="ratings-panel-head">
+          <div>
+            <h3>Reviews</h3>
+            <p>Feedback from completed swaps.</p>
           </div>
         </div>
 
-        <div class="ratings-guide-card">
-          <div class="ratings-panel-head">
-            <div>
-              <h3>Reputation Guide</h3>
-              <p>How your current rating is generally viewed.</p>
-            </div>
-          </div>
-
-          <div class="ratings-guide-list">
-            <div class="ratings-guide-item">
-              <span>4.8 - 5.0</span>
-              <p>Excellent</p>
-            </div>
-
-            <div class="ratings-guide-item">
-              <span>4.5 - 4.7</span>
-              <p>Strong</p>
-            </div>
-
-            <div class="ratings-guide-item">
-              <span>4.0 - 4.4</span>
-              <p>Good</p>
-            </div>
-
-            <div class="ratings-guide-item">
-              <span>Below 4.0</span>
-              <p>Growing</p>
-            </div>
-          </div>
-        </div>
+        <div id="reviewsList" class="reviews-feed"></div>
       </section>
 
     </div>
   </div>
 
-  <div class="app-bottom-nav">
-    <button onclick="goToDashboard()"><span>🏠</span>Home</button>
-    <button onclick="goToBrowse()"><span>🔎</span>Discover</button>
-    <button onclick="goToRequests()"><span>💬</span>Requests</button>
-    <button onclick="goToProfile()"><span>👤</span>Profile</button>
-  </div>
+  <nav class="bottom-nav">
+    <button onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button onclick="goToBrowse()">🔎<span>Discover</span></button>
+    <button onclick="goToRequests()">💬<span>Requests</span></button>
+    <button class="active" onclick="goToProfile()">👤<span>Profile</span></button>
+  </nav>
 
   <script type="module" src="ratings.js"></script>
 </body>

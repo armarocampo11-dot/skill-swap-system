@@ -3,113 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard - STI Skill Swap</title>
+  <title>Missions - STI Skill Swap</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="phone-ui">
+<body class="missions-page">
 
-  <main class="phone-shell">
-    <section class="phone-top">
-      <div class="phone-title-row">
-        <div>
-          <h1>STI Skill Swap</h1>
-          <p>Find skill partners across STI campuses</p>
-        </div>
-        <div class="phone-actions">
-          <button onclick="goToRequests()">🔔<span id="requestBadge" style="display:none;">0</span></button>
-          <button onclick="goToProfile()">👤</button>
-        </div>
-      </div>
-
-      <div class="phone-tabs">
-        <button class="active" onclick="goToDashboard()">🏠 Dashboard</button>
-        <button onclick="goToRequests()">💬 Requests</button>
-        <button onclick="goToConnections()">🤝 Connections</button>
-      </div>
-    </section>
-
-    <section class="phone-hero">
-      <div class="phone-hero-icon">🔎</div>
-      <div class="phone-hero-copy">
-        <span>Discovery Center</span>
-        <h2>Browse <b>Students</b></h2>
-        <p>Find skill partners faster with cleaner filters, compact cards, and smarter recommendations.</p>
-      </div>
-      <div id="welcome" class="phone-welcome">Loading user...</div>
-    </section>
-
-    <section class="phone-stats">
-      <div><span>🤝</span><strong id="swapCount">0</strong><p>Swaps</p></div>
-      <div><span>⚡</span><strong id="xpPoints">0</strong><p>XP</p></div>
-      <div><span>⭐</span><strong id="avgRating">0.0★</strong><p>Rating</p></div>
-      <div><span>🏆</span><strong id="levelNumber">1</strong><p>Level</p></div>
-    </section>
-
-    <section class="phone-search-row">
-      <button onclick="goToBrowse()">🔍 Search by name, skill, or course</button>
-      <button onclick="goToBrowse()">⚙️ Filters</button>
-    </section>
-
-    <section class="phone-section-head">
-      <h3>Quick Access</h3>
-      <button onclick="goToBrowse()">See all</button>
-    </section>
-
-    <section class="phone-card-row">
-      <article onclick="goToBrowse()">
-        <div>🔎</div>
-        <h4>Discover</h4>
-        <p>Find matches</p>
-      </article>
-
-      <article onclick="goToMissions()">
-        <div>🎯</div>
-        <h4>Missions</h4>
-        <p>Grow XP</p>
-      </article>
-
-      <article onclick="goToRatings()">
-        <div>⭐</div>
-        <h4>Ratings</h4>
-        <p>Reviews</p>
-      </article>
-    </section>
-
-    <section class="phone-section-head">
-      <h3>Browse By Skills</h3>
-      <button onclick="goToBrowse()">See all</button>
-    </section>
-
-    <section class="phone-skill-row">
-      <article onclick="goToBrowse()">💻<strong>Programming</strong><span>Students</span></article>
-      <article onclick="goToBrowse()">🎨<strong>Design</strong><span>Students</span></article>
-      <article onclick="goToBrowse()">📘<strong>Academic</strong><span>Students</span></article>
-      <article onclick="goToBrowse()">🎤<strong>Communication</strong><span>Students</span></article>
-    </section>
-
-    <div class="phone-hidden">
-      <span id="messageBadge"></span>
-      <span id="xpPointsMain"></span>
-      <span id="rankTitle"></span>
-      <span id="xpRemaining"></span>
-      <span id="profileCompletionText"></span>
-      <span id="nextGoalText"></span>
-      <span id="priorityActionText"></span>
-      <span id="priorityActionTextCard"></span>
-      <div id="xpBar"></div>
-      <div id="missionsPreviewList"></div>
-      <div id="badgesPreviewList"></div>
-      <div id="recommendedList"></div>
+  <div class="navbar">
+    <h2>Missions</h2>
+    <div class="nav-links">
+      <button onclick="goToDashboard()">Dashboard</button>
+      <button onclick="goToSwipe()">Swipe</button>
+      <button onclick="goToProfile()">Profile</button>
     </div>
-  </main>
+  </div>
 
-  <nav class="phone-bottom-nav">
-    <button class="active" onclick="goToDashboard()">🏠<span>Home</span></button>
+  <div class="page">
+    <div class="container">
+
+      <section class="dashboard-hero card">
+        <p class="dashboard-kicker">Mission center</p>
+        <h1 class="hero-title">Growth <span class="glow-text">Missions</span></h1>
+        <p id="missionsWelcome" class="dashboard-welcome">Loading missions...</p>
+      </section>
+
+      <section class="mission-stats">
+        <div class="mission-stat-card">
+          <p>Total XP</p>
+          <h2 id="totalXp">0 XP</h2>
+          <span id="missionRank" class="mission-badge">Starter</span>
+        </div>
+
+        <div class="mission-stat-card">
+          <p>Completed</p>
+          <h2 id="completedMissions">0</h2>
+        </div>
+
+        <div class="mission-stat-card">
+          <p>Active</p>
+          <h2 id="activeMissions">0</h2>
+        </div>
+
+        <div class="mission-stat-card">
+          <p>Profile</p>
+          <h2 id="profilePercent">0%</h2>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="dashboard-section-head">
+          <div>
+            <h2>Daily Missions</h2>
+            <p class="small-text">Small tasks to stay active.</p>
+          </div>
+        </div>
+        <div id="dailyMissionsList" class="mission-grid"></div>
+      </section>
+
+      <section class="card">
+        <div class="dashboard-section-head">
+          <div>
+            <h2>Milestone Missions</h2>
+            <p class="small-text">Long-term growth goals.</p>
+          </div>
+        </div>
+        <div id="milestoneMissionsList" class="mission-grid"></div>
+      </section>
+
+      <section class="card">
+        <div class="dashboard-section-head">
+          <div>
+            <h2>Reputation Missions</h2>
+            <p class="small-text">Build trust through swaps.</p>
+          </div>
+        </div>
+        <div id="reputationMissionsList" class="mission-grid"></div>
+      </section>
+
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button onclick="goToDashboard()">🏠<span>Home</span></button>
     <button onclick="goToBrowse()">🔎<span>Discover</span></button>
     <button onclick="goToRequests()">💬<span>Requests</span></button>
     <button onclick="goToProfile()">👤<span>Profile</span></button>
   </nav>
 
-  <script type="module" src="dashboard.js"></script>
+  <script type="module" src="missions.js"></script>
 </body>
 </html>

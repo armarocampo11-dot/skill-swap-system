@@ -9,44 +9,42 @@
 <body>
 
   <div class="navbar">
-    <h2>Skill Swap Rating</h2>
+    <h2>Rate</h2>
     <div class="nav-links">
-      <button class="secondary-btn" onclick="goBack()">Back</button>
+      <button onclick="goBack()">Back</button>
     </div>
   </div>
 
   <div class="page">
     <div class="container">
-      <h1 class="hero-title">Rate Your <span class="glow-text">Partner</span></h1>
-      <p class="subtitle">Leave a rating and short feedback after your completed transaction.</p>
 
-      <div class="card">
-        <p><strong>Partner:</strong> <span id="partnerName">Loading...</span></p>
-        <p><strong>Status:</strong> <span id="requestStatus">Loading...</span></p>
-      </div>
+      <section class="card">
+        <p class="dashboard-kicker">Completed transaction</p>
+        <h1 class="hero-title">Rate Your <span class="glow-text">Partner</span></h1>
+        <p class="subtitle">Leave a short feedback after your completed swap.</p>
+      </section>
 
-      <label>Star Rating</label>
-      <select id="stars">
-        <option value="5">5 - Excellent</option>
-        <option value="4">4 - Very Good</option>
-        <option value="3">3 - Good</option>
-        <option value="2">2 - Fair</option>
-        <option value="1">1 - Poor</option>
-      </select>
+      <section class="card">
+        <p><strong>Partner:</strong> <span id="partnerName">Loading.</span></p>
+        <p><strong>Status:</strong> <span id="requestStatus">Loading.</span></p>
 
-      <label>Feedback</label>
-      <textarea id="feedback" rows="4" placeholder="Write a short review..."></textarea>
+        <label for="stars">Star Rating</label>
+        <select id="stars">
+          <option value="5">5 - Excellent</option>
+          <option value="4">4 - Very Good</option>
+          <option value="3">3 - Good</option>
+          <option value="2">2 - Fair</option>
+          <option value="1">1 - Poor</option>
+        </select>
 
-      <button id="submitRatingBtn" class="success-btn" onclick="submitRating()">Submit Rating</button>
-      <p id="ratingStatus" class="small-text"></p>
+        <label for="feedback">Feedback</label>
+        <textarea id="feedback" rows="4" placeholder="Write a short review."></textarea>
+
+        <button id="submitRatingBtn" class="success-btn" onclick="submitRating()">Submit Rating</button>
+        <p id="ratingStatus" class="small-text"></p>
+      </section>
+
     </div>
-  </div>
-
-  <div class="app-bottom-nav">
-    <button onclick="goToDashboard()"><span>🏠</span>Home</button>
-    <button onclick="goToBrowse()"><span>🔎</span>Discover</button>
-    <button onclick="goToRequests()"><span>💬</span>Requests</button>
-    <button onclick="goToProfile()"><span>👤</span>Profile</button>
   </div>
 
   <script type="module" src="rating.js"></script>

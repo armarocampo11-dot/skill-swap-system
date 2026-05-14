@@ -7,8 +7,9 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <div class="navbar">
-    <h2>STI Skill Swap</h2>
+    <h2>Discover</h2>
     <div class="nav-links">
       <button onclick="goToDashboard()">Dashboard</button>
       <button onclick="goToRequests()">Requests</button>
@@ -20,25 +21,17 @@
     <div class="container dashboard-shell">
 
       <section class="browse-hero-card">
-        <div class="browse-hero-copy">
-          <p class="browse-kicker">Discovery center</p>
-          <h1>Browse <span class="glow-text">Students</span></h1>
-          <p>Find skill partners faster with cleaner filters, compact cards, and smarter recommendations.</p>
-          <p id="browseWelcome" class="browse-hero-welcome">Loading student recommendations...</p>
-        </div>
+        <p class="browse-kicker">Discovery center</p>
+        <h1>Browse <span class="glow-text">Students</span></h1>
+        <p>Search, filter, and connect with skill partners.</p>
+        <p id="browseWelcome" class="browse-hero-welcome">Loading student recommendations...</p>
       </section>
 
       <section class="browse-controls-card">
-        <div class="browse-controls-top">
-          <div class="browse-search-wrap">
-            <input id="browseSearchInput" class="browse-search-input" type="text" placeholder="Search by name, skill, or course">
-          </div>
-
-          <div class="browse-results-meta">
-            <span id="browseResultCount">0 students</span>
-          </div>
+        <input id="browseSearchInput" class="browse-search-input" type="text" placeholder="Search by name, skill, or course">
+        <div class="browse-results-meta">
+          <span id="browseResultCount">0 students</span>
         </div>
-
         <div id="categoryCards" class="browse-category-grid"></div>
       </section>
 
@@ -46,10 +39,9 @@
         <div class="browse-list-head">
           <div>
             <h2 id="browseSectionTitle">Recommended Students</h2>
-            <p id="browseSectionSubtitle">Students who may match your interests and offered skills.</p>
+            <p id="browseSectionSubtitle">Students who may match your skills.</p>
           </div>
         </div>
-
         <div id="browseUsersGrid" class="browse-users-grid"></div>
       </section>
 
@@ -73,13 +65,13 @@
       </select>
 
       <label class="app-label" for="requestSkill">Skill / Request Title</label>
-      <input id="requestSkill" class="app-input" type="text" placeholder="Example: Canva editing, Math tutoring">
+      <input id="requestSkill" class="app-input" type="text" placeholder="Example: Canva editing">
 
-      <label class="app-label" for="requestAmount">Paid Amount (optional)</label>
-      <input id="requestAmount" class="app-input" type="number" min="0" placeholder="Enter amount only if needed">
+      <label class="app-label" for="requestAmount">Paid Amount</label>
+      <input id="requestAmount" class="app-input" type="number" min="0" placeholder="Optional">
 
       <label class="app-label" for="requestMessage">Message</label>
-      <textarea id="requestMessage" class="app-input" rows="4" placeholder="Write a short request message"></textarea>
+      <textarea id="requestMessage" class="app-input" rows="4" placeholder="Write a short message"></textarea>
 
       <div class="app-modal-actions">
         <button onclick="submitQuickRequest()">Send Request</button>
@@ -87,12 +79,12 @@
     </div>
   </div>
 
-  <div class="app-bottom-nav">
-    <button onclick="goToDashboard()"><span>🏠</span>Home</button>
-    <button onclick="goToBrowse()"><span>🔎</span>Discover</button>
-    <button onclick="goToRequests()"><span>💬</span>Requests</button>
-    <button onclick="goToProfile()"><span>👤</span>Profile</button>
-  </div>
+  <nav class="bottom-nav">
+    <button onclick="goToDashboard()">🏠<span>Home</span></button>
+    <button class="active" onclick="goToBrowse()">🔎<span>Discover</span></button>
+    <button onclick="goToRequests()">💬<span>Requests</span></button>
+    <button onclick="goToProfile()">👤<span>Profile</span></button>
+  </nav>
 
   <script type="module" src="browse.js"></script>
 </body>
